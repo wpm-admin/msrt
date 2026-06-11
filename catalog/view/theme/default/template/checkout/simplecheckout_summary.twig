@@ -1,0 +1,38 @@
+<div class="simplecheckout-block" id="simplecheckout_summary" {{ hide ? 'data-hide="true"' : '' }}>
+    {% if display_header %}
+	  <div class="checkout_title">{{ text_summary }}</div>
+	  {% endif %}
+
+    {% if display_address %}
+      {% if summary_payment_address or summary_shipping_address %}
+	
+<div class="box_summary_info">
+
+ {% if summary_payment_address %}
+<div>
+<strong>{{ text_summary_payment_address }}</strong>
+<span>
+<a class="bttn_edit_acc" data-onclick="previousStep" ></a>
+{{ summary_payment_address }}</span>
+</div>
+ {% endif %}
+ {% if summary_shipping_address %}
+<div>
+<strong>{{ text_summary_shipping_address }}</strong>
+<span>
+<a class="bttn_edit_acc" data-onclick="previousStep" ></a>
+{{ summary_shipping_address }}</span>
+</div>
+{% endif %}
+</div>
+	 
+      {% endif %}
+    {% endif %}
+</div>
+
+
+<script>
+$( ".bttn_edit_acc" ).click(function() {
+  $( "#simplecheckout_button_prev" ).click();
+});
+</script>

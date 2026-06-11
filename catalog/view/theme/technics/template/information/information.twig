@@ -1,0 +1,73 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main inform">
+        <!-- Breadcrumbs :: Start-->
+        {{ breadcrumbs_twig }}
+        <!-- Breadcrumbs :: End-->
+        <!-- Page :: Start-->
+        <div class="page information_page">
+	<div class="container-fluid">
+{% if ( home_url == '/katalog' or   home_url == '/index.php?route=information/information&information_id=14') %}
+{{ content_top }}
+	{% else %}
+
+	
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+		
+				{% if info16 %}
+				<div class="box_info_id16">
+					<div>
+						{{ description }}
+					</div>
+					<div><img src="/image/VCM112_alt1.jpg"> </div>
+				</div>
+				{% else %}
+
+				 
+				
+				
+				
+						{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+						<div class="col-xl-{{ col }}">
+							<div class="editor">
+								{{ description }}
+							</div>
+						</div>
+						{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+						</div>
+				{% endif %}		
+			</div>
+		  
+		  {% endif %}	
+
+
+</div>
+        <!-- Page :: End-->
+      </main>
+	  <!-- Main :: End-->
+	  
+	  <script>
+		$(document).on('click', '#simpleregister_button_confirm', function(){
+			
+			$.ajax({
+				url: 'index.php?route=mail/send_form',
+				type: 'post',
+				data: $('#request_block').serialize(),
+				dataType: 'text',
+				beforeSend: function () {
+				},
+				complete: function () {
+				},
+				success: function (json) {
+					console.log(json);
+					$('#request_block input').val('');
+				},
+
+			});
+			
+		});
+	  </script>
+	  
+{{ footer }}</body></html>
+

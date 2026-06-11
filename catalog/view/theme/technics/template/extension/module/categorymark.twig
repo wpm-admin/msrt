@@ -1,0 +1,275 @@
+ <link rel="stylesheet" href="catalog/view/theme/technics/css/swiper-bundle.min.css">
+<div class="slider_model_title">{{ text_model_title }}</div>
+<div class="swiper box_swiper_mark mySwiper">
+      <div class="swiper-wrapper">
+	{% for mark in marks %}
+	{% if mark.children %}
+			{% for child in mark.children %}
+<div class="swiper-slide">
+<a href="{{ child.href }}" class="child model_list_link">
+<div class="img_child"><img src="{{ child.image }}"></div>
+{{ child.name }}
+</a>
+</div>
+					{% if child.children %}
+						{% for child1 in child.children %}
+<div class="swiper-slide " data-href="{{ child1.href }}">
+<a data-old_href="{{ child1.href }}" href="javascript:;" class="child1 model_list_link">
+<div class="img_child"><img src="{{ child1.image }}"></div>
+{{ child1.name }}
+</a>
+</div>
+						{% endfor %}
+					{% endif %}
+			{% endfor %}
+		{% endif %}
+  {% endfor %}	
+	 </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+    <!-- Swiper JS -->
+    
+<div class="all_models_popup_back"></div>    
+<div class="all_models_popup">
+<a href="javascript:;" class="button_close_form"> </a>
+<h3>{{ text_model_title }}</h3>
+<div class="model_col_box">
+ 	{% for mark in marks %}
+   {% if mark.children %}
+    {% for child in mark.children %}
+      <div class="model_col">
+      <a href="{{ child.href }}" class="model_list_link">
+      <div class="img_child"><img src="{{ child.image }}"></div>
+       <div class="mark_name">{{ child.name }} </div>
+      </a>
+      </div>
+			{% endfor %}
+		{% endif %}
+  {% endfor %}
+</div>
+</div>
+
+
+
+<script src="catalog/view/javascript/swiper-bundle.min.js"></script>
+<style>
+ .all_models_popup_back{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+  background-color: black;
+  display: none;
+ }
+ .all_models_popup{
+  position: fixed;
+  width: 70%;
+  height: 70%;
+  z-index: 101;
+ /* position: absolute;*/
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  display: none;
+ }
+ .all_models_popup .model_col{
+  float: left;
+ }
+</style>
+<script>
+ //Открываем попап со всеми моделями
+ 
+ $(document).on('click', '.child', function(e){
+   
+  e.preventDefault();
+  
+  $('.all_models_popup').show();
+  $('.all_models_popup_back').show();
+   return false;
+ });
+ 
+ 
+         //Закроем все попапы
+        $(document).on('click', '.popup_back, .button_close_form', function(){
+                 
+         $('.all_models_popup').hide();
+         $('.all_models_popup_back').hide();
+          
+        });
+		
+ $(document).on('click', '.all_models_popup_back', function(e){
+   
+  $('.all_models_popup').hide();
+  $('.all_models_popup_back').hide();
+ });
+</script>		 
+    <!-- Initialize Swiper -->
+    <script>
+     $(document).on('mouseenter', '.model_list_link', function(){
+      var link = $(this).prop('href');
+      //history.pushState(null, null, link);
+     });
+     
+     $(document).on('mouseleave', '.model_list_link', function(){
+      //history.pushState(null, null, '{{ href }}');
+     });
+     
+     {% if is_mobile %}
+      var mobile = 0;
+      var mobile_def = 2;
+     {% else %}
+      var mobile = 1;
+      var mobile_def = 1;
+     {% endif %}
+
+     var main_page = 0;
+     {% if(main_page) %}
+      var main_page = 1;
+     {% endif %}
+     
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        slidesPerGroup:1,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+           clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        on: {
+         slideChange: function (e) {// Событие карусели
+              //console.log (this.activeIndex); // индекс слайда, какой
+              //console.log (this.realIndex); // индекс слайда, какой
+              
+              var element = $(this.slides[this.activeIndex + mobile]);
+              
+              href = element.context.children[0].href;
+              
+              
+              console.log(href); // индекс слайда, какой
+              
+              if(!main_page){
+               window.history.pushState(null, null, element.context.children[0].href);
+              }else{
+               $('.bttn_home_more').prop('href', element.context.children[0].href);
+              }
+              
+              console.log(href);
+              
+              $.ajax({
+               url: href,
+               type: 'post',
+               data: $('#product input'),
+               dataType: 'html',
+               beforeSend: function () {
+               },
+               success: function (data) {
+                
+                 $data = $(data);
+                 $('#mainContainer').html($data.find('.box_categorywall'));
+                 $('.breadcrumbs').html($data.find('.breadcrumbs'));
+                 $('.seo_block').html($data.find('.seo_block'));
+                 $('.box_bestsellers').html($data.find('.box_bestsellers'));
+                 
+                 $('.products_mod_slides').slick({
+                    rows: 2,
+                   dots: false,
+                   arrows: true,
+                   infinite: true,
+                   speed: 300,
+                   slidesToShow: 6,
+                   slidesToScroll: 5,
+                 responsive: [
+                     {
+                       breakpoint: 1000,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                     {
+                       breakpoint: 768,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                     {
+                       breakpoint: 420,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                   ],		
+});
+                 
+               },
+
+              });
+              
+              //$('.box_categorywall_wrapper').load(href + ' div.box_categorywall');
+              //$('#mainContainer').load(href + ' div.box_categorywall');
+              
+              /*
+              main_page = 0;
+              
+               //window.history.pushState(null, null, element.context.children[0].data('old_href'));
+              
+              $( "a.dinamik_link" ).each(function( index ) {
+              
+               $(this).prop('href', href+$(this).data('href'));
+              
+              });
+              
+              $('.home_mark_href').prop('href', href);
+              */
+         },
+        },
+		
+       // Responsive breakpoints
+       breakpoints: {
+         // when window width is >= 320px
+         320: {
+           slidesPerView: 1,
+           spaceBetween: 20
+         },
+ 
+       // when window width is >= 640px
+       990: {
+         slidesPerView: 3,
+         spaceBetween: 30
+       }
+	}
+	
+	
+      });
+      
+      setTimeout(function(){
+       
+       //console.log('{{ active_index }} - ' + mobile_def);
+       
+       swiper.slideTo({{ active_index }} - mobile_def);
+       swiper.update();
+      }, 100);
+    </script>	
+	
+	
+	
+ 
+{% if home_page %}
+<a href="{{ href }}" class="bttn_home_more home_mark_href">
+{{ text_shop_bttn }}
+</a>
+{% endif %}	  

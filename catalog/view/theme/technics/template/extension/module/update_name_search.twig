@@ -1,0 +1,27 @@
+
+		<script src="/catalog/view/javascript/technics/plugins.min.js?v1.4.0"></script>
+		<script src="/catalog/view/javascript/jquery-ui.js"></script>
+		<script src="/catalog/view/javascript/technics/bootstrap/3.3.5/bootstrap.min.js?v1.4.0"></script>
+		<script src="/catalog/view/javascript/technics/app.min.js?v1.4.0"></script>
+
+
+Режим: <b>{{ run_name }}</b><br>
+Обработано: {{ rows }}<br>
+Всего строк: {{ total }}<br>
+Следующая страница: {{ url }}
+
+{% if url %}
+	<script>
+		$(document).ready(function(){
+			
+			setTimeout(function(){
+				
+				location = '{{ url }}';
+					
+			}, 5000);
+				
+		});
+	</script>
+{% else %}
+	<hr><b>DONE</b>
+{% endif %}

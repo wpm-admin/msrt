@@ -1,0 +1,92 @@
+                 <div class="products__grid">
+                  <div class="row">
+					  {% for product in products %}
+                    <div class="col-6 col-xl-4">
+					  <div class="products__item{% if (category_time and product['special'] and product['special_date_end']) %} products__item--countdown{% endif %}">
+						<div class="products__item-in">
+						{% if (category_time and product['special'] and product['special_date_end']) %}
+							{% if (product['special'] and product['sales']) %}
+								<mark class="products__item-discount">{{ '<small>' ~ labelsinfo['sale']['name'][language_id] ~ '</small>' ~ product['discount'] }}</mark>
+							{% endif %}
+						{% endif %}
+ 
+				 
+						  
+ <div class="products__item-stickers stickers_{{  product['stock_status_id']  }} ">{{  product['stock']  }}</div>
+												  
+						  {% if (not product['images']) %} 
+						  <div class="products__item-images"><a href="{{ product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+						  {% else %}
+						  
+						  
+						  <div class="products__item-images js-slick-products">
+						
+						<a href="{{ product['href'] }}"><img data-lazy="{{ product['thumb'] }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+							{% for imageX in product['images'] %} 
+								<a href="{{ product['href'] }}"><img data-lazy="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+						  {% endfor %} 
+						  </div>
+						  {% endif %}
+						  <div class="products__item-desc">
+						  						  						  <a href="{{ product['href'] }}" class="products__item-title">{{ product['name'] }}</a>
+						 
+
+<div class="box_price_cart">	
+<div>
+ <span class="products__item-price">
+							{% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} 
+								{% else %} 
+									{{ product['price'] }}
+								{% endif %}
+							{% endif %} 
+						  </span>	
+  {% if (category_time and product['special'] and product['special_date_end']) %}
+							  <div class="products__item-countdown">
+								<div class="countdown">
+								  <p class="countdown__text">{{ time_text_1 }} <small>{{ time_text_2 }}</small></p>
+								  <time class="countdown__time js-countdown-time" data-text-countdown="{{ text_countdown }}">{{ product['special_date_end'] }}</time>
+								</div>
+							  </div>
+							  {% endif %}
+
+</div>
+<div>
+<div class="">
+								{% if (product['isoption_required']) %}
+									<a data-for="{{ product['product_id'] }}" title="{{ button_cart }}" data-opt="isoptneed" class="btn btn--cart js-btn-preview" href="#popupprod">
+	                                 </a>
+	                            {% else %}
+									<button type="button" class="btn btn--cart" title="{{ button_cart }}" onclick="cart.add('{{ product['product_id'] }}', '{{ product['minimum'] }}');" {{ product['buy_btn'] ? 'disabled' : ''}}> 
+									 </button>	                                
+								{% endif %}
+								{% if (product_detail) %}
+								<a data-for="{{ product['product_id'] }}" title="{{ text_product_view_btn }}" class="btn btn--preview js-btn-preview" href="#popupprod">
+                                <svg class="icon-preview">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                                </svg></a>
+								{% endif %}
+							</div>
+</div>
+
+
+
+
+
+</div>	
+ 
+<div class="view_details">
+	<a href="{{ product['href'] }}" class="products_view_details">{{ text_show_details }}</a>
+</div>		
+
+
+						  
+ 
+						  </div>
+						</div>
+					  </div>
+                    </div>
+					  {% endfor %}
+                  </div>
+                </div>

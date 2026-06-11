@@ -1,0 +1,30 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+         <!-- Breadcrumbs :: End-->
+         <!-- System :: Start-->
+        <div class="system">
+          <div class="container-fluid">
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+            <figure class="system__image">
+					{% if (logo_404) %} 
+						<img src="{{ logo_404 }}" alt="{{ text_error }}">
+					{% else %} 
+						<img src="catalog/view/theme/technics/images/img-system-404.svg" width="318" height="auto" alt="{{ text_error }}">
+					{% endif %} 
+			</figure>
+			<strong class="system__title">{{ text_error }}</strong>
+            <div class="system__text">{{ text_404 }}</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- System :: End-->
+       </main>
+      <!-- Main :: End-->
+{{ footer }}
+</body></html>

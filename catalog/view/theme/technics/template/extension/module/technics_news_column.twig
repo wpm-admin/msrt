@@ -1,0 +1,16 @@
+	{% if (newss is not empty) %}
+	<!-- Media :: Start-->
+        <div class="media-col is-hidden is-lg-visible">
+            <div class="media-col__head">
+              <span class="h3 media-col__heading">{{ heading_title }}</span><a class="media-col__link" href="{{ news_href }}">{{ text_all_news }}</a>
+            </div>
+			{% for news in newss %}
+			<a class="news__item" href="{{ news['href'] }}" style="margin-top: -.1rem;">
+				<span class="h2 news__item-title">{{ news['title'] }}</span>
+				<p class="news__item-text">{{ news['description'] }}</p>
+				<span class="news__item-time">{{ news['date_added'] }}</span>
+			</a>
+			{% endfor %}
+        </div>
+     <!-- Media :: End-->
+    {% endif %}

@@ -1,0 +1,203 @@
+@font-face {
+	font-family: 'Conv_PFDinDisplayPro-Med';
+	src: url('font/PFDinDisplayPro-Med.eot');
+	src: url('font/PFDinDisplayPro-Med.woff') format('woff'), url('font/PFDinDisplayPro-Med.ttf') format('truetype'), url('font/PFDinDisplayPro-Med.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+.putMessage {
+    /*width: 850px;*/
+   /* height: 286px;*/
+   /* background: rgba(255,255,255, 0.9);*/
+    text-align: center;
+    /*margin: 21px auto 102px;*/
+ 
+}
+.clock1 {
+    margin-right: 28px;
+    margin-left: 0px;
+}
+.clock1, .clock2, .clock3, .clock4 {
+    color: #000;
+}
+
+.putMessage b {
+  font-weight: normal;
+  padding-top: 35px;
+  font-size: 18px;
+  color: #2f2f2f;
+  /*text-transform: uppercase;*/
+  display: block;
+}
+.putMessage p.action {
+  font-size: 16px;
+  color: #2f2f2f;
+  margin-top: 17px;
+  margin-bottom: 23px;
+}
+.putMessage p.limit {
+  font-size: 19px;
+  color: #2f2f2f;
+  margin-top: -4px;
+}
+.putMessage p.action span {
+  color: #cf0360;
+  text-transform: uppercase;
+}
+.putMessage p.action span small {
+  font-size: 27px;
+  text-transform: none;
+}
+.putMessage p.action span big {
+  font-size: 41px;
+}
+.clock1 {
+  margin-left: 22px;
+  margin-right: 18px;
+}
+.clock2 {
+  margin-left: 33px;
+  margin-right: 28px;
+}
+.clock3 {
+  margin-left: 15px;
+  margin-right: 32px;
+}
+.putMessage form {
+  height: 55px;
+  width: 100%;
+  background-color: #ccd0d5;
+  text-align: center;
+  padding-top: 12px;
+}
+.putMessage form input[type=submit] {
+  width: 203px;
+  height: 44px;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: #6fbb00;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  font-size: 20px;
+  -moz-box-shadow: -2px 2px 5px rgba(52,87,0,0.3), inset -1px 1px 1px rgba(255,255,255,0.3);
+  -webkit-box-shadow: -2px 2px 5px rgba(52,87,0,0.3), inset -1px 1px 1px rgba(255,255,255,0.3);
+  box-shadow: -2px 2px 5px rgba(52,87,0,0.3), inset -1px 1px 1px rgba(255,255,255,0.3);
+}
+.putMessage form input::-webkit-input-placeholder {
+	font-size:16px;
+	color:#4d4d4d;
+}
+.putMessage form input:-moz-placeholder {
+	font-size:16px;
+	color:#4d4d4d;
+}
+.putMessage form input.placeholder {
+	font-size:16px;
+	color:#4d4d4d;
+}
+.putMessage p.stay {
+	font-size:22px;
+	color:#2f2f2f;
+	margin-top:10px;
+}
+.putMessage p.stay span{
+	color:#3f4750;
+	font-size:37px;
+	font-family: 'Conv_PFDinDisplayPro-Med';
+	width:53px;
+	text-align:center;
+	height:50px;
+	display:inline-block;
+	background:url(stay.png) no-repeat top center;
+	margin:0 5px;
+}
+.putMessage form input[type=text] {
+  width: 190px;
+  height: 44px;
+  background-color: #fff;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  margin-right: 4px;
+  border: none;
+  padding-left: 17px;
+  font-size: 16px;
+  color: #4d4d4d;
+}
+.countdownHolder {
+  font: 20px/1 Arial,sans-serif;
+  letter-spacing: -3px;
+  margin: 5px auto 0;
+  text-align: center;
+  /*width: 518px;*/
+}
+.digit {
+  position: absolute;
+  display: block;
+  width: 32px;
+  background-color: #444;
+  border-radius: 0px;
+  text-align: center;
+  color: #000;
+  color: #3f4750;
+  letter-spacing: -1px;
+  height: 48px;
+  padding-top: 12px; 
+  margin-top: 0px;
+}
+
+.digit.static {
+  box-shadow: none;
+  background-image: linear-gradient(bottom, #3A3A3A 50%, #444444 50%);
+  background-image: -o-linear-gradient(bottom, #3A3A3A 50%, #444444 50%);
+  background-image: -moz-linear-gradient(bottom, #3A3A3A 50%, #444444 50%);
+  background-image: -webkit-linear-gradient(bottom, #3A3A3A 50%, #444444 50%);
+  background-image: -ms-linear-gradient(bottom, #3A3A3A 50%, #444444 50%);
+  background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0.5, #3A3A3A), color-stop(0.5, #444444) );
+  background: url(stay.png) no-repeat top center;
+}
+.position {
+  display: inline-block;
+  height: 40px;
+  overflow: hidden;
+  position: relative;
+  width: 2.05em;
+  width: 32px;
+}
+.countDays{ /* display:none !important;*/ }
+.countDiv0{ /* display:none !important;*/ }
+.countHours{}
+.countDiv1{}
+.countMinutes{}
+.countDiv2{}
+.countSeconds{}
+
+
+.countDiv{
+	display:inline-block;
+	width:16px;
+	height:1.6em;
+	position:relative;
+}
+
+.countDiv:before,
+.countDiv:after{
+	position:absolute;
+	width:5px;
+	height:5px;
+	background-color:#444;
+	border-radius:50%;
+	left:50%;
+	margin-left:-3px;
+	top:0.2em;
+	box-shadow:1px 1px 1px rgba(4, 4, 4, 0.5);
+	content:'';
+}
+
+.countDiv:after{
+	top:0.6em;
+}

@@ -1,0 +1,31 @@
+<div class="products_list">
+  <div class="">
+	  {% for product in products %}
+	<div class="products_list_item">				  
+		<div><a href="{{ product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a> 
+		</div>
+		<div>
+			<span> <label>lot # {{ product.auction.lot_id }} </label> </span>
+			<span><a href="{{ product.href }}" class="products_item_name">{{ product['name'] }}</a> </span>
+			<span>{{ product.year_manuf }}  <br><strong>manuf. year</strong></span>
+			<span>
+					{{ product.auction.z_last_bet_cur }}
+				<br><strong>{{ current_bid }}</strong></span>
+			<span>{{ product.auction.days_to_end }} {{ current_bid_days_laft }} </span>
+			<span>
+			<div class="bid_wish">
+					{% if product.in_wishlist %}
+								<a class="btn_wishlist btn_wishlist_enbl" title="{{ button_wishlist }}" onclick="wishlist.remove('{{ product.product_id }}');" >{{ button_wishlist_remove }}</a>
+								<a class="btn_wishlist btn_wishlist_dis" title="{{ button_wishlist }}"  style="display: none;" onclick="wishlist.add('{{ product.product_id }}');" >{{ button_wishlist }}</a>	
+						{% else %}
+								<a class="btn_wishlist btn_wishlist_enbl" title="{{ button_wishlist }}" style="display: none;" onclick="wishlist.remove('{{ product.product_id }}');" >{{ button_wishlist_remove }}</a>
+								<a class="btn_wishlist btn_wishlist_dis" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');" >{{ button_wishlist }}</a>	
+					{% endif %}
+				</div>
+				<a href="{{ product['href'] }}" class="products_item_details">{{ current_bid_details }}</a> 
+			</span>
+		</div>
+	</div>				  
+	  {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,73 @@
+	  <div class="checkout_title">{{ shipping_cart }}</div>
+
+<div class="simplecheckout-block" id="simplecheckout_customer" {{ hide ? 'data-hide="true"' : '' }} {{ display_error and has_error ? 'data-error="true"' : '' }}>
+ 
+{% if isLogged %}
+{% else %}
+
+<div class="bttn_cart_top">
+	<a   class="reg_bttn active">{{ button_register }}</a>
+<a href="javascript:void(0)" data-onclick="openLoginBox"  class="login_bttn">{{ button_login }}</a>
+ </div>
+{% endif %}
+  <div class="checkout_customer_text">{{ checkout_customer_text }}</div>
+ 
+ {% if display_header or display_login %}
+
+  {% endif %}
+  <div class="simplecheckout-block-content">
+  <div class="checkout-heading panel-heading"><span>{{ text_checkout_customer }}</span> </div>
+{% if display_registered %}
+      <div class="alert alert-success">{{ text_account_created }}</div>
+    {% endif %}
+    {% if display_you_will_registered %}
+      <div class="you-will-be-registered">{{ text_you_will_be_registered }}</div>
+    {% endif %}
+	
+
+{% if isLogged %}
+    {% for row in rows %}
+      {{ row }}
+    {% endfor %}
+<div class="bttn_cart_top isLogged">
+	<a href="{{ logout }}">{{ text_logout }}</a>
+</div>
+
+{% else %}
+
+    {% for row in rows %}
+      {{ row }}
+    {% endfor %}
+{% endif %}
+
+
+</div>
+</div>
+
+<script type="text/javascript">
+$(".login_bttn").click(function(){
+  $(".login_bttn").addClass("active");
+  $(".reg_bttn").removeClass ("active");
+  $(".simplecheckout-block-content").addClass("hide");
+  $("#simplecheckout_payment_address").addClass("hide");
+  $("#simplecheckout_login").removeClass("hide");
+  $("#simplecheckout_login .simplecheckout-block-content").removeClass("hide");
+	 
+	 
+	 
+});
+
+
+$(".reg_bttn").click(function(){
+  $(".reg_bttn").addClass("active");
+  $(".login_bttn").removeClass ("active");
+  $(".simplecheckout-block-content").removeClass("hide");
+  $("#simplecheckout_login").addClass("hide");
+
+  $("#simplecheckout_payment_address").removeClass("hide");
+
+
+
+});
+
+</script>

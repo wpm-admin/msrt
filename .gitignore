@@ -1,0 +1,16 @@
+php.ini
+config.php
+/adm
+/landing
+/catalog/.idea
+/catalog-old
+/catalog/view/.htaccess
+plan.txt
+session-ses_15cf.md
+temp_header_part.txt
+temp_old_section.txt
+.idea/vcs.xml
+CATEGORY_SECTION_GUIDE.md
+HOMEPAGE-NOTES.md
+.gitignore
+.idea/php.xml

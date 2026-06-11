@@ -1,0 +1,119 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			{% if products %}
+				{% for product in products %}
+					  <div class="products__item item_wish">
+						  <div class="products__item-stickers stickers_{{  product['stock_status_id']  }} ">{{  product['stock']  }}</div>
+						  <div class="wish_del"><a class="" title="{{ button_wishlist }}" href="{{ product.remove }}"> </a></div>
+{% if (not product['images']) %} 
+						  <div class="products__item-images"><a href="{{ product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+						  {% else %}
+						<div class="products__item-images s">
+							<a href="{{ product['href'] }}"><img  src="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a>
+						  </div>
+						  {% endif %}
+						  <div class="products__item-desc">
+<a href="{{ product['href'] }}" class="products__item-title">{{ product['name'] }}</a>
+<div class="box_manuf_sku">	
+<div>
+	{% if (product['manufacturer']) %} 
+	<span class="products__item-category">
+		{% if (product['manufacturer_img']) %} 
+			<img src="{{ product['manufacturer_img'] }}">	
+			{% else %} 
+			{{ product['manufacturer'] }}
+		{% endif %}
+	</span>
+	{% endif %}
+</div>
+<div>
+<span class="products__item-category"># {{ product['sku'] }}</span>
+</div>
+</div>				  
+	
+<div class="box_price_cart">	
+<div>
+ <span class="products__item-price">
+							{% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} 
+								{% else %} 
+									{{ product['price'] }}
+								{% endif %}
+							{% endif %} 
+						  </span>	
+  {% if (category_time and product['special'] and product['special_date_end']) %}
+							  <div class="products__item-countdown">
+								<div class="countdown">
+								  <p class="countdown__text">{{ time_text_1 }} <small>{{ time_text_2 }}</small></p>
+								  <time class="countdown__time js-countdown-time" data-text-countdown="{{ text_countdown }}">{{ product['special_date_end'] }}</time>
+								</div>
+							  </div>
+							  {% endif %}
+
+</div>
+<div>
+<div class="">
+								{% if (product['isoption_required']) %}
+									<a data-for="{{ product['product_id'] }}" title="{{ button_cart }}" data-opt="isoptneed" class="btn btn--cart js-btn-preview" href="#popupprod">
+	                                 </a>
+	                            {% else %}
+									<button type="button" class="btn btn--cart" title="{{ button_cart }}" onclick="cart.add('{{ product['product_id'] }}', '{{ product['minimum'] }}');" {{ product['buy_btn'] ? 'disabled' : ''}}> 
+									 </button>	                                
+								{% endif %}
+								{% if (product_detail) %}
+								<a data-for="{{ product['product_id'] }}" title="{{ text_product_view_btn }}" class="btn btn--preview js-btn-preview" href="#popupprod">
+                                <svg class="icon-preview">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                                </svg></a>
+								{% endif %}
+							</div>
+</div>
+</div>				  
+  </div>
+</div>
+					  
+
+
+ 
+				{% endfor %}
+				
+ 
+			{% else %}
+			<p>{{ text_empty }}</p>
+			{% endif %}
+ 
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

@@ -1,0 +1,180 @@
+           <div class="products__grid classif">
+                <div class="row">
+                                
+                      {% if products %}
+                    {% for index,product in products %}
+				     <div class="col-6 col-xl-4">
+					  <div class="products__item{% if (category_time and product['special'] and product['special_date_end']) %} products__item--countdown{% endif %}">
+						<div class="products__item-in">
+						{% if (category_time and product['special'] and product['special_date_end']) %}
+							{% if (product['special'] and product['sales']) %}
+								<mark class="products__item-discount">{{ '<small>' ~ labelsinfo['sale']['name'][language_id] ~ '</small>' ~ product['discount'] }}</mark>
+							{% endif %}
+						{% endif %}
+ 	  
+						<div class="products__item-stickers stickers_{{  product['stock_status_id']  }} ">{{  product['stock']  }}</div>
+												  
+						  {% if (not product['images']) %} 
+						  <div class="products__item-images"><a href="{{ product['consignment_href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+						  {% else %}
+						  
+						  
+						  <div class="products__item-images js-slick-products">
+						
+						<a href="{{ product['consignment_href'] }}"><img data-lazy="{{ product['thumb'] }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+							{% for imageX in product['images'] %} 
+								<a href="{{ product['consignment_href'] }}"><img data-lazy="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+						  {% endfor %} 
+						  </div>
+                    {% endif %}
+               
+							<div class="box_descr_class_cat">
+								{{ categories[product['category_id']]['name']}}
+							</div>
+							<div class="box_descr_class">  
+								<div class="box_descr_class_mark1">{{ marks[models[product['mark_id']]['parent_id']]['name'] }}</div>
+								<div class="box_descr_class_mark1">{{ models[product['mark_id']]['name'] }}</div>
+								<span class="products__item-price">
+								   {% if (product['price']) %} 
+									   {% if (product['special']) %} 
+										   <u>{{ product['price'] }}</u>{{ product['special'] }} 
+									   {% else %} 
+										   {{ product['price'] }}
+									   {% endif %}
+								   {% endif %} 
+								</span>
+							</div>
+							<div class="box_descr_class_text">  
+								{{ product.description }}
+							</div>
+							<a href="{{ product['consignment_href'] }}" class="products_view_details_class">{{ text_show_more_details }}</a>
+						</div>
+					  </div>
+                    </div>
+                  	{% if index == 1 or products|length < 2 %}
+							<div class="col-6 col-xl-4">
+								<form class="filter_form" action="javascript:;">
+									<input type="hidden" name="language_id" value="{{ language_id }}">
+								<div class="filter_category">
+									<h3>Category</h3>
+									<ul>
+										{% for category in categories %}
+											<li>
+												<label><input type="checkbox" name="filter_category[]" value="{{ category.category_id }}" {% if category.active or category_id == category.category_id or category.category_id in filter_categories %} checked {% endif %}>
+												<span class="filter_category_title">{{ category.name }}</span>
+												</label>
+											</li>	
+										{% endfor %}
+									</ul>
+								</div>
+								<div class="text_ather_details">
+								{{ text_ather_details }}
+								</div>
+								<div class="filter_category">
+									<select class="filter_mark" name="filter_mark">
+										<option value="0">select mark</option>
+										{% for mark in marks %}
+											<option value="{{ mark.mark_id }}" {% if mark_id == mark.mark_id %} selected {% endif %}>{{ mark.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								
+								<div class="filter_category">
+									<select class="filter_model" name="filter_model">
+										<option value="0" class="mark_0">select model</option>
+										{% for model in models %}
+											<option value="{{ model.mark_id }}" class="mark_{{ model.parent_id }}" {% if model_id == model.mark_id %} selected {% endif %}>{{ model.name }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								
+								<div class="filter_submit">
+									<button class="filter_submit_btn">Filter</button>
+								</div>
+								</form> 
+							</div>
+						{% endif %}
+					  {% endfor %}
+                      
+                {% else %}
+                    <div class="col-6 col-xl-4">
+                      <form class="filter_form" action="javascript:;">
+                          <input type="hidden" name="language_id" value="{{ language_id }}">
+                      <div class="filter_category">
+                          <h3>Category</h3>
+                          <ul>
+                              {% for category in categories %}
+                                  <li>
+                                        <label><input type="checkbox" name="filter_category[]" value="{{ category.category_id }}" {% if category.active or category_id == category.category_id or category.category_id in filter_categories %} checked {% endif %}>
+					                    <span class="filter_category_title">{{ category.name }}</span>
+                                      </label>
+                                  </li>	
+                              {% endfor %}
+                          </ul>
+                      </div>
+                      <div class="text_ather_details">
+                      {{ text_ather_details }}
+                      </div>
+                      <div class="filter_category">
+                          <select class="filter_mark" name="filter_mark">
+                              <option value="0">select mark</option>
+                              {% for mark in marks %}
+                                  <option value="{{ mark.mark_id }}" {% if mark_id == mark.mark_id %} selected {% endif %}>{{ mark.name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      
+                      <div class="filter_category">
+                          <select class="filter_model" name="filter_model">
+                              <option value="0" class="mark_0">select model</option>
+                              {% for model in models %}
+                                  <option value="{{ model.mark_id }}" class="mark_{{ model.parent_id }}" {% if model_id == model.mark_id %} selected {% endif %}>{{ model.name }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                      
+                      <div class="filter_submit">
+                          <button class="filter_submit_btn">Filter</button>
+                      </div>
+                      </form> 
+                  </div>    
+                {% endif %}
+                      
+                      
+                  </div>
+                </div>
+				 
+				 
+				<script>
+					$(document).on('change', '.filter_mark', function(){
+						
+						var mark_id = $(this).val();
+						
+						$('.filter_model option').hide();
+						
+						if(mark_id > 0){
+							$('.filter_model option.mark_' + mark_id).show();
+							$('.filter_model option.mark_0').show();
+						}else{
+							$('.filter_model option').show();
+						}
+						
+						$('.filter_model option').removeAttr('selected').filter('[value="0"]').attr('selected', true)
+			
+					});
+					
+					$(document).on('click', '.filter_submit_btn', function(){
+						
+						$.ajax({
+							url: 'index.php?route=product/consignment/get_filter_url',
+							type: 'post',
+							data: $('.filter_form input:checked, .filter_form input[type="hidden"], .filter_form select'),
+							dataType: 'text',
+							success: function (json) {
+								console.log(json);
+								location.href = json;
+							},
+						});
+					});
+					
+				</script>

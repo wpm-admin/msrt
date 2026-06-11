@@ -1,0 +1,277 @@
+ <div class="popup_back"></div>
+
+	<!-- consignment -->
+		<div class="popup popup-container popup-consignment-success" >
+			<div class="row">
+					<div class="col-xl-12">
+                    <h3>{{ header_consignment }}</h3> <a href="javascript:;" class="button_close_form"> </a>
+                </div>
+				<div class="consignment_success_text">
+                        <div>{{ text_consignment_success }}</div>
+                        <div>{{ text_consignment_success_text }}</div>
+						<a href="javascript:;" class="button_close_form consignment">{{ text_consignment_back }}</a>
+				</div>
+			</div>
+		</div>
+		
+	<!--CONSIGNMENT-->	
+		<div class="popup popup-container popup-consignment">
+            <form action="{{ add }}" method="post" enctype="multipart/form-data" class="add_garage_form_consignment">
+            <div class="row">
+    <div class="col-xl-12">
+						<div class="">
+							<a href="javascript:;" class="button_close_form"> </a>
+						</div>
+					</div>
+    <div class="col-xl-12">
+                        <h3>{{ header_consignment }}</h3>
+                  </div>
+                       
+
+     <div class="col-xl-6 input_box">
+						  <select name="part_category">
+          <option value="0">{{ text_part_category }}</option>
+          {% for category in categories %}
+          <option value="{{ category.category_id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+					</div>
+					<div class="col-xl-6">
+						  <input type="text" class="" name="price" placeholder="{{ text_Price2 }}" value="">
+					</div>
+					<div class="col-xl-6 input_box">
+						  <select name="modeli">
+          <option value="0">{{ text_modeli }}</option>
+          {% for mark in marks %}
+          <option value="{{ mark.mark_id }}">{{ mark.name }}</option>
+          {% endfor %}
+        </select>
+					</div>
+					<div class="col-xl-6">
+						  <input type="text"  class="" name="name_company" placeholder="{{ text_name_company }}" value="">
+					</div>
+			  
+					<div class="col-xl-6 input_box">
+						  <select type="text"  class="" name="mark" placeholder="{{ text_model }}"></select>
+					</div>
+			  
+					<div class="col-xl-6">
+						  <input type="text"  class="" name="telephone" placeholder="{{ text_telephone }}" value="">
+					</div>
+			  
+					<div class="col-xl-6">
+						  <input type="text"  class="" name="year" placeholder="{{ text_year }}" value="">
+					</div>
+			  
+					<div class="col-xl-6">
+						  <input type="text"  class="" name="email" placeholder="{{ text_email }}" value="">
+					</div>
+			  
+					<div class="col-xl-4">
+						<img class="add_image" src="/image/catalog/add_foto.png">
+						<input type="hidden"  class="" name="image[1]" value="">
+					</div>
+					<div class="col-xl-4">
+						<img class="add_image" src="/image/catalog/add_foto.png">
+						<input type="hidden"  class="" name="image[2]" value="">
+					</div>
+					<div class="col-xl-4">
+						<img class="add_image" src="/image/catalog/add_foto.png">
+						<input type="hidden"  class="" name="image[3]" value="">
+					</div>
+		  
+					<div class="col-xl-12">
+						  <div class="msg"></div>
+					</div>
+					
+					<div class="col-xl-12">
+						<div class="personal__action">
+							<a href="javascript:;" class="btn btn--transparent button_add_form">{{ btn_form_add }}</a>
+						</div>
+					</div>
+					
+			</div>
+            </form>
+		</div>
+		<!--// CONSIGNMENT-->	
+	
+
+		<!-- contact_form -->
+		<div class="popup popup-container popup-contact_form">
+            <form action="{{ add }}" method="post" enctype="multipart/form-data" class="add_garage_form">
+            <div class="row">
+                  <div class="col-xl-12">
+						<div class="personal__action">
+							<a href="javascript:;" class="btn button_close_form"> </a>
+						</div>
+                  </div>
+                       
+					<div class="col-xl-12">
+						  {{ contact_form.description }}
+					</div>
+					
+			</div>
+            </form>
+		</div>
+		 
+   
+      <style>
+       .add_image{
+        cursor: pointer;
+       }
+      </style>
+      <script>
+        $(document).on('click', '.add_garage_form_consignment .button_add_form', function(){
+        
+          $.ajax({
+           url: 'index.php?route=mail/custom_form/add_garage_form',
+           type: 'post',
+           data: $('.add_garage_form_consignment').serialize(),
+           dataType: 'text',
+           beforeSend: function () {
+            $('.popup-consignment').hide();
+           },
+           complete: function () {
+           },
+           success: function (json) {
+            console.log(json);
+            $('.popup-consignment-success').show();
+            
+            setTimeout(function(){
+             $('.popup-consignment-success').hide();
+             $('.popup_back').hide();
+             },5000);
+           },
+           error: function (xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + " " + xhr.statusText + " " + xhr.responseText);
+           }
+          });
+         
+        }); 
+        
+        //Закроем все попапы
+        $(document).on('click', '.popup_back, .button_close_form', function(){
+                 
+         $('.popup').hide();
+         $('.popup_back').hide();
+          
+        });
+		//Отвываем попапы
+        $(document).on('click', '.folder_form', function(){
+            
+			var formname = $(this).data('form');
+			
+			if(formname != 'consignment'){
+				//Если это не форма деталей - то все остальные отсылаем на форму контактов
+				formname = 'contact_form';
+			}
+			
+			console.log('.popup-'+formname);
+			
+			$('.popup-'+formname).show();
+			$('.popup_back').show();
+				
+        });
+	$('.add_image').on('click', function() {
+             var element = this;
+             var element_img = $(this);
+        
+             $('#form-upload').remove();
+        
+             var targer = $(element).parent().find('input');//.prop('name');
+          
+             $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="hidden" name="id" value="' + targer + '"><input type="file" name="file" /></form>');
+        
+             $('#form-upload input[name=\'file\']').trigger('click');
+        
+             if (typeof timer != 'undefined') {
+              clearInterval(timer);
+             }
+          
+             console.log('load');
+        
+             timer = setInterval(function() {
+                  if ($('#form-upload input[name=\'file\']').val() != '') {
+                       clearInterval(timer);
+        
+                       var filename = $('#form-upload input[name=\'file\']').val();
+                       $.ajax({
+                            url: 'index.php?route=tool/upload',
+                            type: 'post',
+                            dataType: 'json',
+                            data: new FormData($('#form-upload')[0]),
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            beforeSend: function() {
+                                 $(element).button('loading');
+                            },
+                            complete: function() {
+                                 $(element).button('reset');
+                            },
+                            success: function(json) {
+                  
+                            console.log(json);
+                  
+                            $(element).parent().find('.text-danger').remove();
+                            $(element).parent().find('.text-success').remove();
+                            $(element).parent().find('a').css('text-decoration','line-through');
+        
+                            element_img.prop('src', json.file);
+        
+                            if (json['error']) {
+                              $(element).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+                            }
+        
+                            if (json['success']) {
+                              //alert(json['success']);
+                              //$(element).parent().find('input').after('<div class="text-success">' + json['success'] + '<br><b>' + json['filename'] + '</b></div>');
+                    
+                               //$(element).parent().find('input').val(json['code']);
+                               $(element).parent().find('input').val(json.file);
+                            }
+                            },
+                            error: function(xhr, ajaxOptions, thrownError) {
+                                 console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                            }
+                       });
+                  }
+             }, 500);
+        });
+ 
+        $(document).on('change', '.add_garage_form_consignment select[name="modeli"]', function(){
+          
+             if($(this).val() < 1){
+                   
+                   var $select = $('.add_garage_form_consignment select[name="mark"]');                        
+                   $select.find('option').remove();
+                   $('<option>').val(0).text('{{ text_mark }}').appendTo($select);     
+                        
+                   return false;
+             }
+          
+             $.ajax({
+                   url: 'index.php?route=account/garage/get_marks&mark_id='+$(this).val(),
+                   type: 'get',
+                   dataType: 'json',
+                   beforeSend: function () {
+                   },
+                   complete: function () {
+                   },
+                   success: function (json) {
+                         
+                         console.log(json);
+                         
+                         var $select = $('.add_garage_form_consignment select[name="mark"]');                        
+                         $select.find('option').remove();
+                         $('<option>').val(0).text('{{ text_mark }}').appendTo($select);     
+                         $.each(json.marks, function(key, value) {
+                             $('<option>').val(value.mark_id).text(value.name).appendTo($select);     
+                         });
+                       
+                   },
+             });
+             
+       });
+
+	  </script>

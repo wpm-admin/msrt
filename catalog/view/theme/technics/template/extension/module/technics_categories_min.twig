@@ -1,0 +1,31 @@
+        <!-- Category :: Start-->
+        <div class="category category_select">
+          <div class="container-fluid">
+		  {% if title %}
+            <div class="category__head">
+              <span class="h2 category__heading">{{ title }}</span>
+            </div>
+			{% endif %}
+            <div class="category__grid">
+              <div class="row">
+				{% for banner1 in banners %}
+					{% for banner in banner1 %} 
+                <div class="col-12 col-sm-6 col-lg-{{ banner['full'] ? column*2 : column}} col-xl-{{ banner['full'] ? column*2 : column}}">
+				{% if (banner['link']) %}
+				<a class="category__item" href="{{ banner['link'] }}">
+                    <span class="h3 category__item-title">{{ banner['title'] }}</span>
+					<figure class="category__item-image"><img   src="{{ banner['image'] }}" alt="{{ banner['title'] }}"></figure>
+
+				</a>
+				{% else %}
+                    <span class="h3 category__item-title">{{ banner['title'] }}</span>
+                    <figure class="category__item-image"><img  src="{{ banner['image'] }}" alt="{{ banner['title'] }}"></figure>
+				{% endif %}
+				</div>
+					{% endfor %} 
+				{% endfor %} 
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Category :: End-->

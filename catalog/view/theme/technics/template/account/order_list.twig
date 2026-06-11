@@ -1,0 +1,112 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+			  {% if orders %}
+			  <div class="table-responsive">
+				<table class="table table-bordered table-hover">
+				  <thead>
+					<tr>
+				<td class="text-left">{{ column_image }}</td>
+					
+					  <td class="text-right">{{ column_order_id }}</td>
+					  <td class="text-left">{{ column_customer }}</td>
+					  <td class="text-right">{{ column_product }}</td>
+					  <td class="text-left">{{ column_status }}</td>
+					  <td class="text-right">{{ column_total }}</td>
+					  <td class="text-left">{{ column_date_added }}</td>
+					  <td></td>
+					</tr>
+				  </thead>
+				  <tbody>
+				   {% for order in orders %}
+					<tr id="order_id_{{ order.order_id }}">
+	
+				<td class="text-left"><a href="{{ order.view }}"><img src="{{ order.image }}"></a></td>
+
+                                <td class="text-right">#{{ order.order_id }}{% if order.total_notify %} <b class="notify-bell">({{ order.total_notify }})</b>{% endif %}</td>
+					  <td class="text-left">{{ order.name }}</td>
+					  <td class="text-right">{{ order.products }}</td>
+					  <td class="text-left">{{ order.status }}</td>
+					  <td class="text-right">{{ order.total }}</td>
+					  <td class="text-left">{{ order.date_added }}</td>
+					  <td class="text-right">
+                                    <a href="{{ order.view }}" title="{{ button_view }}" class="btn btn--sm btn--transparent">{{ button_view }}</a>
+                                    {% if order.status_id  == 1 %}
+                                          <a class="order_del" onclick="confirm('{{ text_confirm }}') ? order_delete({{ order.order_id }}) : false;" href="javascript:;"> </a>
+                                    {% endif %}
+                                </td>
+					</tr>
+					{% endfor %}
+				  </tbody>
+				</table>
+			  </div>
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %} 
+			  {% else %}
+			  <p>{{ text_empty }}</p>
+			  {% endif %}
+			<div class="personal__data">
+				<div class="personal__action">
+					<a href="{{ continue }}" class="btn btn--transparent">{{ button_continue }}</a>
+				</div>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        
+            <script>
+            function order_delete(order_id) {
+            
+                  var target = $(this);
+                  
+                  $.ajax({
+                        url: 'index.php?route=account/order/delete_order&order_id='+order_id,
+                        dataType: 'text',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              console.log(json);
+                              
+                              if(json == 'success'){
+                                    $('#order_id_'+order_id).remove();
+                              }
+                              
+                        },
+                  });
+            }
+            </script>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

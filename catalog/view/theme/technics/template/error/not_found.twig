@@ -1,0 +1,25 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+    
+        <!-- Breadcrumbs :: End-->
+ 
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+		 
+			<div class="col-xl-{{ col }}">
+				<p>{{ text_error }}</p>
+				<a href="{{ continue }}" class="btn btn--blue">{{ button_continue }}</a>
+			</div>
+			 
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+       </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

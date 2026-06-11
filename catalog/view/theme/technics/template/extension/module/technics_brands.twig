@@ -1,0 +1,60 @@
+<!-- Brands :: Start-->
+<div class="info brands-slide">
+          <div class="container-fluid">
+		  {% if (title) %}
+            <div class="media__head">
+              <span class="h2 media__heading">{{ title }}</span>
+            </div>
+		  {% endif %} 
+            <div class="row">
+              <div class="col-xl-12">
+                  <div class="js-slider-brands">
+		    {% for banner1 in banners %} 
+				{% for banner in banner1 %} 
+                    <div class="brands-slide__item">
+						{% if (banner['link']) %} 
+						<a href="{{ banner['link'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['title'] }}" style="max-width: {{ width }}rem;"></a>
+						{% else %} 
+						<img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ banner['image'] }}" alt="{{ banner['title'] }}" style="max-width: {{ width }}rem;">
+						{% endif %} 
+                    </div>
+				{% endfor %} 
+  		    {% endfor %} 
+                  </div>
+              </div>
+            </div>
+          </div>
+</div>
+<script type="text/javascript"><!--
+function slickBrands() {
+      $('.js-slider-brands').slick({
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        arrows: false,
+		dots: false,
+		autoplay: {{ autoplay ? "true" : "false"}},
+		autoplaySpeed: {{ autoplay*1000 }},
+		speed: {{ speed*100 }},
+        mobileFirst: true,
+        responsive: [{
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 2
+          }
+        }, {
+          breakpoint: 991,
+          settings: {
+            slidesToShow: 3
+          }
+        }, {
+          breakpoint: 1199,
+          settings: {
+            slidesToShow: {{ slidestoshow }}
+          }
+        }]
+
+      });
+}
+document.addEventListener('DOMContentLoaded', slickBrands);
+--></script>
+<!-- Brands :: End-->

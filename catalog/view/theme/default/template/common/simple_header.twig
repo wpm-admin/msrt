@@ -1,0 +1,66 @@
+{{ header }}
+<div class="container-fluid">
+
+<div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu" >
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li> 
+					<a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a>
+					{% if (breadcrumb.breadList is defined) %}
+			            <div class="breadcrumbs__dropdown">
+			                <ul class="breadcrumbs__submenu">
+			                  {% for i,category in breadcrumb.breadList %}
+			                  	  <li><a class="breadcrumbs__submenu-link" href="{{ category.href }}">{{ category.name }}</a></li>
+			                  {% endfor %}
+			                 </ul>
+                		</div>
+					{% endif %}					
+				</li>
+				{% else %}
+                                        
+                                        {# последняя крошка - если признак - то показываем как линк #}
+                                        {% if view_last %}
+                                                <li> 
+                                                        <a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a>
+                                                        {% if (breadcrumb.breadList is defined) %}
+                                                    <div class="breadcrumbs__dropdown">
+                                                        <ul class="breadcrumbs__submenu">
+                                                          {% for i,category in breadcrumb.breadList %}
+                                                                  <li><a class="breadcrumbs__submenu-link" href="{{ category.href }}">{{ category.name }}</a></li>
+                                                          {% endfor %}
+                                                         </ul>
+                                                </div>
+                                                        {% endif %}					
+                                                </li>
+				                
+                                        {% else %}
+                                                <li>{{ breadcrumb['text'] }}</li>
+                                        {% endif %}
+				
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div> 
+  
+  
+  
+  
+  {% if error_warning %}
+  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}
+      <h1 class="title_product_shema">{{ heading_title }}<span onclick="javascript:history.back(); return false;" class="bttn_back"></span></h1>
+	  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+
+      
+      

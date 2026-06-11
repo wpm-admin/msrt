@@ -1,0 +1,559 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main search_page">
+        <!-- Breadcrumbs :: Start-->
+        {# breadcrumbs_twig #}
+        
+        <div class="breadcrumbs select_bread" style="display: none;">
+          <div class="container-fluid">
+            <div class="filter_wrapper">
+			{% if marks %}
+				<select name="filter_mark" id="filter_mark" class="filter_row">
+					<option value="0">Select marque</option>
+					{% for row in marks %}
+						{% if filter_mark == row['id'] %}
+								<option value="{{ row['id'] }}" selected>{{ row['name'] }}</option>
+						{% else %}	
+								<option value="{{ row['id'] }}">{{ row['name'] }}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			{% endif %}
+ 												
+			{% if marks %}
+				<select name="filter_model" id="filter_model" class="filter_row">
+					<option value="0">Select model</option>
+					{% for row in models %}
+						{% if filter_model == row['id'] %}
+								<option value="{{ row['id'] }}" selected>{{ row['name'] }}</option>
+						{% else %}	
+								<option value="{{ row['id'] }}">{{ row['name'] }}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			{% endif %}
+               
+  			{% if marks %}
+				<select name="filter_category" id="filter_category" class="filter_row">
+					<option value="0">Select category</option>
+					{% for row in categories %}
+						{% if filter_category == row['id'] %}
+								<option value="{{ row['id'] }}" selected>{{ row['name'] }}</option>
+						{% else %}	
+								<option value="{{ row['id'] }}">{{ row['name'] }}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			{% endif %}
+               
+			{% if marks %}
+				<select name="filter_diagram" id="filter_diagram" class="filter_row">
+					<option value="0">Select diagram</option>
+					{% for row in diagrams %}
+						{% if filter_diagram == row['id'] %}
+								<option value="{{ row['id'] }}" selected>{{ row['name'] }}</option>
+						{% else %}	
+								<option value="{{ row['id'] }}">{{ row['name'] }}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			{% endif %}
+               
+             
+			<script>
+                $(document).on('change', '.filter_row', function(){
+																	
+					url = '{{ href }}';
+
+					var search = $('.filter_wrapper #filter_mark').val();
+					if (search && search > 0) {
+						url += '&filter_mark=' + encodeURIComponent(search);
+					}
+				
+					var search = $('.filter_wrapper #filter_model').val();
+					if (search && search > 0) {
+						url += '&filter_model=' + encodeURIComponent(search);
+					}
+				
+					var search = $('.filter_wrapper #filter_category').val();
+					if (search && search > 0) {
+						url += '&filter_category=' + encodeURIComponent(search);
+					}
+				
+					var search = $('.filter_wrapper #filter_diagram').val();
+					if (search && search > 0) {
+						url += '&filter_diagram=' + encodeURIComponent(search);
+					}
+				
+					console.log(url);
+				
+					location.href = url;												
+																																		
+                });	
+              </script>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+       <!-- Catalog :: Start-->
+        <div class="catalog catalog--search">
+          <div class="container-fluid">
+            <h1 class="catalog__heading">{{ heading_title }}</h1>
+            <div class="">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+ 
+
+						{% if (products) %} 
+										<!-- Options :: Start-->
+										<div class="options options--desktop">
+						
+						{% if (category_limits) %} 
+							<div class="box_options_show">
+								<!--
+								{{ text_limit }}
+								-->
+								<div class="box_options_show_items">
+									<!--
+									{% for limits in limits %} 
+										{% if (limits['value'] == limit) %} 
+											<div class="box_options_show_item active" OnClick="{{ limits['href'] }}" data-href="{{ limits['href'] }}"> {{ limits['text'] }}</div>
+										{% else %} 
+											<div class="box_options_show_item js-options-item" data-href="{{ limits['href'] }}">{{ limits['text'] }} </div>
+										{% endif %} 
+									{% endfor %}
+									-->
+								</div>
+							
+							</div>
+						{% endif %}			  
+							
+
+							<div class="box_options_show">
+							<div class="box_options_show_items">
+								<div class="box_options_show_item js-options-item
+								{% if picture_sort_actice %} active"  title="Products with pictures"
+								{% else %}"  title="All goods"
+								{% endif %} data-href="{{ picture_sort }}"><i class="fa fa-file-image-o" aria-hidden="true"></i></div>
+							</div>
+							<div class="box_options_show_items">
+								<div class="box_options_show_item js-options-item
+								{% if price_sort_actice %} active"  title="Products with prices"
+								{% else %}"  title="All goods"
+								{% endif %} data-href="{{ price_sort }}"><i class="fa fa-money" aria-hidden="true"></i></div>
+							</div>
+                                          {% for mark in marks %} 
+                                          <div class="box_options_show_items">
+								<div class="box_options_show_item js-options-item
+								{% if filter_model == mark.id %} active"  title="{{ mark.name }}"
+								{% else %}"  title="{{ mark.name }}"
+								{% endif %} data-href="{{ mark.sort }}" style="width: auto;padding: 16px 16px;">{{ mark.name }}</div>
+							</div>
+                                          {% endfor %}
+							</div>
+                                          
+
+
+				{% if (category_sorts) %}
+						<div class="options__type js-options">
+					
+					{% for sortData in sorts %}
+						{% if (sortData['value'] == sort ~ '-' ~ order) %}
+								{% set sort_title = sortData['text'] %}
+						{% elseif (sortData['value'] == sort) %}
+								{% set sort_title = sortData['text'] %}
+						{% endif %}
+					{% endfor %}
+					
+					<button class="options__link options__link--arrow js-options-btn">{{ text_sort }} {{ sort_title }}</button>
+					<ul class="options__dropdown">
+					{% for sortData in sorts %}
+
+					{% if (sortData['value'] == sort ~ '-' ~ order) %}
+							<li class="js-options-item is-active" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+					{% elseif (sortData['value'] == sort) %}
+							<li class="js-options-item is-active" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+							{% else %} 
+							<li class="js-options-item" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+							{% endif %}
+					{% endfor %}
+					</ul>
+						</div>
+				{% endif %}
+				  
+				  
+				  <div class="options__view js-options">
+					<button class="options__btn js-options-btn"><span class="icon-view-{{ view }}"></span></button>
+					<ul class="options__dropdown">
+					  {% if ('grid' in viewLayer) %}
+					  	<li class="js-options-item is-active" data-option="{{ viewLayer }}"><span class="icon-view-grid"></span></li>
+					  {% else %}
+					  	<li class="js-options-item" data-option="grid_{{ viewSub }}"><span class="icon-view-grid"></span></li>
+					  {% endif %}
+					  
+					  <li class="js-options-item {% if (viewLayer == 'inline') %} is-active {% endif %}" data-option="inline"><span class="icon-view-inline"></span></li>
+					  <li class="js-options-item {% if (viewLayer == 'micro') %} is-active {% endif %}" data-option="micro"><span class="icon-view-micro"></span></li>
+					</ul>
+				  </div>
+				</div>
+				
+				
+				
+				
+				
+				<div class="options options--mobile">
+				  <div class="row">
+					<div class="col-sm-12">
+					{% if (category_limits) %} 
+						<div class="box_options_show">
+					{{ text_limit }}
+						<div class="box_options_show_items">
+						{% for limits in limits %} 
+							{% if (limits['value'] == limit) %} 
+					<div class="box_options_show_item active " data-href="{{ limits['href'] }}"> {{ limits['text'] }}</div>
+										{% else %} 
+					<div class="box_options_show_item js-options-item" data-href="{{ limits['href'] }}">{{ limits['text'] }} </div>
+										{% endif %} 
+										{% endfor %} 
+					</div>
+					</div>
+					{% endif %}			  
+					 
+					{% if (category_sorts) %}
+				  <div class="options__type js-options">
+					<button class="options__link options__link--arrow js-options-btn">{{ text_sort }} {{ sort_title }}</button>
+					<ul class="options__dropdown">
+					{% for sortData in sorts %}
+					{% if (sortData['value'] == sort ~ '-' ~ order) %}
+					  <li class="js-options-item is-active" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+					  {% else %} 
+					  <li class="js-options-item" data-href="{{ sortData['href'] }}">{{ text_sort }} {{ sortData['text'] }}</li>
+					  {% endif %}
+					{% endfor %}
+					</ul>
+				  </div>
+				  {% endif %} 					 
+					 
+					 
+					 
+					</div>
+				  </div>
+				</div>
+				<!-- Options :: End-->
+			
+				<div id="mainContainer">
+
+                <div class="products__grid">
+                  <div class="row">
+					  {% for product in products %}
+                    <div class="col-6 col-xl-3">
+					  <div class="products__item{% if (category_time and product['special'] and product['special_date_end']) %} products__item--countdown{% endif %}">
+						<div class="products__item-in">
+						{% if (category_time and product['special'] and product['special_date_end']) %}
+							{% if (product['special'] and product['sales']) %}
+								<mark class="products__item-discount">{{ '<small>' ~ labelsinfo['sale']['name'][language_id] ~ '</small>' ~ product['discount'] }}</mark>
+							{% endif %}
+						{% endif %}
+ 
+						  <div class="products__item-stickers stickers_{{  product['stock_status_id']  }} ">{{  product['stock']  }}</div>
+						  {% if (1 == 1 or not product['images']) %} 
+						  <div class="products__item-images"><a href="{{ product['href'] }}">
+						  <!--img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div-->
+						  <img src="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+						  {% else %}
+						  <div class="products__item-images js-slick-products">
+							<a href="{{ product['href'] }}"><img data-lazy="{{ product['thumb'] }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+							{% for imageX in product['images'] %} 
+								<a href="{{ product['href'] }}"><img data-lazy="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+						  {% endfor %} 
+						  </div>
+						  {% endif %}
+						  <div class="products__item-desc">
+						<a href="{{ product['href'] }}" class="products__item-title">{{ product['name'] }}</a>
+														
+						<div class="box_manuf_sku">	
+						<div>
+							{% if (product['manufacturer']) %} 
+							<span class="products__item-category">
+								{% if (product['manufacturer_img']) %} 
+									<img src="{{ product['manufacturer_img'] }}">	
+									{% else %} 
+									{{ product['manufacturer'] }}
+								{% endif %}
+							</span>
+							{% endif %}
+						</div>
+						<div>
+						<span class="products__item-category"># {{ product['sku'] }}</span>
+						</div>
+						</div>				  
+							
+						<div class="box_price_cart">	
+						<div>
+						 <span class="products__item-price">
+							{% if (product['price']) %} 
+								{% if (product['special']) %} 
+									<u>{{ product['price'] }}</u>{{ product['special'] }} 
+								{% else %} 
+									{{ product['price'] }}
+								{% endif %}
+							{% endif %} 
+						  </span>	
+  {% if (category_time and product['special'] and product['special_date_end']) %}
+							  <div class="products__item-countdown">
+								<div class="countdown">
+								  <p class="countdown__text">{{ time_text_1 }} <small>{{ time_text_2 }}</small></p>
+								  <time class="countdown__time js-countdown-time" data-text-countdown="{{ text_countdown }}">{{ product['special_date_end'] }}</time>
+								</div>
+							  </div>
+							  {% endif %}
+
+							</div>
+							<div>
+							<div class="">
+								{% if (product['isoption_required']) %}
+									<a data-for="{{ product['product_id'] }}" title="{{ button_cart }}" data-opt="isoptneed" class="btn btn--cart js-btn-preview" href="#popupprod">
+	                                 </a>
+	                            {% else %}
+									<button type="button" class="btn btn--cart" title="{{ button_cart }}" onclick="cart.add('{{ product['product_id'] }}', '{{ product['minimum'] }}');" {{ product['buy_btn'] ? 'disabled' : ''}}> 
+									 </button>	                                
+								{% endif %}
+								{% if (product_detail) %}
+								<a data-for="{{ product['product_id'] }}" title="{{ text_product_view_btn }}" class="btn btn--preview js-btn-preview" href="#popupprod">
+                                <svg class="icon-preview">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                                </svg></a>
+								{% endif %}
+							</div>
+						</div>
+
+
+
+
+
+						</div>				  
+							
+						<div class="view_details">
+							<a href="{{ product['href'] }}" class="products_view_details">{{ text_show_details }}</a>
+						</div>						
+						 
+							
+							
+						  </div>
+						</div>
+					  </div>
+                    </div>
+					  {% endfor %}
+                  </div>
+                </div>
+				</div>
+				
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %} 
+			{% endif %}
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+       	
+			<div class="box_search_links">
+				<div class="box_search_links_title">{{ text_title_parts }}  </div>
+				<div class="box_search_links_parts">
+					<a href="/maserati/">{{ text_title_parts_1 }}</a>
+					<a href="{{ club_href }}">{{ text_title_parts_2 }}</a>
+					<!-- <a href="#">{{ text_title_parts_3 }}</a> -->
+				</div>
+			</div>
+			
+		</div>
+		  </div>
+        </div>
+        <!-- Page :: End-->
+		
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}
+<script>
+$('#button-search').bind('click', function() {
+	url = 'index.php?route=product/search';
+
+	var search = $('.js-search-page input[name=\'search\']').prop('value');
+
+	if (search) {
+		url += '&search=' + encodeURIComponent(search);
+	}
+
+	var category_id = $('.js-search-page select[name=\'category_id\']').prop('value');
+
+	if (category_id > 0) {
+		url += '&category_id=' + encodeURIComponent(category_id);
+	}
+
+	var sub_category = $('.js-search-page input[name=\'sub_category\']:checked').prop('value');
+
+	if (sub_category) {
+		url += '&sub_category=true';
+	}
+
+	var filter_description = $('.js-search-page input[name=\'description\']:checked').prop('value');
+
+	if (filter_description) {
+		url += '&description=true';
+	}
+
+	location = url;
+});
+
+$('.js-search-page input[name=\'search\']').bind('keydown', function(e) {
+	if (e.keyCode == 13) {
+		$('#button-search').trigger('click');
+	}
+});
+
+$('.js-search-page select[name=\'category_id\']').on('change', function() {
+	if (this.value == '0') {
+		$('input[name=\'sub_category\']').prop('disabled', true);
+	} else {
+		$('input[name=\'sub_category\']').prop('disabled', false);
+	}
+});
+
+$('.js-search-page select[name=\'category_id\']').trigger('change');
+</script>
+{% if schema %} 
+<!-- Schema Org :: Start-->
+<script type="application/ld+json">
+          {
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+			{% for i,breadcrumb in breadcrumbs %}
+			{
+              "@type": "ListItem",
+              "position": {{ i + 1 }},
+              "item": {
+                "@id": "{{ breadcrumb['href'] }}",
+                "name": "{{ breadcrumb['text'] }}"
+              }
+            }{% if (i + 1 < breadcrumbs|length) %},{% endif %}
+			{% endfor %}
+			]
+          }
+</script>
+ <!-- Schema Org :: End-->
+ 
+ <script>
+	var pagination_exist = true; // оставить пагинацию и добавить кнопку
+	var button_more = false; // наличие кнопки "загрузить ещё"
+	var top_offset = 100; // высота отступа от верха окна, запускающего arrow_top
+	var window_height = 0; // высота окна
+	var product_block_offset = 0; // отступ от верха окна блока, содержащего контейнеры
+	
+	var product_block = '.products__grid'; // определяет div, содержащий товары
+	var pages_count = 0; // счетчик массива ссылок пагинации
+	var pages = []; // массив для ссылок пагинации
+	var waiting = false;
+
+function getNextProductPage(pages) {
+	
+	if (waiting) return;
+	
+    if (pages_count >= pages.length) return;
+	waiting = true;
+	
+	//$(product_block).parent().after('<div id="ajax_loader"><img src="/image/ajax-loader-horizontal.gif" /></div>');
+	$.ajax({
+		url:pages[pages_count], 
+		type:"GET", 
+		data:'',
+		success:function (data) {
+			
+			$data = $(data);
+			$('#ajax_loader').remove();
+			if ($data) {         
+				if ($data.find('.product-list').length > 0)    {
+					$(product_block).parent().append($data.find('.products__grid').parent().html());
+					if (product_block == '.products__grid') {$('#grid-view').trigger('click')};
+				} else {
+					$(product_block).parent().append($data.find('.products__grid').parent().html());
+					if (product_block == '.products__grid') {$('#list-view').trigger('click')};
+				}
+				if (pagination_exist) {
+					$('.pagination').html($data.find('.pagination'));
+				}
+			}
+			
+			waiting = false;
+		}
+	});
+	pages_count = pages_count + 1;
+	//if (pages_count+1 >= pages.length) {$('#ajax_loader').hide();};
+}
+
+
+function getProductBlock() {
+    if ($('.product-list').length > 0) {
+        product_block = '.product-list';
+    } else {
+        product_block = '.products__grid';
+    }
+    return product_block;
+}
+
+$(document).ready(function(){
+	
+	window_height = $(window).height();
+    product_block = getProductBlock();
+	var button_more_block = $('#load_more').html(); //
+	var arrow_top = $('#arrow_top'); //
+    
+	if ($(product_block).length > 0) {
+        product_block_offset = $(product_block).offset().top;
+		var href = $('.pagination').find('li:last a').attr('href');
+        $('.pagination').each(function(){
+			if (href) {
+				TotalPages = href.substring(href.indexOf("page=")+5);
+				First_index = $(this).find('li.active span').html();
+				i = parseInt(First_index) + 1;
+				while (i <= TotalPages) {
+					pages.push(href.substring(0,href.indexOf("page=")+5) + i);
+					i++;
+				}
+					
+			}		
+        });	
+		
+		$(window).scroll(function(){
+			if (arrow_top) {
+				if ($(document).scrollTop() > top_offset) {
+					$('#arrow_top').show();
+				} else {
+					$('#arrow_top').hide();
+				} 
+			}
+		});
+
+		//$('.pagination').parent().parent().hide();
+		$(window).scroll(function(){
+			product_block = getProductBlock();
+			product_block_height = $(product_block).parent().height();
+			
+			if (pages.length > 0) {
+			
+				if((product_block_offset+product_block_height-window_height)<($(this).scrollTop())){
+					getNextProductPage(pages);
+					//pages_count++;
+				}
+			}
+		});
+		
+    }
+	
+});
+ </script>
+ 
+{% endif %}
+</body></html>

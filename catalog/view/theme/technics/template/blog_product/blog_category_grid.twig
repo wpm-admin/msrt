@@ -1,0 +1,92 @@
+                <div class="blog_products__grid">
+                  <div class="row">
+					  {% for blog_product in blog_products %}
+                    <div class="col-6 col-xl-4">
+					  <div class="blog_products__item{% if (blog_category_time and blog_product['special'] and blog_product['special_date_end']) %} blog_products__item--countdown{% endif %}">
+						<div class="blog_products__item-in">
+						{% if (blog_category_time and blog_product['special'] and blog_product['special_date_end']) %}
+							{% if (blog_product['special'] and blog_product['sales']) %}
+								<mark class="blog_products__item-discount">{{ '<small>' ~ labelsinfo['sale']['name'][language_id] ~ '</small>' ~ blog_product['discount'] }}</mark>
+							{% endif %}
+						{% endif %}
+ 
+				 
+						  
+ <div class="blog_products__item-stickers stickers_{{  blog_product['stock_status_id']  }} ">{{  blog_product['stock']  }}</div>
+												  
+						  {% if (not blog_product['images']) %} 
+						  <div class="blog_products__item-images"><a href="{{ blog_product['href'] }}"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src' : 'src' }}="{{ blog_product['thumb'] }}" alt="{{ blog_product['name'] }}"></a></div>
+						  {% else %}
+						  
+						  
+						  <div class="blog_products__item-images js-slick-blog_products">
+						
+						<a href="{{ blog_product['href'] }}"><img data-lazy="{{ blog_product['thumb'] }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ blog_product['name'] }}"></a>
+							{% for imageX in blog_product['images'] %} 
+								<a href="{{ blog_product['href'] }}"><img data-lazy="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ blog_product['name'] }}"></a>
+						  {% endfor %} 
+						  </div>
+						  {% endif %}
+						  <div class="blog_products__item-desc">
+						  						  						  <a href="{{ blog_product['href'] }}" class="blog_products__item-title">{{ blog_product['name'] }}</a>
+						 
+
+<div class="box_price_cart">	
+<div>
+ <span class="blog_products__item-price">
+							{% if (blog_product['price']) %} 
+								{% if (blog_product['special']) %} 
+									<u>{{ blog_product['price'] }}</u>{{ blog_product['special'] }} 
+								{% else %} 
+									{{ blog_product['price'] }}
+								{% endif %}
+							{% endif %} 
+						  </span>	
+  {% if (blog_category_time and blog_product['special'] and blog_product['special_date_end']) %}
+							  <div class="blog_products__item-countdown">
+								<div class="countdown">
+								  <p class="countdown__text">{{ time_text_1 }} <small>{{ time_text_2 }}</small></p>
+								  <time class="countdown__time js-countdown-time" data-text-countdown="{{ text_countdown }}">{{ blog_product['special_date_end'] }}</time>
+								</div>
+							  </div>
+							  {% endif %}
+
+</div>
+<div>
+<div class="">
+								{% if (blog_product['isoption_required']) %}
+									<a data-for="{{ blog_product['blog_product_id'] }}" title="{{ button_cart }}" data-opt="isoptneed" class="btn btn--cart js-btn-preview" href="#popupprod">
+	                                 </a>
+	                            {% else %}
+									<button type="button" class="btn btn--cart" title="{{ button_cart }}" onclick="cart.add('{{ blog_product['blog_product_id'] }}', '{{ blog_product['minimum'] }}');" {{ blog_product['buy_btn'] ? 'disabled' : ''}}> 
+									 </button>	                                
+								{% endif %}
+								{% if (blog_product_detail) %}
+								<a data-for="{{ blog_product['blog_product_id'] }}" title="{{ text_blog_product_view_btn }}" class="btn btn--preview js-btn-preview" href="#popupprod">
+                                <svg class="icon-preview">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+                                </svg></a>
+								{% endif %}
+							</div>
+</div>
+
+
+
+
+
+</div>	
+ 
+<div class="view_details">
+	<a href="{{ blog_product['href'] }}" class="blog_products_view_details">{{ text_show_details }}</a>
+</div>		
+
+
+						  
+ 
+						  </div>
+						</div>
+					  </div>
+                    </div>
+					  {% endfor %}
+                  </div>
+                </div>

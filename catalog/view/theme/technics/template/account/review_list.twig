@@ -1,0 +1,199 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+				
+				<div class="catalog__category">
+					<div class="category__grid">
+					  <div class="row">
+						<div class="col-6 col-sm-6 col-lg-3">
+							<a class="category__item" href="{{ all_answer_href }}">
+								<span class="h3 category__item-title">All Answers</span>
+							</a>
+						</div>
+						<div class="col-6 col-sm-6 col-lg-3">
+							<a class="category__item" href="{{ all_review_href }}">
+								<span class="h3 category__item-title">All Reviews</span>
+							</a>
+						</div>
+							<div class="col-6 col-sm-6 col-lg-3">
+							<a class="category__item" href="{{ new_href }}">
+								<span class="h3 category__item-title">New</span>
+							</a>
+						</div>
+							
+					  </div>
+					</div>
+				</div>
+				
+				
+				
+			  {% if a_reviews or r_reviews %}
+			  <div class="table-responsive">
+				{% if a_reviews %}
+				<h3>Answer(s)</h3>
+				<table class="table table-bordered table-hover">
+				  <thead>
+					<tr>
+						<td class="text-left"></td>
+						<td class="text-left">{{ column_image }}</td>
+					  <td class="text-left">{{ column_product }}</td>
+					  <td class="text-left">{{ column_message }}</td>
+					  <td></td>
+					</tr>
+				  </thead>
+				  <tbody>
+				   {% for review in a_reviews %}
+					<tr id="answer_id_{{ review.review_id }}">
+						<td class="text-left">
+							{% if review.active %}
+								<i class="fa fa-bell wibro notify-bell" aria-hidden="true"></i>
+							{% endif %}
+						</td>
+						<td class="text-left"><a href="{{ review.href }}"><img src="{{ review.image }}"></a></td>
+						<td class="text-left"><a href="{{ review.href }}">{{ review.product.name }}</td>
+						<td class="text-left">{{ review.info.text }}<br><br><b>{{ review.info.answer }}</b></td>
+						<td class="text-right">
+                            {% if review.active %}
+								<a href="javascript:;" class="make_read" data-review_id="{{ review.review_id }}" data-field="read_quest">Make as read</i>
+							{% endif %}
+                        </td>
+					</tr>
+					{% endfor %}
+				  </tbody>
+				</table>
+				{% endif %}
+			
+				{% if r_reviews %}
+				<h3>Review(s)</h3>
+				<table class="table table-bordered table-hover">
+				  <thead>
+					<tr>
+						<td class="text-left"></td>
+						<td class="text-left">{{ column_image }}</td>
+					  <td class="text-left">{{ column_product }}</td>
+					  <td class="text-left">{{ column_message }}</td>
+					  <td></td>
+					</tr>
+				  </thead>
+				  <tbody>
+				   {% for review in r_reviews %}
+					<tr id="review_id_{{ review.review_id }}">
+						<td class="text-left">
+							{% if review.active %}
+								<i class="fa fa-bell wibro notify-bell" aria-hidden="true"></i>
+							{% endif %}
+						</td>
+						<td class="text-left"><a href="{{ review.href }}"><img src="{{ review.image }}"></a></td>
+						<td class="text-left"><a href="{{ review.href }}">{{ review.product.name }}</td>
+						<td class="text-left answer">{{ review.info.text }}<br><br>
+							<b>answer:</b><br>
+							<textarea class="text" data-review_id="{{ review.review_id }}">{{ review.info.answer }}</textarea><br>
+							<button class="btn save">save</button> 
+						</td>
+						<td class="text-right">
+                            {% if review.active %}
+								<a href="javascript:;" class="make_read" data-review_id="{{ review.review_id }}" data-field="read_customer">Make as read</i>
+							{% endif %}
+                        </td>
+					</tr>
+					{% endfor %}
+				  </tbody>
+				</table>
+				{% endif %}
+			  </div>
+				{% if (pagination) %}
+				<div class="container-pagination">
+					{{ pagination }}
+				</div>
+				{% endif %} 
+			  {% else %}
+			  <p>{{ text_empty }}</p>
+			  {% endif %}
+			<div class="personal__data">
+				<div class="personal__action">
+					<a href="{{ continue }}" class="btn btn--transparent">{{ button_continue }}</a>
+				</div>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        
+            <script>
+				
+				$(document).on('click', '.answer button.save', function(){
+					
+					var review_id = $(this).parents('td').find('textarea').data('review_id');
+					var text = $(this).parents('td').find('textarea').val();
+					
+					$.ajax({
+                        url: 'index.php?route=account/review/write_answer&review_id='+review_id+'&text='+encodeURIComponent(text) ,
+                        dataType: 'text',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                            console.log(json);
+                              
+                        },
+					});
+				});
+				
+				$(document).on('click', '.make_read', function(){
+					
+					var review_id = $(this).data('review_id');
+					var field = $(this).data('field');
+					
+					$.ajax({
+                        url: 'index.php?route=account/review/make_as_read&review_id='+review_id+'&field='+field,
+                        dataType: 'text',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              console.log(json);
+                              
+							  if(field == 'read_quest'){
+								$('#answer_id_'+review_id+' .notify-bell').remove();
+							  }else{
+								$('#review_id_'+review_id+' .notify-bell').remove();
+							  }
+							
+                              
+                        },
+					});
+				});
+				
+			   
+            </script>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      <!-- Main :: End-->
+{{ footer }}</body></html>

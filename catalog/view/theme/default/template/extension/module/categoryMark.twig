@@ -1,0 +1,70 @@
+ <link rel="stylesheet" href="catalog/view/theme/technics/css/swiper-bundle.min.css">
+<div class="slider_model_title">{{ text_model_title }}</div>
+<div class="swiper box_swiper_mark mySwiper">
+      <div class="swiper-wrapper">
+	{% for mark in marks %}
+	{% if mark.children %}
+			{% for child in mark.children %}
+<div class="swiper-slide">
+<a href="{{ child.href }}" class="child">
+<div class="img_child"><img src="{{ child.image }}"></div>
+{{ child.name }}
+</a>
+</div>
+					{% if child.children %}
+						{% for child1 in child.children %}
+<div class="swiper-slide">
+<a href="{{ child1.href }}" class="child1">
+<div class="img_child"><img src="{{ child1.image }}"></div>
+{{ child1.name }}
+</a>
+</div>
+						{% endfor %}
+					{% endif %}
+			{% endfor %}
+		{% endif %}
+  {% endfor %}	
+	 </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+    <!-- Swiper JS -->
+
+<script src="catalog/view/javascript/swiper-bundle.min.js"></script>
+		 
+    <!-- Initialize Swiper -->
+    <script>
+      var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        slidesPerGroup:1,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+           clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+		
+		
+		 // Responsive breakpoints
+  breakpoints: {
+    // when window width is >= 320px
+    320: {
+      slidesPerView: 1,
+      spaceBetween: 20
+    },
+ 
+    // when window width is >= 640px
+    990: {
+      slidesPerView: 3,
+      spaceBetween: 30
+    }
+	}
+	
+	
+      });
+    </script>	

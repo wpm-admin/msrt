@@ -1,0 +1,651 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+
+<div class="alerts"></div>
+
+      <!-- Main :: Start-->
+      <main class="main page_product">
+        <!-- Breadcrumbs :: Start-->
+        {{ breadcrumbs_twig }}
+        <!-- Breadcrumbs :: End-->
+
+        <!-- Page :: Start-->
+        <div class="sku">
+		
+        {% if (column_left or column_right) %}
+          <div class="container-fluid">
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-{{ col }}">
+		{% endif %}
+		
+        <!-- SKU :: Start-->
+		  <div class="container-fluid">
+
+			 <h1 class="title_product_shema">{{ heading_title }}</h1>
+<div class="row">
+              <div class="col-md-7 col-lg-7 image_box">
+
+				<div class="sku__slides js-gallery-slides">
+					{% if (thumb) %}
+						{% if (zoom) %}
+							<a class="sku__slides-item sku__slides-item--ezplus" data-popup="{{ popup }}"><img src="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" data-zoom-{% if (zoom == 2) %}lens{% elseif (zoom == 3) %}window{% else %}inner{% endif %} data-zoom-image="{{ popup }}"></a>
+						{% else %}
+							<a class="sku__slides-item article_top" href="{{ popup }}" data-fancybox="images"><img {% if (lazyload) %}src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" width="{{ image_thumb_width }}" height="{{ image_thumb_height }}" data-lazy{% else %}src{% endif %}="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}"></a>
+						{% endif %}
+					{% endif %}
+					
+	
+	
+	
+	
+	      {% if is_mobile %}
+              {% else %}
+
+
+
+<div class="dop_img_art ">	
+					{% if (images) %} 
+						{% for image in images %}
+						 {% if image.isvideo is defined %}
+						 	<div class="sku__slides-item in">
+							<a data-fancybox="images" href="https://www.youtube.com/watch?v={{ image['thumb']|replace({'https://www.youtube.com/embed/': '', '?controls=0': ''}) }}"><span>▶</span><img {% if (lazyload) %}src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" width="480" height="360" data-lazy{% else %}src{% endif %}="https://img.youtube.com/vi/{{ image['thumb']|replace({'https://www.youtube.com/embed/': '', '?controls=0': ''}) }}/hqdefault.jpg" title="{{ heading_title }}"></a>
+							</div>
+						 {% else %}
+						 
+						
+						  {% if (zoom) %}
+							<a class="sku__slides-item sku__slides-item--ezplus" data-popup="{{ image['popup'] }}"><img src="{{ image['thumb'] }}" alt="{{ heading_title }}" title="{{ heading_title }}" data-zoom-{% if (zoom == 2) %}lens{% elseif (zoom == 3) %}window{% else %}inner{% endif %} data-zoom-image="{{ image['popup'] }}"></a>
+						  {% else %}
+							<a class="sku__slides-item article_dop" href="{{ image['popup'] }}" data-fancybox="images"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ image['thumb'] }}" alt="{{ heading_title }}" title="{{ heading_title }}"></a>
+						  {% endif %}
+						
+						  
+						  
+						 {% endif %}
+						{% endfor %}
+					{% endif %}	
+					 </div>
+					 
+{% endif %}
+					 
+					 
+					 
+					</div>
+ 
+
+
+               </div>
+              <div class="col-md-5 col-lg-5 box_news_item_deskr">
+	{% if (description) %}
+					{{ description }}
+				{% endif %}	
+				  
+            </div>
+			
+			
+      {% if is_mobile %}
+						 <div class="dop_img_art mobi_img_art">	
+					{% if (images) %} 
+						{% for image in images %}
+						 {% if image.isvideo is defined %}
+						 	<div class="sku__slides-item in">
+							<a data-fancybox="images" href="https://www.youtube.com/watch?v={{ image['thumb']|replace({'https://www.youtube.com/embed/': '', '?controls=0': ''}) }}"><span>▶</span><img {% if (lazyload) %}src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" width="480" height="360" data-lazy{% else %}src{% endif %}="https://img.youtube.com/vi/{{ image['thumb']|replace({'https://www.youtube.com/embed/': '', '?controls=0': ''}) }}/hqdefault.jpg" title="{{ heading_title }}"></a>
+							</div>
+						 {% else %}
+						 
+						
+						  {% if (zoom) %}
+							<a class="sku__slides-item sku__slides-item--ezplus" data-popup="{{ image['popup'] }}"><img src="{{ image['thumb'] }}" alt="{{ heading_title }}" title="{{ heading_title }}" data-zoom-{% if (zoom == 2) %}lens{% elseif (zoom == 3) %}window{% else %}inner{% endif %} data-zoom-image="{{ image['popup'] }}"></a>
+						  {% else %}
+							<a class="sku__slides-item article_dop" href="{{ image['popup'] }}" data-fancybox="images"><img {{ lazyload ? 'src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-lazy' : 'src' }}="{{ image['thumb'] }}" alt="{{ heading_title }}" title="{{ heading_title }}"></a>
+						  {% endif %}
+						
+						  
+						  
+						 {% endif %}
+						{% endfor %}
+					{% endif %}	
+					 </div>              {% else %}
+
+{% endif %}
+        			
+	
+					 
+					 
+          </div>
+ 
+
+        {% if (column_left or column_right) %}
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+		{% endif %}
+
+		{% if (review_status) %}
+        <!-- Comments :: Start-->
+        <div class="comments">
+          <div class="container-fluid">
+            <span class="h2 comments__heading">{{ button_reviews }}<mark>{{ reviews_num }}</mark></span>
+            <div class="row">
+              <div class="col-lg-8">
+                <div class="comments__container">
+                  <div class="comments__container-in">
+					<div id="review">{{ reviewsdata }}</div>
+                    <div class="comments__form">
+					{% if review_guest %}
+                      <form id="form-review">
+					    {% if (customer_name) %}
+                        <div class="comments__user">
+                          <figure class="comments__user-image">
+                            <svg class="icon-photo">
+                              <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-photo"></use>
+                            </svg>
+                          </figure><span class="comments__user-name">{{ customer_name }}</span>
+                        </div>
+						<input type="hidden" name="name" value="{{ customer_name }}">
+						{% else %}
+                        <h5>{{ text_write }}</h5>
+						<input class="ui-input" type="text" name="name" value="{{ customer_name }}" placeholder="{{ entry_name }}">
+						{% endif %}
+                        <textarea class="ui-textarea" name="text" placeholder="{{ entry_review }}"></textarea>
+                        <textarea class="ui-textarea ui-textarea--50" name="text_plus" placeholder="{{ text_review_plus }}"></textarea>
+                        <textarea class="ui-textarea ui-textarea--50" name="text_minus" placeholder="{{ text_review_minus }}"></textarea>
+						{{ captcha }}
+                        <div class="comments__form-action">
+                          <div class="ui-rating">
+                            <p class="ui-rating__text">{{ entry_rating }}</p>
+                            <div class="ui-rating__stars">
+							{% set i=5 %}{% for i in i..1 %}
+                              <input class="ui-rating__input" type="radio" name="rating" value="{{ i }}" id="star_{{ i }}">
+                              <label class="ui-rating__label" for="star_{{ i }}">
+                                <svg class="icon-star">
+                                  <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-star"></use>
+                                </svg>
+                              </label>
+							{% endfor %}
+                            </div>
+                          </div>
+                          <button class="btn btn--blue"  data-loading-text="{{ text_loading }}" onclick="reviewAdd(); return false;">{{ button_continue }}</button>
+                        </div>
+						{% if (text_review_pdata) %}
+						<div class="personal-data">{{ text_review_pdata }}</div>
+						{% endif %}
+                      </form>
+					{% else %}
+					<h5>{{ text_write }}</h5>
+					{{ text_login }}
+					{% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+			  {% if reviewsStats is not empty %} 
+              <div class="col-hidden col-lg-visible col-lg-4">
+                <span class="h2 comments__heading">{{ text_review }}</span>
+                <div class="comments__statistic">
+                  <table class="comments__statistic-table">
+                   {% for reviewsStat in reviewsStats %}
+                    <tr>
+                      <td><span class="comments__statistic-line">{% for i in 1..reviewsStat.rating %}<span></span>{% endfor %}</span></td>
+                      <td><span class="comments__statistic-pct">{{ reviewsStat.percent }}%</span></td>
+                      <td>
+					  {% if reviewsStat.count != 0 %} 
+					  <a href="#" data-link="{{ reviewsStat.link }}" class="comments__statistic-count">{{ reviewsStat.count }} {{ reviewsStat.text }}</a>
+					  {% else %}
+					  <span class="comments__statistic-count">{{ reviewsStat.count }} {{ reviewsStat.text }}</span>
+					  {% endif %}
+					  </td>
+                    </tr>
+                   {% endfor %}
+                  </table>
+                  <button class="btn btn--transparent all_rew showmore" style="display:none;" data-link="product_id={{product_id}}&rating=0">{{ text_show_more }}</button>
+                </div>
+              </div>
+			  {% endif %}
+            </div>
+          </div>
+        </div>
+        <!-- comments :: End-->
+		{% endif %}
+		
+ 
+		
+		{% if (customTabs['popup'] is defined) %} 
+			{% for key,popup in customTabs['popup'] %} 
+		  <div class="popup popup--1090" style="display: none;" id="custom-popup-{{ key }}">
+			<div class="writeus"><span class="writeus__heading">{{ popup['title'] }}</span>
+			  <div class="writeus__form">
+				{{ popup['description'] }}
+			  </div>
+			</div>
+		  </div>
+			{% endfor %} 
+		{% endif %} 
+		
+			  
+			  
+			  
+		
+		  
+			  
+        </div>
+        <!-- Page :: End-->
+
+      </main>
+      <!-- Main :: End-->
+		  
+		  
+		  
+	<div class="atricle_footer">	 
+		<div class="container-fluid">
+			{% if (products) %}
+        <!-- Products :: Start-->
+        <div class="products products--recomended">
+          <div class="container-fluid">
+            <span class="h2 products__heading">{{ text_related }}</span>
+			{% if (p_related_view == 0) %}
+            <div class="products__slides js-slick-recomended">
+			  {% for product in products %}
+
+				<div class="products__item{% if (category_time and product['special'] and product['special_date_end']) %} products__item--countdown{% endif %}">
+<a href="{{ product['href'] }}"></a>
+						<div class="products__item-in">
+						  {% if (not product['images']) %} 
+							  <div class="products__item-images"><a href="{{ product['href'] }}">
+							  <img src="{{ product['thumb'] }}" alt="{{ product['name'] }}"></a></div>
+						  {% else %}
+						  <div class="products__item-images js-slick-products">
+							<a href="{{ product['href'] }}"><img data-lazy="{{ product['thumb'] }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+							{% for imageX in product['images'] %} 
+								<a href="{{ product['href'] }}"><img data-lazy="{{ imageX }}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt="{{ product['name'] }}"></a>
+						  {% endfor %} 
+						  </div>
+						  {% endif %}
+						  <div class="products__item-desc">
+							<div class="name"><a href="{{ product['href'] }}">{{ product['name'] }}</a></div>
+							 <div class="description">{{ product['description'] }}</div>
+							<div class="autor">{{ text_author }}: {{ product['sku'] }}</div>
+							<div class="date">{{ product['date_available'] }} </div>
+						  </div>
+                          </div>
+                        </div>
+	
+				
+				{% endfor %}
+            </div>
+			{% else %}
+			{% endif %}
+          </div>
+        </div>
+        <!-- Products :: End-->
+		{% endif %}
+
+			  
+ 			  
+		{{ blogs_related }}
+			  
+		  </div>		  
+		  </div>		  
+		  
+		  
+{{ footer }}
+{% if schema %} 
+        <!-- Schema Org :: Start-->
+        <script type="application/ld+json">
+          {
+            "@context": "http://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+			{% for i,breadcrumb in breadcrumbs %}
+			{
+              "@type": "ListItem",
+              "position": {{ i + 1 }},
+              "item": {
+                "@id": "{{ breadcrumb['href'] }}",
+                "name": "{{ breadcrumb['text'] }}"
+              }
+            }{% if (i + 1 < breadcrumbs|length) %},{% endif %}
+			{% endfor %}
+			]
+          }
+        </script>
+        <script type="application/ld+json">
+          {
+            "@context": "http://schema.org/",
+            "@type": "Product",
+            "name": "{{ heading_title }}",
+            "image": [
+			{% if (images_for_schema) %}
+			{{ images_for_schema }}
+			{% endif %} 
+             ],
+            "description": "{{ schema_description }}",
+            "mpn": "{{ model }}",
+            "sku": "{{ model }}",
+            "brand": "{{ manufacturer }}",
+			{% if (review_status and rating) %}
+            "aggregateRating": {
+              "@type": "AggregateRating",
+			  "bestRating": "5",
+			  "worstRating": "1",
+              "ratingValue": "{{ rating }}",
+              "reviewCount": "{{ reviews_num }}"
+            },
+			{% endif %}
+            "offers": {
+              "@type": "Offer",
+              "url": "{{ href }}",
+              "priceCurrency": "{{ currency }}",
+			  {% if (not special) %}
+              "price": "{{ price_schema }}",
+			  {% if (discount_date_end) %}"priceValidUntil": "{{ discount_date_end }}",{% endif %}
+			  {% else %}
+              "price": "{{ special_schema }}",
+			  {% if (special_date_end) %}"priceValidUntil": "{{ special_date_end }}",{% endif %}
+			  {% endif %}
+              "itemCondition": "http://schema.org/UsedCondition",
+			  {% if (quantity > 0) %}
+              "availability": "http://schema.org/InStock",
+			  {% else %}
+              "availability": "http://schema.org/OutOfStock",
+			  {% endif %}
+              "seller": {
+                "@type": "Organization",
+                "name": "{{ store }}"
+              }
+            }
+          }
+        </script>
+        <!-- Schema Org :: End-->
+{% endif %}
+<script>
+$('select[name=\'recurring_id\'], #product input[name="quantity"]').change(function(){
+	$.ajax({
+		url: 'index.php?route=product/product/getRecurringDescription',
+		type: 'post',
+		data: $('input[name=\'product_id\'], #product input[name=\'quantity\'], select[name=\'recurring_id\']'),
+		dataType: 'json',
+		beforeSend: function() {
+			$('#recurring-description').html('');
+		},
+		success: function(json) {
+			$('.alert, .recurring .ui-error').remove();
+			$('.recurring .ui-field').removeClass('is-error');
+
+			if (json['success']) {
+				$('#recurring-description').html(json['success']);
+			}
+		}
+	});
+});
+
+
+	
+$('#button-cart').on('click', function() {
+
+	var datapr = $('#product input[type=\'text\'], #product input[type=\'hidden\'], #product input[type=\'number\'], #product input[type=\'radio\']:checked, #product input[type=\'checkbox\']:checked, #product select, #product textarea');
+
+
+	$.ajax({
+		url: 'index.php?route=checkout/cart/add',
+		type: 'post',
+		data: datapr,
+		dataType: 'json',
+		beforeSend: function() {
+			$('#button-cart').button('loading');
+		},
+		complete: function() {
+			$('#button-cart').button('reset');
+		},
+		success: function(json) {
+			$('.alert, .ui-error').remove();
+			$('[id^="input-option"],.ui-field').removeClass('is-error');
+
+			if (json['error']) {
+				if (json['error']['option']) {
+					for (i in json['error']['option']) {
+						var element = $('#input-option' + i.replace('_', '-'));
+
+						if (element.parent().hasClass('ui-select')) {
+							element.parent().after('<span class="error ui-error">' + json['error']['option'][i] + '</span>').parent().addClass('is-error');
+						} else if (element.hasClass('ui-input') || element.hasClass('ui-textarea')) {
+							element.after('<svg class="icon-error"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-error"></use></svg><span class="error ui-error">' + json['error']['option'][i] + '</span>').parent().addClass('is-error');
+						} else {
+							element.after('<span class="error ui-error">' + json['error']['option'][i] + '</span>').addClass('is-error');
+						}
+					}
+				}
+
+				if (json['error']['recurring']) {
+					$('select[name=\'recurring_id\']').parent().after('<span class="error ui-error">' + json['error']['recurring'] + '</span>').parent().addClass('is-error');
+				}
+
+			}
+
+			if (json['success']) {
+				cartExrtaElem(json['total']);
+				
+				if ($('.js-cart-call').length) {
+					$('.js-cart-call>button').trigger('click');
+				} else {
+					$('.alerts').append($('<div class="alert alert-success alert-dismissible fade show" role="alert"> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>'));
+				}
+				$('#cart-total').html('<mark class="cart__counter" id="cart-total"> ' + json['total'] + '</mark>');
+
+				sendYM('technics_addtocart_product');
+				sendGA(datapr,'technics_addtocart_product');
+				
+				$('#cart .cart__body').load('index.php?route=common/cart/info div.cart__scroll',function(){
+					$('#cart input[type=\'number\']').styler();
+				});
+			}
+		},
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+	});
+});
+
+
+/*@preserve
+ * Tempus Dominus Bootstrap4 v5.1.2 (https://tempusdominus.github.io/bootstrap-4/)
+ * Copyright 2016-2018 Jonathan Peterson
+ * Licensed under MIT (https://github.com/tempusdominus/bootstrap-3/blob/master/LICENSE)
+ */
+var $d = $('.date'),
+	$dt = $('.datetime'),
+	$t = $('.time');
+if ($d.length) {
+	$d.datetimepicker({
+		locale: '{{ datepicker }}',
+		format: 'L',
+		icons: {
+			previous: 'icon-datepicker icon-datepickerchevron-small-left',
+			next: 'icon-datepicker icon-datepickerchevron-small-right'
+		},
+		pickTime: false
+	});
+}
+if ($dt.length) {
+	$dt.datetimepicker({
+		locale: '{{ datepicker }}',
+		icons: {
+			time: 'icon-datepicker icon-datepickerclock',
+			date: 'icon-datepicker icon-datepickercalendar',
+			up: 'icon-datepicker icon-datepickerchevron-small-up',
+			down: 'icon-datepicker icon-datepickerchevron-small-down',
+			previous: 'icon-datepicker icon-datepickerchevron-small-left',
+			next: 'icon-datepicker icon-datepickerchevron-small-right'
+		},
+		pickDate: true,
+		pickTime: true
+	});
+}
+if ($t.length) {
+	$t.datetimepicker({
+		locale: '{{ datepicker }}',
+		format: 'LT',
+		icons: {
+			up: 'icon-datepicker icon-datepickerchevron-small-up',
+			down: 'icon-datepicker icon-datepickerchevron-small-down'
+		},
+		pickDate: false
+	});
+}
+
+
+$('button[id^=\'button-upload\']').on('click', function() {
+	var node = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(node).button('loading');
+				},
+				complete: function() {
+					$(node).button('reset');
+				},
+				success: function(json) {
+					$('.ui-error').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input').after('<span class="error ui-error">' + json['error'] + '</span>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(node).parent().find('input').val(json['code']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+
+	$('#review').delegate('.pagination a', 'click', function(e) {
+		e.preventDefault();
+
+		$('#review').fadeOut('slow');
+
+		$('#review').load(this.href);
+
+		$('#review').fadeIn('slow');
+	});
+
+
+	$('.sku').on('click', ' .comments__statistic a, .all_rew',  function(e) {
+		e.preventDefault();
+		$('#review').load('index.php?route=product/product/review&' + $(this).attr('data-link'));
+
+		if ($(this).hasClass('showmore')) {
+			$('.showmore').hide();
+		}else{
+			$('.showmore').show();
+		}
+		
+	});
+
+	var product_id = {{ product_id }};
+
+	function reviewAdd() {
+
+	    $.ajax({
+	      url: 'index.php?route=product/product/write&product_id=' + product_id,
+	      type: 'post',
+	      dataType: 'json',
+	      data: $("#form-review").serialize(),
+	      beforeSend: function() {
+	        $('#form-review button').button('loading');
+	      },
+	      complete: function() {
+	        $('#form-review button').button('reset');
+	      },
+	      success: function(json) {
+	        $('.alert-dismissible').remove();
+			
+	        if (json['error']) {
+	          $('#form-review').before('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-bottom: 2rem;"> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>');
+			  
+	        }
+	        if (json['success']) {
+	          $('#form-review').before('<div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-bottom: 2rem;"> ' + json['success'] + ' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg class="icon-delete"><use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-delete"></use></svg></button></div>');
+			  
+	          $('input[name=\'name\']').val('');
+	          $('textarea[name=\'text\']').val('');
+	          $('textarea[name=\'text_plus\']').val('');
+	          $('textarea[name=\'text_minus\']').val('');
+	          $('input[name=\'rating\']:checked').prop('checked', false);
+
+	        }
+	      }
+	    });
+	}
+
+$(document).on('click','.comments__item-action a', function(e) {
+	e.preventDefault();
+
+	var subj = $(this);
+	var review_id = subj.attr("data-for");
+
+	var like = 0;
+	if (subj.hasClass('btn--good')) {  like = 1; }
+
+	    $.ajax({
+	      url: 'index.php?route=product/product/like&review_id=' + review_id + '&islike=' + like,
+	      type: 'post',
+	      dataType: 'json',
+	      data: '',
+	      complete: function() {
+
+	      },
+	      success: function(json) {
+
+	        if (json['success']) {
+	        	subj.find('span').text(json['success']['likes']);
+	        }
+	      }
+	    });
+
+});
+
+$(document).on('click','.sku__rating', function(e) {
+	e.preventDefault();
+	$('html, body').animate({
+		scrollTop: $('.comments').offset().top
+	}, 400);
+});
+
+$(document).ready(function(){
+	{% if (reviewsdata is same as(false)) %}	
+		$('#review').load('index.php?route=product/product/review&product_id=' + {{ product_id }}, function(e) {});
+	{% endif %}
+});
+
+</script>
+{{ forms }}
+</body></html>

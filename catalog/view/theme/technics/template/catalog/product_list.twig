@@ -1,0 +1,547 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right" style="z-index: 10000;position: relative;">
+        <button type="button" data-toggle="tooltip" title="{{ button_filter }}" onclick="$('#filter-product').toggleClass('hidden-sm hidden-xs');" class="btn btn-default hidden-md hidden-lg"><i class="fa fa-filter"></i></button>
+        <!--a href="javascript:;" data-toggle="tooltip" title="columns" class="btn btn-primary columns"><i class="fa fa-list-ul"></i></a-->
+       
+        <a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <button type="submit" form="form-product" formaction="{{ copy }}" data-toggle="tooltip" title="{{ button_copy }}" class="btn btn-default"><i class="fa fa-copy"></i></button>
+        <button type="button" form="form-product" formaction="{{ delete }}" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-product').submit() : false;"><i class="fa fa-trash-o"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  
+  
+  <div class="text-left my_category_wrapper">
+    <div class="tree_wrapper_my">
+      <input type="hidden" name="category_product_id" value="">    
+      <p><a href="javascript:;" id="tree-expand-all">show tree</a> | <a href="javascript:;" id="tree-collapse-all">hide tree</a> | <a href="javascript:;" id="tree-clouse-all">close</a></p>
+      <ul id="tree">
+        {% for index,level in my_categories %}
+          <li><a href="javascript:;" id="{{ level.category_id }}">{{ level.name }}</a>
+            {% if level.parent %}
+              <ul>
+              {% for index1,level1 in level.parent %}
+                <li><a href="javascript:;" id="{{ level1.category_id }}">{{ level1.name }}</a>
+                  {% if level1.parent %}
+                    <ul>
+                    {% for index2,level2 in level1.parent %}
+                      <li><a href="javascript:;" id="{{ level2.category_id }}">{{ level2.name }}</a>
+                      {% if level2.parent %}
+                        <ul>
+                        {% for index3,level3 in level2.parent %}
+                          <li><a href="javascript:;" id="{{ level3.category_id }}">{{ level3.name }}</a>
+  
+                        {% endfor %}
+                        </ul>
+                      {% endif %}
+                  {% endfor %}
+                    </ul>
+                  {% endif %}
+              {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}  
+      </ul>
+    </div>
+  </div>
+  
+ <div class="text-left my_mark_wrapper">
+    <div class="tree_wrapper_my">
+      <input type="hidden" name="mark_product_id" value="">    
+      <p><a href="javascript:;" id="tree-expand-all">show tree</a> | <a href="javascript:;" id="tree-collapse-all">hide tree</a> | <a href="javascript:;" id="tree-clouse-all">close</a></p>
+      <ul id="tree_mark">
+        {% for index,level in my_marks %}
+          <li><a href="javascript:;" id="{{ level.mark_id }}">{{ level.name }}</a>
+            {% if level.parent %}
+              <ul>
+              {% for index1,level1 in level.parent %}
+                <li><a href="javascript:;" id="{{ level1.mark_id }}">{{ level1.name }}</a>
+                  {% if level1.parent %}
+                    <ul>
+                    {% for index2,level2 in level1.parent %}
+                      <li><a href="javascript:;" id="{{ level2.mark_id }}">{{ level2.name }}</a>
+                      {% if level2.parent %}
+                        <ul>
+                        {% for index3,level3 in level2.parent %}
+                          <li><a href="javascript:;" id="{{ level3.mark_id }}">{{ level3.name }}</a>
+  
+                        {% endfor %}
+                        </ul>
+                      {% endif %}
+                  {% endfor %}
+                    </ul>
+                  {% endif %}
+              {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}  
+      </ul>
+    </div>
+  </div>
+  
+  
+  <div class="container-fluid">{% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="row">
+      <!--div id="filter-product" class="col-xs-12 hidden-sm hidden-xs">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-filter"></i> {{ text_filter }}</h3>
+          </div>
+          <div class="panel-body row">
+            <div class="form-group col-xs-3">
+              <label class="control-label" for="input-name">{{ entry_name }} or description</label>
+              <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+            </div>
+            <div class="form-group col-xs-2">
+              <label class="control-label" for="input-model">{{ entry_model }}(код)</label>
+              <input type="text" name="filter_model" value="{{ filter_model }}" placeholder="{{ entry_model }}" id="input-model" class="form-control" />
+            </div>
+           <div class="form-group col-xs-2">
+              <label class="control-label" for="input-sku">{{ entry_sku }}</label>
+              <input type="text" name="filter_sku" value="{{ filter_sku }}" placeholder="{{ entry_sku }}" id="input-sku" class="form-control" />
+            </div>
+            <div class="form-group col-xs-2">
+              <label class="control-label" for="input-price">{{ entry_price }}</label>
+              <input type="text" name="filter_price" value="{{ filter_price }}" placeholder="{{ entry_price }}" id="input-price" class="form-control" />
+            </div>
+             <div class="form-group col-xs-2">
+              <label class="control-label" for="input-status">{{ entry_status }}</label>
+              <select name="filter_status" id="input-status" class="form-control">
+                <option value=""></option>
+                  {% if filter_status == '1' %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                  {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                  {% endif %}
+                  {% if filter_status == '0' %}
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% else %}
+                    <option value="0">{{ text_disabled }}</option>
+                  {% endif %}
+              </select>
+            </div>
+           <div class="form-group col-xs-1">
+              <label class="control-label" for="input-quantity">{{ entry_quantity }}</label>
+              <input type="text" name="filter_quantity" value="{{ filter_quantity }}" placeholder="{{ entry_quantity }}" id="input-quantity" class="form-control" />
+            </div>
+    
+            <div class="form-group col-xs-3">
+              <label class="control-label" for="input-manufacturer">{{ entry_manufacturer }}</label>
+              <select name="filter_manufacturer" id="input-manufacturer" class="form-control">
+                <option value=""></option>
+                {% for manufacturer in manufacturers %}
+                  {% if filter_manufacturer == manufacturer.manufacturer_id %}
+                    <option value="{{ manufacturer.manufacturer_id }}" selected="selected">{{ manufacturer.name }}</option>
+                  {% else %}
+                    <option value="{{ manufacturer.manufacturer_id }}">{{ manufacturer.name }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group col-xs-3">
+              <label class="control-label" for="input-category">{{ entry_category }}</label>
+              <select name="filter_category" id="input-category" class="form-control">
+                <option value=""></option>
+                {% for category in categories %}
+                  {% if filter_category == category.category_id %}
+                    <option value="{{ category.category_id }}" selected="selected">{{ category.name }}</option>
+                  {% else %}
+                    <option value="{{ category.category_id }}">{{ category.name }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group col-xs-3">
+              <label class="control-label" for="input-mark">Mark-Model</label>
+              <select name="filter_mark" id="input-mark" class="form-control">
+                <option value=""></option>
+                {% for mark in marks %}
+                  {% if filter_mark == mark.mark_id %}
+                    <option value="{{ mark.mark_id }}" selected="selected">{{ mark.name }}</option>
+                  {% else %}
+                    <option value="{{ mark.mark_id }}">{{ mark.name }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group col-xs-2">
+              <label class="control-label" for="input-diagram">Is diagram {{ filter_diagram }}+</label>
+              <select name="filter_diagram" id="input-diagram" class="form-control">
+                <option value="-1"></option>
+                  {% if filter_diagram == '1' %}
+                    <option value="1" selected="selected">{{ text_yes }}</option>
+                  {% else %}
+                    <option value="1">{{ text_yes }}</option>
+                  {% endif %}
+                  {% if filter_diagram == '0' %}
+                    <option value="0" selected="selected">{{ text_no }}</option>
+                  {% else %}
+                    <option value="0">{{ text_no }}</option>
+                  {% endif %}
+              </select>
+            </div>
+  
+          <div class="form-group text-right col-xs-1">
+              <button type="button" id="button-filter" class="btn btn-default"><i class="fa fa-filter"></i> {{ button_filter }}</button>
+            </div>
+          </div>
+        </div>
+      </div-->
+      <div class="col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-product">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                      <td class="text-left">{% if sort == 'p.product_id' %} <a href="{{ sort_product_id }}" class="{{ order|lower }}">ID</a> {% else %} <a href="{{ sort_product_id }}">ID</a> {% endif %}</td>
+                      
+                      <td class="text-center" data-name="product_image" {% if cols.image == 0 %} style="display: none;" {% endif %}>{{ column_image }}</td>
+                      
+                      <td class="text-left" {% if cols.name == 0 %} style="display: none;" {% endif %}>{% if sort == 'pd.name' %} <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a> {% else %} <a href="{{ sort_name }}">{{ column_name }}</a> {% endif %}</td>
+                     <td class="text-left" {% if cols.description == 0 %} style="display: none;" {% endif %}>Description</td>
+                     <td class="text-left" {% if cols.manufacturer == 0 %} style="display: none;" {% endif %}>{% if sort == 'md.name' %} <a href="{{ sort_manufacturer }}" class="{{ order|lower }}">{{ column_manufacturer }}</a> {% else %} <a href="{{ sort_manufacturer }}">{{ column_manufacturer }}</a> {% endif %}</td>
+                     <td class="text-left" {% if cols.category == 0 %} style="display: none;" {% endif %}>{% if sort == 'cd.name' %} <a href="{{ sort_category }}" class="{{ order|lower }}">{{ column_category }}</a> {% else %} <a href="{{ sort_category }}">{{ column_category }}</a> {% endif %}</td>
+                     
+                     <td class="text-left" {% if cols.uom == 0 %} style="display: none;" {% endif %}>
+                       {% if sort == 'p.uom' %}
+                        <a href="{{ sort_uom }}" class="{{ order|lower }}">UOM</a>
+                       {% else %}
+                       <a href="{{ sort_uom }}">UOM</a>
+                      {% endif %}
+                     </td>
+                     
+                     <td class="text-left" {% if cols.availability == 0 %} style="display: none;" {% endif %}>
+                       {% if sort == 'p.stock_status_id' %}
+                        <a href="{{ sort_uom }}" class="{{ order|lower }}">Availability</a>
+                       {% else %}
+                       <a href="{{ sort_uom }}">Availability</a>
+                      {% endif %}
+                     </td>
+                     
+                     <td class="text-left" {% if cols.dimensions == 0 %} style="display: none;" {% endif %}>
+                       {% if sort == 'p.uom' %}
+                        <a href="{{ sort_uom }}" class="{{ order|lower }}">Dimensions</a>
+                       {% else %}
+                       <a href="{{ sort_uom }}">Dimensions</a>
+                      {% endif %}
+                     </td>
+                     
+                     <td class="text-left" {% if cols.sales_tax == 0 %} style="display: none;" {% endif %}>
+                       {% if sort == 'p.uom' %}
+                        <a href="{{ sort_uom }}" class="{{ order|lower }}">Sales tax</a>
+                       {% else %}
+                       <a href="{{ sort_uom }}">Sales tax</a>
+                      {% endif %}
+                     </td>
+                     
+                     <td class="text-left" {% if cols.condition == 0 %} style="display: none;" {% endif %}>
+                       {% if sort == 'p.uom' %}
+                        <a href="{{ sort_uom }}" class="{{ order|lower }}">Condition</a>
+                       {% else %}
+                       <a href="{{ sort_uom }}">Condition</a>
+                      {% endif %}
+                     </td>
+                     
+                   <td class="text-left" {% if cols.weight == 0 %} style="display: none;" {% endif %}>
+                       {% if sort == 'p.uom' %}
+                        <a href="{{ sort_weight }}" class="{{ order|lower }}">Weight</a>
+                       {% else %}
+                       <a href="{{ sort_weight }}">Weight</a>
+                      {% endif %}
+                     </td>
+                     
+                   
+                     
+                     
+                     <td class="text-left" {% if cols.mark == 0 %} style="display: none;" {% endif %}>{% if sort == 'mode.name' %} <a href="{{ sort_mark }}" class="{{ order|lower }}">{{ column_mark }}</a> {% else %} <a href="{{ sort_mark }}">{{ column_mark }}</a> {% endif %}</td>
+                      <td class="text-left" {% if cols.code_manual == 0 %} style="display: none;" {% endif %}>{% if sort == 'p.model' %} <a href="{{ sort_model }}" class="{{ order|lower }}">{# column_model #}{{ entry_model }}</a> {% else %} <a href="{{ sort_model }}">{{ entry_model }}{# column_model #}</a> {% endif %}</td>
+                      <td class="text-left" {% if cols.fishbowl == 0 %} style="display: none;" {% endif %}>{% if sort == 'p.sku' %} <a href="{{ sort_sku }}" class="{{ order|lower }}">{{ entry_sku }}{# column_sku #}</a> {% else %} <a href="{{ sort_sku }}">{{ entry_sku }}{# column_sku #}</a> {% endif %}</td>
+                      <td class="text-right" {% if cols.cost == 0 %} style="display: none;" {% endif %}>{% if sort == 'p.cost' %} <a href="{{ sort_cost }}" class="{{ order|lower }}">Cost</a> {% else %} <a href="{{ sort_cost }}">Cost</a> {% endif %}</td>
+                       <td class="text-right" {% if cols.price == 0 %} style="display: none;" {% endif %}>{% if sort == 'p.price' %} <a href="{{ sort_price }}" class="{{ order|lower }}">{{ column_price }}</a> {% else %} <a href="{{ sort_price }}">{{ column_price }}</a> {% endif %}</td>
+                      <td class="text-right" {% if cols.quantity == 0 %} style="display: none;" {% endif %}>{% if sort == 'p.quantity' %} <a href="{{ sort_quantity }}" class="{{ order|lower }}">{{ column_quantity }}</a> {% else %} <a href="{{ sort_quantity }}">{{ column_quantity }}</a> {% endif %}</td>
+                      <td class="text-left" {% if cols.status == 0 %} style="display: none;" {% endif %}>{% if sort == 'p.status' %} <a href="{{ sort_status }}" class="{{ order|lower }}">{{ column_status }}</a> {% else %} <a href="{{ sort_status }}">{{ column_status }}</a> {% endif %}
+                      <br>
+                       <select name="change_status" id="change-status" class="form-control"
+                       form="form-product" formaction="{{ update }}" data-toggle="tooltip" onChange="confirm('{{ text_confirm }}') ? $('#form-product').submit() : false;" data-original-title="Update"><i class="fa fa-trash-o"></i></button>
+                       >
+                         <option value="">change status</option>
+                           {% if filter_status == '1' %}
+                             <option value="1" selected="selected">{{ text_enabled }}</option>
+                           {% else %}
+                             <option value="1">{{ text_enabled }}</option>
+                           {% endif %}
+                           {% if filter_status == '0' %}
+                             <option value="0" selected="selected">{{ text_disabled }}</option>
+                           {% else %}
+                             <option value="0">{{ text_disabled }}</option>
+                           {% endif %}
+                       </select>
+                      </td>
+                      <td class="text-left" {% if cols.sort_order == 0 %} style="display: none;" {% endif %}>{% if sort == 'p.sort_order' %} <a href="{{ sort_order }}" class="{{ order|lower }}">{{ column_order }}</a> {% else %} <a href="{{ sort_order }}">{{ column_order }}</a> {% endif %}</td>
+                      <td class="text-right">{{ column_action }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  
+                  {% if products %}
+                  {% for product in products %}
+                  <tr id="{{ product.product_id }}" class="product_row">
+                    <td class="text-center">{% if product.product_id in selected %}
+                      <input type="checkbox" name="selected[]" value="{{ product.product_id }}" checked="checked" />
+                      {% else %}
+                      <input type="checkbox" name="selected[]" value="{{ product.product_id }}" />
+                      {% endif %}</td>
+                    <td class="text-left">{{ product.product_id }}</td>
+                    <td class="text-center" data-name="image" {% if cols.image == 0 %} style="display: none;" {% endif %}>
+                      {% if product.image %} <img src="{{ product.image }}" alt="{{ product.name }}" class="img-thumbnail" /> {% else %} <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span> {% endif %}
+                    </td>
+                    <td class="text-left pointer111" data-name="name" {% if cols.name == 0 %} style="display: none;" {% endif %}>{{ product.name }}</td>
+                    <td class="text-left pointer111" data-name="description"  {% if cols.description == 0 %} style="display: none;max-width: 30%;" {% endif %}>{{ product.description }}</td>
+                    <td class="text-left pointer111" data-name="manufacturer_id" {% if cols.manufacturer == 0 %} style="display: none;" {% endif %} >{{ product.manufacturer_name }}{{ product.manufacturer }}</td>
+                    <td class="text-left pointer111 category_tree" {% if cols.category == 0 %} style="display: none;" {% endif %}>{{ product.category }}</td>
+                    <td class="text-left" {% if cols.uom == 0 %} style="display: none;" {% endif %}>{{ product.uom }}</td>
+                    <td class="text-left" {% if cols.availability == 0 %} style="display: none;" {% endif %}>{{ product.availability }}</td>
+                    <td class="text-left" {% if cols.dimensions == 0 %} style="display: none;" {% endif %}>{{ product.dimensions }}</td>
+                    <td class="text-left" {% if cols.sales_tax == 0 %} style="display: none;" {% endif %}>{{ product.sales_tax }}</td>
+                    <td class="text-left" {% if cols.condition == 0 %} style="display: none;" {% endif %}>{{ product.condition }}</td>
+                    <td class="text-left" {% if cols.weight == 0 %} style="display: none;" {% endif %}>{{ product.weight }}</td>
+                    <td class="text-left pointer111 mark_tree" {% if cols.mark == 0 %} style="display: none;" {% endif %}>{{ product.mark }}</td>
+                    <td class="text-left" {% if cols.code_manual == 0 %} style="display: none;" {% endif %}>{{ product.model }}</td>
+                   <td class="text-left" {% if cols.fishbowl == 0 %} style="display: none;" {% endif %}>{{ product.sku }}</td>
+                    <td class="text-left pointer111" data-name="cost" {% if cols.cost == 0 %} style="display: none;" {% endif %}>{{ product.cost }}</td>
+                    <td class="text-right pointer111" data-name="price" {% if cols.price == 0 %} style="display: none;" {% endif %}>{% if product.special %} <span style="text-decoration: line-through;">{{ product.price }}</span><br/>
+                      <div class="text-danger">{{ product.special }}</div>
+                      {% else %}
+                      {{ product.price }}
+                      {% endif %}</td>
+                    <td class="text-right pointer111" data-name="quantity" {% if cols.quantity == 0 %} style="display: none;" {% endif %}>{% if product.quantity <= 0 %} <span class="label label-warning">{{ product.quantity }}</span> {% elseif product.quantity <= 5 %} <span class="label label-danger">{{ product.quantity }}</span> {% else %} <span class="label label-success">{{ product.quantity }}</span> {% endif %}</td>
+                    <td class="text-left pointer111" data-name="status" {% if cols.status == 0 %} style="display: none;" {% endif %} >{{ product.status }}</td>
+                    <td class="text-left" {% if cols.sort_order == 0 %} style="display: none;" {% endif %}>{{ product.sort_order }}</td>
+                    <td class="text-right"><a href="{{ product.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+                  </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td class="text-center" colspan="8">{{ text_no_results }}</td>
+                  </tr>
+                  {% endif %}
+                    </tbody>
+                  
+                </table>
+              </div>
+            </form>
+            
+            
+            <div class="row">
+              <div class="col-sm-6 text-left">{{ pagination }}</div>
+              <div class="col-sm-6 text-right">{{ results }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	var url = '';
+
+	var filter_name = $('input[name=\'filter_name\']').val();
+
+	if (filter_name) {
+		url += '&filter_name=' + encodeURIComponent(filter_name);
+	}
+
+	var filter_model = $('input[name=\'filter_model\']').val();
+
+	if (filter_model) {
+		url += '&filter_model=' + encodeURIComponent(filter_model);
+	}
+
+	var filter_price = $('input[name=\'filter_price\']').val();
+
+	if (filter_price) {
+		url += '&filter_price=' + encodeURIComponent(filter_price);
+	}
+
+	var filter_quantity = $('input[name=\'filter_quantity\']').val();
+
+	if (filter_quantity) {
+		url += '&filter_quantity=' + encodeURIComponent(filter_quantity);
+	}
+
+	var filter_status = $('select[name=\'filter_status\']').val();
+
+	if (filter_status !== '') {
+		url += '&filter_status=' + encodeURIComponent(filter_status);
+	}
+
+	var filter_diagram = $('select[name=\'filter_diagram\']').val();
+
+	if (filter_diagram !== '') {
+		url += '&filter_diagram=' + encodeURIComponent(filter_diagram);
+	}
+
+var filter_sku = $('input[name=\'filter_sku\']').val();
+
+	if (filter_sku) {
+		url += '&filter_sku=' + encodeURIComponent(filter_sku);
+	}
+
+  
+var filter_manufacturer = $('select[name=\'filter_manufacturer\']').val();
+
+	if (filter_manufacturer !== '') {
+		url += '&filter_manufacturer=' + encodeURIComponent(filter_manufacturer);
+	}
+
+var filter_category = $('select[name=\'filter_category\']').val();
+
+	if (filter_category !== '') {
+		url += '&filter_category=' + encodeURIComponent(filter_category);
+	}
+
+var filter_mark = $('select[name=\'filter_mark\']').val();
+
+	if (filter_mark !== '') {
+		url += '&filter_mark=' + encodeURIComponent(filter_mark);
+	}
+
+	location = 'index.php?route=catalog/product&user_token={{ user_token }}' + url;
+});
+//--></script> 
+  <script type="text/javascript"><!--
+// IE and Edge fix!
+$('button[form=\'form-product\']').on('click', function(e) {
+	$('#form-product').attr('action', $(this).attr('formaction'));
+});
+  
+$('#change-status').on('click, focus', function(e) {
+ $('#form-product').attr('action', $(this).attr('formaction'));
+  console.log($('#form-product').attr('action'));
+});
+  
+$('input[name=\'filter_name\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'filter_name\']').val(item['label']);
+	}
+});
+
+$('input[name=\'filter_model\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_model=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['model'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'filter_model\']').val(item['label']);
+	}
+});
+//--></script>
+<style>
+  .pointer111{
+    cursor: pointer111;
+  }
+</style>
+</div>
+  <style>
+  .abix-tree-list li {
+      list-style: none;
+  }
+  .abix-tree-list .collapsed span.icon, 
+  .abix-tree-list .expanded span.icon {
+      margin-right: 6px;
+      cursor: pointer111;
+  }
+  .loading_wrapper{
+    z-index: 1001;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    background-color: white;
+    align-items: center;
+    text-align: center;
+    display: none;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .loading_wrapper img{
+      /*width: 100%;*/
+      height: 70%;
+  }
+  .my_category_wrapper, .my_mark_wrapper{
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid;
+    padding: 10px;
+    left: 110px;
+    box-shadow: 10px 5px 5px #757575;
+  }
+  .my_mark_wrapper{
+    left: 600px;
+  }
+  td.selected, td.selected{
+    background-color: #A1C4A2;
+  }
+  </style>     
+      
+  <script>
+    (function(e,t,n,r){function o(t,n){this.element=t;this.$element=e(t);this.options=e.extend({},s,n);this._defaults=s;this._name=i,this.$topLevelBranches,this.$allBranches,this.init()}var i="abixTreeList",s={collapsedIconClass:"glyphicon glyphicon-plus",expandedIconClass:"glyphicon glyphicon-minus"};o.prototype.init=function(){var t=this;t.$topLevelBranches=t.$element.children("li");t.$allBranches=t.$element.find("li");t.$element.addClass("abix-tree-list");t.$allBranches.not(t.$topLevelBranches).hide();t.$allBranches.each(function(){var n=e(this).children("ul,ol");if(n.size()>0){e(this).addClass("collapsed");e('<span class="icon '+t.options.collapsedIconClass+'"></span>').prependTo(e(this))}});t.$allBranches.children("span.icon").on("click",function(n){if(e(this).parent().hasClass("collapsed")){t.expand(e(this).parent());n.stopPropagation()}if(e(this).parent().hasClass("expanded")){t.collapse(e(this).parent());n.stopPropagation()}});e("#tree-expand-all").on("click",function(e){e.preventDefault();t.expandAll();e.stopPropagation()});e("#tree-collapse-all").on("click",function(e){e.preventDefault();t.collapseAll();e.stopPropagation()})};o.prototype.expand=function(e){var t=this;e.children("ul,ol").children("li").show(500,function(){e.removeClass("collapsed").addClass("expanded");e.children("span.icon").removeClass(t.options.collapsedIconClass).addClass(t.options.expandedIconClass)})};o.prototype.collapse=function(e){var t=this;e.children("ul,ol").children("li").hide(500,function(){e.removeClass("expanded").addClass("collapsed");e.children("span.icon").removeClass(t.options.expandedIconClass).addClass(t.options.collapsedIconClass)})};o.prototype.collapseAll=function(){var e=this;e.$allBranches.not(e.$topLevelBranches).hide(1e3,function(){e.$allBranches.removeClass("expanded").addClass("collapsed");e.$allBranches.children("span.icon").removeClass(e.options.expandedIconClass).addClass(e.options.collapsedIconClass)})};o.prototype.expandAll=function(){var e=this;e.$allBranches.show(1e3,function(){e.$allBranches.removeClass("collapsed").addClass("expanded");e.$allBranches.children("span.icon").removeClass(e.options.collapsedIconClass).addClass(e.options.expandedIconClass)})};e.fn[i]=function(t){return this.each(function(){if(!e.data(this,"plugin_"+i)){e.data(this,"plugin_"+i,new o(this,t))}})}})(jQuery,window,document)
+        
+    $(document).ready(function() {
+       $('#tree').abixTreeList();
+       $('#tree_mark').abixTreeList();
+    });
+  </script>
+  
+{{ footer }} 

@@ -1,0 +1,43 @@
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu" >
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li> 
+					<a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a>
+					{% if (breadcrumb.breadList is defined) %}
+			            <div class="breadcrumbs__dropdown">
+			                <ul class="breadcrumbs__submenu">
+			                  {% for i,category in breadcrumb.breadList %}
+			                  	  <li><a class="breadcrumbs__submenu-link" href="{{ category.href }}">{{ category.name }}</a></li>
+			                  {% endfor %}
+			                 </ul>
+                		</div>
+					{% endif %}					
+				</li>
+				{% else %}
+                                        
+                                        {# последняя крошка - если признак - то показываем как линк #}
+                                        {% if view_last %}
+                                                <li> 
+                                                        <a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a>
+                                                        {% if (breadcrumb.breadList is defined) %}
+                                                    <div class="breadcrumbs__dropdown">
+                                                        <ul class="breadcrumbs__submenu">
+                                                          {% for i,category in breadcrumb.breadList %}
+                                                                  <li><a class="breadcrumbs__submenu-link" href="{{ category.href }}">{{ category.name }}</a></li>
+                                                          {% endfor %}
+                                                         </ul>
+                                                </div>
+                                                        {% endif %}					
+                                                </li>
+				                
+                                        {% else %}
+                                                <li>{{ breadcrumb['text'] }}</li>
+                                        {% endif %}
+				
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>

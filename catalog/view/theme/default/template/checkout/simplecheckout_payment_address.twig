@@ -1,0 +1,20 @@
+<div class="simplecheckout-block" id="simplecheckout_payment_address" {{ hide ? 'data-hide="true"' : '' }} {{ display_error and has_error ? 'data-error="true"' : '' }}>
+  <div class="simplecheckout-block-content">
+   {% if display_header %}
+  <div class="checkout-heading panel-heading">{{ text_checkout_payment_address }}</div>
+  {% endif %}
+ 
+  
+    {% for row in rows %}
+      {{ row }}
+    {% endfor %}
+    {% for row in hidden_rows %}
+      {{ row }}
+    {% endfor %}
+  </div>
+  {% if display_address_same %}
+    <div class="simplecheckout-customer-same-address">
+      <label>{{ entry_address_same }} <input type="checkbox" name="address_same" value="1" {{ address_same ? 'checked="checked"' : '' }} data-onchange="reloadAll"><span></span>  </label>
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,34 @@
+<nav class="personal__nav js-fixed">
+    <ul class="personal__nav-menu account_menu">
+	
+	        {% if (not logged) %} 
+                <li><a class="personal__nav-link {% if active == 'login' %}active{% endif %}" href="{{ login }}">{{ text_login }}</a></li>
+                <li><a class="personal__nav-link {% if active == 'register' %}active{% endif %}" href="{{ register }}">{{ text_register }}</a></li> 
+                <li><a class="personal__nav-link {% if active == 'forgotten' %}active{% endif %}" href="{{ forgotten }}">{{ text_forgotten }}</a></li>
+        {% endif %} 
+                <!--li><a class="personal__nav-link {% if active == 'product' %}active{% endif %}" href="{{ product }}">Classified</a></li-->
+                <li><a class="personal__nav-link {% if active == 'garage' %}active{% endif %}" href="{{ garage }}">{{ text_garage }}</a></li>
+                <li><a class="personal__nav-link {% if active == 'edit' %}active{% endif %}" href="{{ edit }}">{{ text_edit }}</a></li>
+                <li><a class="personal__nav-link" href="{{ address }}">{{ text_address }}</a></li>
+                
+                <li><a class="personal__nav-link {% if active == 'wishlist' %}active{% endif %}" href="{{ wishlist }}">{{ text_wishlist }}</a></li> 
+                <li><a class="personal__nav-link {% if active == 'auction' %}active{% endif %}" href="{{ auction }}">{{ text_auction }}</a></li> 
+                <li><a class="personal__nav-link {% if active == 'order' %}active{% endif %}" href="{{ order }}">{{ text_order }}{% if total_notify %} <b class="notify-bell">({{ total_notify }})</b>{% endif %}</a></li>
+                <!--li><a class="personal__nav-link {% if active == 'transaction' %}active{% endif %}" href="{{ transaction }}">{{ text_transaction }}</a></li-->
+                
+                <!--li><a href="javascript:;" class="personal__nav-link folder_form" data-form="consignment">Consignation add</a></li-->
+                <li><a class="personal__nav-link {% if active == 'classified' %}active{% endif %}" href="{{ classified }}">Classified</a></li>
+                
+                <li><a class="personal__nav-link {% if active == 'review' %}active{% endif %}" href="{{ message }}">Message{% if message_total %} <b class="notify-bell">({{ message_total }})</b>{% endif %}</a></li>
+             
+	        {% if (logged) %} 
+                <li><a class="personal__nav-link {% if active == 'logout' %}active{% endif %}" href="{{ logout }}">{{ text_logout }}</a></li>
+        {% endif %} 
+			
+				
+				
+	
+	
+	  
+    </ul>
+</nav>

@@ -1,0 +1,91 @@
+		<div class="box_auction_mod">
+              <div class="auction_heading">{{ heading_title }} </div>
+				
+				 
+	
+	
+	 
+    <div class="swiper3 mySwiper3">
+      <div class="swiper-wrapper">
+  
+  						{% for banner in products %}
+							<div class="swiper-slide">
+<div class="label_auction">	
+	{{ label_auction }}		
+</div>							
+								<a href="{{ banner.href }}"> 
+									<img src="{{ banner.thumb }}" alt="{{ banner.name }}" class="img-responsive" />
+								</a>
+								<a class="name_mod_auction" href="{{ banner.href }}"> 
+								{{ banner.name }}
+ 
+	<span class="name_auct_price">
+		{# banner.auction.last_bet_cur #}
+		{{ banner.price }}
+	</span>
+</a>
+							</div>
+						{% endfor %}
+					 
+
+
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+	
+<script>
+      var swiper3 = new Swiper(".mySwiper3", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+		
+		
+ breakpoints: {
+    // when window width is >= 320px
+    320: {
+      slidesPerView: 1,
+      spaceBetween: 20
+    },
+    // when window width is >= 480px
+    480: {
+      slidesPerView: 1,
+      spaceBetween: 30
+    },
+    // when window width is >= 640px
+    640: {
+      slidesPerView:3,
+      spaceBetween: 40
+    }
+  },
+        freeMode: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      });
+    </script>
+	
+            </div>
+ 
+		
+		
+<a href="/auctions/" class="bttn_auction_more">
+{{ text_to_auction_bttn }}
+</a>
+<style>
+	.bttn_auction_more{
+		    width: 308px;
+    height: 51px;
+    display: block;
+    margin: 0 auto 70px;
+    left: 566px;
+    padding: 13px 1px;
+    top: 920px;
+    font-weight: 400;
+    font-size: 18px;
+    text-align: center;
+    line-height: 23px;
+    color: #FFFFFF;
+    background: #1C3156;
+    border: 1px solid #000000;
+	}
+</style>

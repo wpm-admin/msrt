@@ -1,0 +1,23 @@
+<div class="box_categorywall_title">
+	{{ text_select_category_title }}
+</div>
+
+<div class="row box_categorywall">
+            {% for category in categories %}
+
+
+                <div class="product-layout product-grid col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                  <div class="product-thumb transition">
+                      <div class="image">
+                        <a href="{{ category.href }}" style="padding-bottom: 100%">
+                            <img alt="{{ category.name }}" title="{{ category.name }}" class="img" data-src="{{ category.image }}" src="#"/>
+                        </a>
+                      </div>
+                      <div class="caption">
+                        <div class="name"><a href="{{ category.href }}">{{ category.name }}</a></div>
+                      </div>
+                  </div>
+                </div>
+
+            {% endfor %}
+        </div>

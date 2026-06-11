@@ -1,0 +1,463 @@
+      <!-- Header v5 :: Start-->
+      <header class="header header--v5">
+
+
+	<div class="topbar">
+    	<div class="container-fluid">
+        	<div class="row">
+            	<div class="col col-lg-4">
+            	<div class="logo">
+					{% if (header_logo) %} 
+						<a href="{{ home }}"><img src="/image/catalog/logo.svg" title="{{ name }}" alt="{{ name }}"></a>
+						{% else %} 
+						<a class="logo__text" {{ home == og_url ? '' : 'href="' ~ home ~'"'}}>{{ header_text_logo }}</a>
+					{% endif %} 
+				</div>
+				
+				{{ language }}
+				{{ currency }}
+	</div> 
+				  <input type="hidden" name="id_mark_hidden" id="id_mark_hidden" value="{{ mark_id }}">
+	<div class="col-hidden col-md-visible col-lg-4 mark_logo_slider">
+		{#	<!-- Ид выбранной марки, false если не выбрана {{ mark_id }}  -->
+		<!-- Ид выбранной модели, false если не выбрана {{ model_id }} -->#}
+		<div class="mySwiperLogo" data-curren-slide="{{ mark_id }}">
+		
+				{% for mark in marks %}
+				{% if(mark_id) == mark.mark_id %}
+				<div class="" data-slide-id="{{mark.mark_id}}" ><a href="{{ mark.href }}" data-mark="{{ mark.href }}"><img src="{{ mark.image }}" alt="{{ mark.name }}" title="{{ mark.name }}"></a></div>
+				{% endif %}
+				{% endfor %}
+
+			
+	
+				{% for mark in marks %}
+				{% if(mark_id) != mark.mark_id %}
+				<div class="" data-slide-id="{{mark.mark_id}}"><a href="{{ mark.href }}" data-mark="{{ mark.href }}"><img src="{{ mark.image }}" alt="{{ mark.name }}" title="{{ mark.name }}"></a></div>
+				{% endif %}
+		{% endfor %}
+
+
+		</div>
+
+		<script>
+			$('.mySwiperLogo').slick({
+    centerMode: true,
+    centerPadding: '10px',
+    slidesToShow: 3,
+    autoplay: false,
+    infinite: true,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: false,
+          centerMode: true,
+          centerPadding: '40px',
+          slidesToShow: 3
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          arrows: false,
+          centerMode: true,
+          centerPadding: '40px',
+          slidesToShow: 1
+        }
+      }
+    ]
+  });
+
+  $(".mySwiperLogo").on('afterChange', function(event, slick, currentSlide){
+        var NexMarklink = $(slick.$slides[currentSlide]).find('a').attr('href');
+		var NexMarkName = $(slick.$slides[currentSlide]).find('img').attr('alt');
+		$('.mobi_menu_box_select_items').find('.active').removeClass('active');
+		$('.mobi_menu_box_select_items').find('a:contains("'+NexMarkName+'")').addClass('active');
+
+		if(!$('body').attr('class').includes('product-mark') && !$('body').attr('class').includes('common-home')){
+    console.log('redireect');
+        window.location.replace(NexMarklink);
+      }
+	  
+		if(!main_page){
+         window.history.pushState(null, null, NexMarklink);
+        }else{
+         $('.bttn_home_more').prop('href', NexMarklink);
+        }
+
+		$.ajax({
+               url: NexMarklink,
+               type: 'post',
+               data: $('#product input'),
+               dataType: 'html',
+               beforeSend: function () {
+               },
+               success: function (data) {
+                
+                 $data = $(data);
+				 $('.mySwiper').html($data.find('.mySwiper ').children());
+                 $('.all_models_popup').html($data.find('.all_models_popup ').children());
+                 $('#mainContainer').html($data.find('.box_categorywall'));
+                 $('.breadcrumbs').html($data.find('.breadcrumbs'));
+                 $('.seo_txt').html($data.find('.seo_txt'));
+                 $('.box_bestsellers').html($data.find('.box_bestsellers'));
+                 
+                 $('.products_mod_slides').slick({
+                    rows: 2,
+                   dots: false,
+                   arrows: true,
+                   infinite: true,
+                   speed: 300,
+                   slidesToShow: 6,
+                   slidesToScroll: 5,
+                 responsive: [
+                     {
+                       breakpoint: 1000,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                     {
+                       breakpoint: 768,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                     {
+                       breakpoint: 420,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                   ],		
+});
+                 
+		var swiper = new Swiper(".mySwiper", {
+        slidesPerView: 3,
+        spaceBetween: 30,
+        slidesPerGroup:1,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+           clickable: true,
+        },
+        on: {
+          slideChange: function () {
+      
+              //console.log (this.activeIndex); // индекс слайда, какой
+              //console.log (this.realIndex); // индекс слайда, какой
+              
+              var element = $(this.slides[this.activeIndex + mobile]);
+              
+              href = element.context.children[0].href;
+              
+              
+              console.log(href); // индекс слайда, какой
+              
+              if(!main_page){
+                console.log('gettt');
+               window.history.pushState(null, null, element.context.children[0].href);
+              }else{
+               $('.bttn_home_more').prop('href', element.context.children[0].href);
+              }
+              
+              console.log(href);
+              
+              $.ajax({
+               url: href,
+               type: 'post',
+               data: $('#product input'),
+               dataType: 'html',
+               beforeSend: function () {
+               },
+               success: function (data) {
+                
+                 $data = $(data);
+                 $('#mainContainer').html($data.find('.box_categorywall'));
+                 $('.breadcrumbs').html($data.find('.breadcrumbs'));
+                 $('.seo_txt').html($data.find('.seo_txt'));
+				 $('.seo_block').html($data.find('.seo_block').children());
+                 $('.box_bestsellers').html($data.find('.box_bestsellers'));
+                 
+                 $('.products_mod_slides').slick({
+                    rows: 2,
+                   dots: false,
+                   arrows: true,
+                   infinite: true,
+                   speed: 300,
+                   slidesToShow: 6,
+                   slidesToScroll: 5,
+                 responsive: [
+                     {
+                       breakpoint: 1000,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                     {
+                       breakpoint: 768,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                     {
+                       breakpoint: 420,
+                       settings: {
+                         slidesToShow: 2,
+                         slidesToScroll: 2,
+                       },
+                     },
+                   ],		
+});
+                 
+               },
+              });
+              
+              //$('.box_categorywall_wrapper').load(href + ' div.box_categorywall');
+              //$('#mainContainer').load(href + ' div.box_categorywall');
+              
+              /*
+              main_page = 0;
+              
+               //window.history.pushState(null, null, element.context.children[0].data('old_href'));
+              
+              $( "a.dinamik_link" ).each(function( index ) {
+              
+               $(this).prop('href', href+$(this).data('href'));
+              
+              });
+              
+              $('.home_mark_href').prop('href', href);
+              */
+          }
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+		
+       // Responsive breakpoints
+       breakpoints: {
+         // when window width is >= 320px
+         320: {
+           slidesPerView: 1,
+           spaceBetween: 20
+         },
+ 
+       // when window width is >= 640px
+       990: {
+         slidesPerView: 3,
+         spaceBetween: 30
+       }
+	}
+	
+	
+      });
+
+				},
+
+              });
+    });
+		</script>
+	</div>
+			  	  
+              <div class="col-lg-4 header_right_box header_right_nav">
+                <div class="ctrl">
+				{% if (logged) %} 
+                  <div class="acc js-toggle">
+                    <button class="acc__btn js-toggle-btn">
+							{% if total_notify %}
+								<i class="fa fa-bell wibro notify-bell" aria-hidden="true"></i>
+							{% endif %}
+                      <svg class="icon-user">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-user"></use>
+                      </svg>{{ text_ls_logged }} <span id="wishcomptotall" class="acc__counter" {{ counTotall ? '' : ' style="display:none;" ' }} >{{ counTotall }}</span>
+                    </button>
+                    <div class="acc__dropdown js-toggle-dropdown">
+                      <ul class="acc__menu">
+                      	<li><a class="acc__link" href="{{ account }}">{{ text_account }}</a></li>
+								<li><a class="acc__link" href="{{ address_href }}">{{ text_address }}</a></li>
+                        <li><a class="acc__link" href="{{ garage }}">{{ text_garage }}</a></li>
+                        <li><a class="acc__link" href="{{ order }}">{{ text_order }}{% if order_total_notify %} <b class="notify-bell">({{ order_total_notify }})</b>{% endif %}</a></li>
+								<!--li><a class="acc__link" href="{{ review }}">Message{% if message_total %} <b class="notify-bell">({{ message_total }})</b>{% endif %}</a></li-->
+                        <li id="wish">{{ wish_head }}</li>
+                        <li><a class="acc__link" href="{{ auction }}">{{ text_auction_href }}</a></li>
+                        <!--li><a class="acc__link" href="{{ product }}">Classified</a></li-->
+                        <li><a class="acc__link" href="{{ logout }}">{{ text_logout }}</a></li>
+                        
+                        <!--li><a class="acc__link" href="{{ address }}">{{ text_address }}</a></li-->
+                        <!--li><a class="acc__link" href="{{ transaction }}">{{ text_transaction }}</a></li>
+                        <li><a class="acc__link" href="{{ download }}">{{ text_download }}</a></li-->
+                      </ul>
+                    </div>
+                  </div>
+				{% else %} 
+                  <div class="acc js-toggle">
+                    <button class="acc__btn js-toggle-btn">
+                      <svg class="icon-user">
+                        <use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-user"></use>
+                      </svg>{{ text_technics_account }} <span id="wishcomptotall" class="acc__counter" {{ counTotall ? '' : ' style="display:none;" ' }} >{{ counTotall }}</span>
+                    </button>
+                    <div class="acc__dropdown js-toggle-dropdown">
+                      <ul class="acc__menu">
+                        <li><a class="acc__link js-fancy-popup" href="#signin">{{ text_account_title }} / {{ text_register }}</a></li>
+                        <li id="wish">{{ wish_head }}</li>
+                       </ul>
+                    </div>
+                  </div>
+				{% endif %}
+                </div>
+
+			  
+<div class="mobi_item">			  
+	<a class="acc__link js-fancy-popup" href="#signin"><span class="icon-user"></span></a>
+</div>			  
+{{ cart }} 
+
+<div class="mobi_item">			  
+	<div class="ico_mobi_call"><a href="tel:{{telephone}}"></a></div>
+</div>			  
+
+
+
+<div class="mobi_menu">
+<div class="mobi_menu_togle"></div>
+	<div class="mobi_menu_box">
+		<div class="mobi_menu_box_content">
+			<div class="mobi_menu_togle_close"></div>
+	
+				<div class="mobi_menu_box_top">
+					{{ language }}
+					{{ currency }}
+          <div class="logged_mobi">
+				{% if (logged) %} 
+                  <div class="acc js-toggle">
+                    <button class="acc__btn js-toggle-btn">
+               {{ text_ls_logged }} <span id="wishcomptotall" class="acc__counter" {{ counTotall ? '' : ' style="display:none;" ' }} >{{ counTotall }}</span>
+                    </button>
+                    <div class="acc__dropdown js-toggle-dropdown">
+                      <ul class="acc__menu">
+								<li><a class="acc__link" href="{{ account }}">{{ text_account }}</a></li>
+                        <li><a class="acc__link" href="{{ garage }}">{{ text_garage }}</a></li>
+								<li><a class="acc__link" href="{{ order }}">{{ text_order }}</a></li>
+                        <li id="wish">{{ wish_head }}</li>
+                        <li><a class="acc__link" href="{{ auction }}">{{ text_auction_href }}</a></li>
+								<!--li><a class="acc__link" href="{{ product }}">Classified</a></li-->
+                        <li><a class="acc__link" href="{{ logout }}">{{ text_logout }}</a></li>
+                      </ul>
+                    </div>
+                  </div>
+				{% else %} 
+                  <div class="acc js-toggle">
+                    <button class="acc__btn js-toggle-btn">
+                      <span class="icon-user"></span>
+					  {{ text_technics_account }} <span id="wishcomptotall" class="acc__counter" {{ counTotall ? '' : ' style="display:none;" ' }} >{{ counTotall }}</span>
+                    </button>
+                    <div class="acc__dropdown js-toggle-dropdown">
+                      <ul class="acc__menu">
+                        <li><a class="acc__link js-fancy-popup" href="#signin">{{ text_account_title }} / {{ text_register }}</a></li>
+                        <li id="wish">{{ wish_head }}</li>
+                      </ul>
+                    </div>
+                  </div>
+				{% endif %}
+
+                </div> 
+
+<div class="cart_mobi_menu">
+	{{ cart }}  
+</div>	 
+	 
+</div>				
+				
+				<div class="mobi_menu_box_select">
+					<div class="mobi_menu_box_select_title">{{ text_model_title }}</div>
+					<div class="mobi_menu_box_select_items">
+					 {% for mark in marks %}
+						{% if mark.mark_id == mark_id %}
+						  <a class="active" href="{{ mark.href }}">{{ mark.name }}</a>
+						{% else %}
+						  <a href="{{ mark.href }}">{{ mark.name }}</a>
+						{% endif %}
+					 {% endfor %}
+					</div>
+				</div>
+				
+				<div class="box_menu_articles">
+					<ul>
+						<li><a href="/maserati/">{{ text_car_parts }}</a></li>
+						<!-- <li><a href="">{{ text_auction }}</a></li> 
+						<li><a href="">{{ text_club_international }} </a></li>-->
+						<li><a href="{{ club_href }}">{{ text_club_store }}</a></li>
+						<li><a href="{{ auction_href }}">{{ text_auction }}</a></li>
+						<!-- <li><a href="{{ info19.href }}">{{ info19.title }}</a></li>-->
+						<li><a href="{{ info12.href }}">{{ info12.title }}</a></li>
+						<li><a href="{{ info4.href }}">{{ info4.title }}</a></li>
+						<li><a href="{{ info13.href }}">{{ info13.title }}</a></li>
+					</ul>
+				</div>
+
+				<div class="box_menu_contact">
+					Contact us:</br>
+					<a href="tel:{{telephone}}">{{telephone}}</a>	
+					
+					
+					<div class="box_menu_contact_icon">
+						<a href="tel:{{telephone}}"target="_blank"></a><a href="https://wa.me/+17147913038" target="_blank"></a><a href="https://t.me/+17147913038" target="_blank"></a><a href="mailto:{{config_email}}" target="_blank"></a>
+					</div>
+				</div>
+
+		</div>
+
+
+
+
+<script>
+var icon = $('.mobi_menu_togle');
+ 
+	 
+ 	$(".mobi_menu_togle, .mobi_menu_togle_close").click(function(){
+
+	  if ( $(".mobi_menu_box").hasClass("open")) {
+      	 $(".mobi_menu_box").removeClass("open");
+       
+      }else{
+         $(".mobi_menu_box").addClass("open");
+      }
+});
+	
+   </script>
+	</div>
+</div>
+
+<div class="box_home_search">
+	<nav class="nav js-sticky">
+		{{ search }}
+	</nav>
+	</div>
+
+
+
+</div>
+
+            </div>
+          </div>
+        </div>
+ 			<div class="ico_call popup-contact_form_open"><a href="javascript:;" ></a></div> <!-- tel:{{ telephone }}	" -->
+
+      </header>
+	  <script>
+	  $(document).on('click', '.popup-contact_form_open a', function(){
+	  	$('.popup-contact_form').show();
+		$('.popup_back').show();
+	  });
+	  </script>
+
+{{ forms }}	  
+      <!-- Header v5 :: End-->

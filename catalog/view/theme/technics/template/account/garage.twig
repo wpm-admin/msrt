@@ -1,0 +1,409 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-9">
+			{% if garages %}
+				{% set garage_row = 1 %}
+				{% for garage in garages %}
+
+
+
+<div class="item_garege row">
+					<div class="col-xl-5">
+						<img src="{{ garage['thumb'] }}">
+					</div>
+					
+					<div class="col-xl-7">
+						<div class="garage_row garage_name">
+							<a href="{{ garage['href'] }}">
+								{{ garage['name'] }}
+							</a>
+						</div>
+						
+						
+	<div class="item_garege_line"><span>{{ text_year }} </span>{{ garage['year'] }}				</div>				
+	<div class="item_garege_line"><span>{{ text_volume }} </span>{{ garage['volume'] }}				</div>				
+	<div class="item_garege_line"><span>{{ text_tipo }} </span>{{ garage['tipo'] }}				</div>				
+	<div class="item_garege_line"><span>{{ text_vin }} </span>{{ garage['vin'] }}				</div>				
+	<div class="item_garege_line"><span>{{ text_status }} </span><input type="checkbox" class="ajax_data" {% if garage['status'] %} checked {% endif %} data-name="status" data-garage_id="{{ garage['garage_id'] }}" value="1">				</div>				
+	<div class="item_garege_line"><span>{{ text_sort }} </span><input type="text" class="ajax_data" data-garage_id="{{ garage['garage_id'] }}" data-name="sort_order" value="{{ garage['sort_order'] }}">				</div>				
+ 
+                 			
+
+<a class="bttn_clear_garage" title="{{ button_remote_garage }}" href="{{ garage.remove }}"></a>
+					</div>
+				</div>
+				{% set garage_row = garage_row + 1 %}
+				{% endfor %}
+			{% else %}
+			<p>{{ text_empty }}</p>
+			{% endif %}
+			<div class="personal__data">
+				<div class="personal__action">
+					<a href="javascript:;" class="bttn_blue button_add">{{ button_add }}</a>
+				</div>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      
+      
+      <!-- ПОПАП ДОБАВЛЕНИЯ -->
+      <script>
+            $(document).on('click', '.add_popup_back, .button_close_form', function(){
+                 
+                 $('.add_popup').hide();
+                 $('.add_popup_back').hide();
+                     
+            });
+            $(document).on('click', '.button_add', function(){
+                 
+                 $('.add_popup').show();
+                 $('.add_popup_back').show();
+                     
+            });
+            $(document).on('change', '.add_garage_form select[name="modeli"]', function(){
+               
+                  if($(this).val() < 1){
+                        
+                        var $select = $('.add_garage_form select[name="mark"]');                        
+                        $select.find('option').remove();
+                        $('<option>').val(0).text('{{ text_mark }}').appendTo($select);     
+                             
+                        return false;
+                  }
+               
+                  $.ajax({
+                        url: 'index.php?route=account/garage/get_marks&mark_id='+$(this).val(),
+                        type: 'get',
+                        dataType: 'json',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              
+                              var $select = $('.add_garage_form select[name="mark"]');                        
+                              $select.find('option').remove();
+                              $('<option>').val(0).text('{{ text_modeli }}').appendTo($select);     
+                              $.each(json.marks, function(key, value) {
+                                  $('<option>').val(value.mark_id).text(value.name).appendTo($select);     
+                              });
+                              
+                              $('.add_garage_form .add_image').prop('src', json.thumb);
+                        },
+                  });
+                  
+            });
+            
+            
+            
+            $(document).on('change', '.ajax_data', function(){
+               
+                  garage_id = $(this).data('garage_id');
+                  name = $(this).data('name');
+                  value = $(this).val();
+                  parent = $(this).parent('div');
+                  
+                  if(name == 'status'){
+                        value = 0;
+                        if($(this).prop('checked')){
+                              value = 1;
+                        }
+                  }
+               
+                  $.ajax({
+                        url: 'index.php?route=account/garage/ajax_data&garage_id='+garage_id+'&name='+name+'&value='+value,
+                        type: 'get',
+                        dataType: 'text',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              
+                              //console.log(json);
+                              
+                              /* Тут подкраска по обновлению
+                              parent.css('background-color','#c6dcbb');
+                              setTimeout(function(){
+                                    parent.css('background-color','#fff');     
+                              },1000);
+                              */
+
+                        },
+                  });
+                  
+            });
+            $(document).on('change', '.add_garage_form select[name="mark"]', function(){
+               
+                  $.ajax({
+                        url: 'index.php?route=account/garage/get_mark&mark_id='+$(this).val(),
+                        type: 'get',
+                        dataType: 'json',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              
+                              console.log(json);
+                              
+                              $('.add_garage_form .add_image').prop('src', json.thumb);
+
+                        },
+                  });
+                  
+            });
+            $(document).on('click', '.add_garage_form.vehicle .button_add_form', function(){
+               
+				var form = this;
+				var submit = true;
+				
+				console.log('add_garage_form');
+				if($('.add_garage_form select[name="modeli"]').val() == 0){
+					$('.add_garage_formselect[name="modeli"]').css('border-color', '#f00');
+					submit = false;
+				}
+				
+				if($('.add_garage_formselect[name="mark"]').val() == 0){
+					$('.add_garage_formselect[name="mark"]').css('border-color', '#f00');
+					submit = false;
+				}
+			
+				if($('.add_garage_form.vehicle input[name="year"]').val() == 0){
+					$('input[name="year"]').css('border-color', '#f00');
+					submit = false;
+				}
+			
+				if(submit){
+				  $.ajax({
+                        url: 'index.php?route=account/garage/add',
+                        type: 'post',
+                        data: $('.add_garage_form').serialize(),
+                        dataType: 'json',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              
+                              console.log(json);
+                              
+                              $('.msg').html(json.msg);
+                              
+                              setTimeout(function(){
+                                   $('.add_popup_back').trigger('click');
+                                   location.reload();
+                              }, 2000);
+                              
+
+                        },
+                  });
+				}else{
+					setTimeout(function(){
+						$('select[name="mark"]').css('border-color', '#E1E6EE');
+						$('select[name="modeli"]').css('border-color', '#E1E6EE');
+						$('input[name="year"]').css('border-color', '#E1E6EE');
+					},2000);
+				
+			
+				}
+            });
+      </script>
+
+<!-- form ADD VEHICLE-->	  
+
+      <div class="add_popup_back"></div>
+      <div class="add_popup container-fluid">
+            <form action="{{ add }}" method="post" enctype="multipart/form-data" class="add_garage_form vehicle" id="add_garage_form">
+			<a href="javascript:;" class="button_close_form"> </a>
+			
+<div class="row">
+                  <div class="col-xl-12">
+                        <h3>{{ add_garage_title }}</h3>
+                  </div>
+		<div class="col-xl-5">
+			<div class="add_image">
+				<a href="javascript:;"  data-toggle="image">
+				<div class="add_image_text">add foto</div>
+				<img src="" class="add_imagew">
+				</a>
+			    <input type="hidden" name="image" value="" id="input-image">
+            </div>
+
+		</div>
+                  <div class="col-xl-7 input_box">
+                        <div class="row">
+                              <select name="modeli">
+                                    <option value="0">{{ text_mark }}</option>
+                                    {% for mark in marks %}
+                                    <option value="{{ mark.mark_id }}">{{ mark.name }}</option>
+                                    {% endfor %}
+                              </select>
+                        </div>
+                       <div class="row">
+                              <select name="mark">
+                                    <option value="0">{{ text_modeli }}</option>
+                              </select>
+                        </div>
+                        <div class="row">
+                              <input type="text" name="year" placeholder="{{ text_year }}" value="">
+                        </div>
+                        <div class="row">
+                              <input type="text" name="volume" placeholder="{{ text_volume }}" value="">
+                        </div>
+                        <div class="row">
+                              <input type="text" name="tipo" placeholder="{{ text_tipo }}" value="">
+                        </div>
+                        <div class="row">
+                              <input type="text" name="vin" placeholder="{{ text_vin }}" value="">
+                        </div>
+                        <div class="row hide">
+                              <input type="text" name="sort_order" placeholder="{{ text_sort }}" value="">
+                              <input type="hidden" name="status" value="1">
+                        </div>
+                  </div>
+                  <div class="col-xl-12">
+                        <div class="msg"></div>
+                  </div>
+
+                  </div>
+
+                        <div class="personal__action">
+					<a href="javascript:;" class="bttn_blue   button_add_form">{{ button_add }}</a>
+            </div>
+            </form>
+      </div>
+	  
+<!--// form ADD VEHICLE-->	  
+	  
+	  
+      <!-- Main :: End-->
+      
+      <style>
+            .add_popup_back{
+                  width: 100vw;
+                  height: 100vh;
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  opacity: 0.7;
+                  background-color: black;
+                  display: none;
+                  z-index: 1000;
+            }
+            .add_popup{
+                  width: 70vw;
+                  height: 70vh;
+                  position: fixed;
+                  top: 50vh;
+                  left: 50vw;
+                  margin-right: -50%;
+                  transform: translate(-50%, -50%);
+                  background-color: white;
+                  display: none;
+                  opacity: 1;
+                  z-index: 1001;
+            }
+      </style>
+	  <script>
+
+				
+	$(document).on('click', 'a[data-toggle=\'image\']', function(e) {
+		var element = this;
+
+		$('#form-upload').remove();
+		
+		var targer = $(element).parent().find('input').prop('name');
+		  
+		$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="hidden" name="id" value="' + targer + '"><input type="file" name="file" /></form>');
+		
+		$('#form-upload input[name=\'file\']').trigger('click');
+		
+		if (typeof timer != 'undefined') {
+			clearInterval(timer);
+		}
+		  
+		console.log('load');
+
+		timer = setInterval(function() {
+			if ($('#form-upload input[name=\'file\']').val() != '') {
+				clearInterval(timer);
+	
+		  var filename = $('#form-upload input[name=\'file\']').val();
+		  
+		  //console.log(filename);
+		  
+				$.ajax({
+					url: 'index.php?route=tool/upload',
+					type: 'post',
+					dataType: 'json',
+					data: new FormData($('#form-upload')[0]),
+					cache: false,
+					contentType: false,
+					processData: false,
+					beforeSend: function() {
+						$(element).button('loading');
+					},
+					complete: function() {
+						$(element).button('reset');
+					},
+					success: function(json) {
+			  
+						console.log(json);
+			  
+						$(element).parent().find('.text-danger').remove();
+						$(element).parent().find('.text-success').remove();
+						$(element).parent().find('a').css('text-decoration','line-through');
+	
+						if (json['error']) {
+							$(element).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+						}
+	
+						if (json['success']) {
+							//alert(json['success']);
+				
+							$(element).parent().find('input').after('<div class="text-success">' + json['success'] + '<br></div>');
+				
+							$(element).parent().find('input').val(json['file']);
+							$(element).parent().find('img').prop('src', json['file']);
+						}
+					},
+					error: function(xhr, ajaxOptions, thrownError) {
+						console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+					}
+				});
+			}
+		}, 500);
+	});
+	  </script>
+	  
+{{ footer }}</body></html>

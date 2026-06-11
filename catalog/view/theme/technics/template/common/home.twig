@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" class="page">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="theme-color" content="#000000">
+		<title>{{ title }}</title>
+		<base href="{{ base }}">
+		<meta name="description" content="{{ description }}">
+		<meta name="keywords" content="{{ keywords }}">
+		{% if links %}
+			{% for link in links %}
+				<link {{ link }}>
+			{% endfor %}
+		{% endif %}
+		<link rel="preload" href="{{ lm_theme_assets }}fonts/GoogleSansFlex.woff2" as="font" type="font/woff2" crossorigin>
+		<link rel="preload" href="{{ lm_theme_assets }}fonts/Hand.woff2" as="font" type="font/woff2" crossorigin>
+		<link rel="stylesheet" href="{{ lm_theme_assets }}css/vendor.css">
+		<link rel="stylesheet" href="{{ lm_theme_assets }}css/main.css">
+		<link rel="stylesheet" href="{{ lm_theme_assets }}css/custom.css">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+		{% for style in lm_styles %}
+			<link {{ style }}>
+		{% endfor %}
+		<script defer src="{{ lm_theme_assets }}js/main.js"></script>
+		<script defer src="{{ lm_theme_assets }}js/custom.js?v33"></script>
+	</head>
+	<body class="page__body">
+		<div
+			class="site-container">
+
+			<!-- Header -->
+			<header class="header">
+				<div class="container container__header" data-anime>
+					<div class="logo header__logo">
+						<a href="{{ home }}" class="logo__link">
+							<img src="{{ lm_theme_assets }}img/svg/logo.svg" alt="{{ name }}" class="logo__img">
+						</a>
+					</div>
+					<div class="header__user">
+						<div class="header__user-cabinet">
+							<button type="button" class="btn-reset bg-white btn">
+								<img src="{{ lm_theme_assets }}img/svg/user.svg" alt="Login">
+								Login
+							</button>
+						</div>
+						<div class="header__user-cart">
+							<button type="button" class="btn-reset bg-white btn">
+								<img src="{{ lm_theme_assets }}img/svg/cart.svg" alt="cart">
+								<span>Empty</span>
+							</button>
+						</div>
+					</div>
+
+					<div class="header__right">
+						<div class="m-select">
+							<div class="m-select__header bg-white lang__btn">
+								<span class="m-select__current">
+									{% for lang_item in lm_languages %}
+										{% if lang_item.code == lm_current_lang_code %}
+											<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">
+											{{ lang_item.name }}
+										{% endif %}
+									{% endfor %}
+								</span>
+								<div class="m-select__icon">
+									<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="">
+								</div>
+							</div>
+							<ul class="list-reset m-select__body lang__menu">
+								{% for lang_item in lm_languages %}
+									<li class="m-select__item" data-lang="{{ lang_item.code }}">
+										<a class="lang__link m-select__item-inner" href="{{ lang_item.href }}">
+											<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">{{ lang_item.name }}
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+						<div class="mobi_menu">
+							<button type="button" class="btn-reset btn bg-blue color-white btn-menu mobi_menu_togle">
+								<div class="toggle_wrap">
+									<span></span>
+									<span></span>
+									<span></span>
+								</div>
+							</button>
+							<div class="mobi_menu_box">
+								<div class="mobi_menu_box_content">
+									<div class="mobi_menu_box_top">
+										<div class="logged_mobi">
+											<button type="button" class="btn-reset bg-white btn">
+												<img src="{{ lm_theme_assets }}img/svg/user.svg" alt="Login">
+												Login
+											</button>
+										</div>
+										<div class="cart_mobi_menu">
+											<button type="button" class="btn-reset bg-white btn">
+												<img src="{{ lm_theme_assets }}img/svg/cart.svg" alt="cart">
+												<span>Empty</span>
+											</button>
+										</div>
+										<div class="lang js-toggle">
+											<button class="btn-reset bg-white btn lang__btn js-toggle-btn">{{ text_language }}</button>
+											<div class="lang__dropdown js-toggle-dropdown">
+												<div class="lang__dropdown_title">{{ text_language }}
+													<span class="close_model_lang"></span>
+												</div>
+												<ul class="lang__menu">
+
+													{% for lang_item in lm_languages %}
+														<li data-lang="{{ lang_item.code }}">
+															<a class="lang__link" href="{{ lang_item.href }}">{{ lang_item.name }}</a>
+														</li>
+													{% endfor %}
+												</ul>
+											</div>
+											<input type="hidden" name="code" value="">
+											<input type="hidden" name="redirect" value="{{ base }}">
+										</div>
+										<div class="mobi_menu_togle_close menu-close">
+											<svg class="icon-back" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<path d="M1 2L22 23" stroke="white" stroke-width="2" stroke-linecap="round"/>
+												<path d="M22 2L1 23" stroke="white" stroke-width="2" stroke-linecap="round"/>
+											</svg>
+										</div>
+									</div>
+									<div class="mobi_menu_box_select">
+										<div class="mobi_menu_box_select_items">
+											{% for mark in marks %}
+												<a href="{{ mark.href }}">{{ mark.name }}</a>
+											{% endfor %}
+										</div>
+									</div>
+									<div class="box_menu_articles">
+										<ul class="list-reset">
+											<li>
+												<a href="/maserati/">Shop Maserati Parts</a>
+											</li>
+											<li>
+												<a href="{{ blog_href }}">MCI Store</a>
+											</li>
+											<li>
+												<a href="{{ auction_href }}">Auctions</a>
+											</li>
+											<li>
+												<a href="{{ blog_href }}">Maserati Club News</a>
+											</li>
+											<li>
+												<a href="{{ customer_service_href }}">Customer service</a>
+											</li>
+											<li>
+												<a href="{{ about_href }}">About Us</a>
+											</li>
+											<li>
+												<a href="{{ contact_href }}">Contacts</a>
+											</li>
+										</ul>
+									</div>
+									<div class="box_menu__bottom">
+										<div class="box_menu__contact">
+											<p class="contacts-title">Contact us:</p>
+											<a href="tel:{{ telephone }}">{{ telephone }}</a>
+											<a href="mailto:{{ config_email }}">{{ config_email }}</a>
+										</div>
+										<ul class="list-reset social__list">
+											<li>
+												<a href="#"><img src="{{ lm_theme_assets }}img/social/fb.svg" alt=""></a>
+											</li>
+											<li>
+												<a href="#"><img src="{{ lm_theme_assets }}img/social/inst.svg" alt=""></a>
+											</li>
+											<li>
+												<a href="#"><img src="{{ lm_theme_assets }}img/social/yt.svg" alt=""></a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<script>
+									var icon = $('.mobi_menu_togle');
+$(".mobi_menu_togle, .mobi_menu_togle_close").click(function () {
+if ($(".mobi_menu_box").hasClass("open")) {
+$(".mobi_menu_box").removeClass("open");
+} else {
+$(".mobi_menu_box").addClass("open");
+}
+});
+								</script>
+							</div>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<main
+				class="main">
+
+				<!-- Hero -->
+				<section class="hero">
+					<div class="swiper hero-slider">
+						<div class="swiper-wrapper">
+							{% for slide in lm_hero_slides %}
+								<div class="swiper-slide">
+									<img src="{{ slide.image }}" class="hero-bg" alt="{{ slide.title }}">
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div class="hero__content">
+						<h1 class="page-title">{{ text_home_title }}</h1>
+						<div class="box_home_search">
+							<nav class="nav hero-nav js-sticky">
+								<div id="search" class="search js-search">
+									<div class="search__wrapper">
+										<a href="#" class="search__btn">
+											<img src="{{ lm_theme_assets }}img/svg/search.svg" alt="">
+										</a>
+										<input type="text" name="search" value="" placeholder="Search by part number or description" class="form-control" autocomplete="off">
+										<div class="search__right">
+											<a href="#" class="search__list-close">
+												<img src="{{ lm_theme_assets }}img/svg/s-close.svg" alt="search close button" type="button">
+											</a>
+											<span class="vertical-line"></span>
+											<a href="#" class="search__btn">SEARCH</a>
+										</div>
+										<div class="live-search">
+											<ul></ul>
+										</div>
+									</div>
+								</div>
+							</nav>
+						</div>
+					</div>
+					<div class="swiper-pagination hero-pagination"></div>
+				</section>
+
+				<!-- Categories -->
+				<section class="categories">
+					<div class="container">
+						<div class="categories__top">
+							<div class="swiper categories__slider">
+								<div class="swiper-wrapper">
+									{% for mark in lm_marks %}
+										<div class="swiper-slide categories__slide" data-mark-id="{{ mark.mark_id }}">
+											<a href="{{ mark.href }}">
+												<img src="{{ mark.image }}" alt="{{ mark.name }}">
+											</a>
+										</div>
+									{% endfor %}
+								</div>
+								<div class="categories__navigation">
+									<div class="slider-nav categories__slider-prev">
+										<img src="{{ lm_theme_assets }}img/slider-logo/left.svg" alt="">
+									</div>
+									<div class="slider-nav categories__slider-next">
+										<img src="{{ lm_theme_assets }}img/slider-logo/right.svg" alt="">
+									</div>
+								</div>
+							</div>
+							<form class="select__group">
+								<div class="select__models">
+									<p class="color-grey">{{ text_select_model }}</p>
+									<div class="c-select" id="lm-model-select">
+										<select name="model" class="c-select__native">
+											<option value="">{{ text_select_model }}</option>
+											{% for model in lm_first_models %}
+												<option value="{{ model.model_id }}">{{ model.name }}</option>
+											{% endfor %}
+										</select>
+										<div class="c-select__custom">
+											<div class="c-select__trigger">
+												<span class="c-select__label">{{ text_select_model }}</span>
+												<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="" class="c-select__icon">
+											</div>
+											<div class="c-select__dropdown">
+
+												{% for model in lm_first_models %}
+													<div class="c-select__option" data-value="{{ model.model_id }}">
+														{% if model.image %}
+															<img src="{{ model.image }}" alt="">
+														{% endif %}
+														<span>{{ model.name }}</span>
+													</div>
+												{% endfor %}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="select__category">
+									<p class="color-grey">{{ text_select_category }}</p>
+									<div class="c-select" id="lm-category-select">
+										<select name="category" class="c-select__native">
+											<option value="">{{ text_select_category }}</option>
+											{% for cat in lm_first_categories %}
+												<option value="{{ cat.category_id }}" data-href="{{ cat.href }}">{{ cat.name }}</option>
+											{% endfor %}
+										</select>
+										<div class="c-select__custom">
+											<div class="c-select__trigger">
+												<span class="c-select__label">{{ text_select_category }}</span>
+												<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="" class="c-select__icon">
+											</div>
+											<div class="c-select__dropdown">
+												{% for cat in lm_first_categories %}
+													<div class="c-select__option" data-value="{{ cat.category_id }}" data-href="{{ cat.href }}">
+														<span>{{ cat.name }}</span>
+													</div>
+												{% endfor %}
+											</div>
+										</div>
+									</div>
+								</div>
+								<button type="submit" class="btn-reset btn bg-blue color-white btn-search">{{ text_search }}</button>
+							</form>
+						</div>
+					</div>
+					<div class="wrapper-categories__bottom">
+						<div class="container">
+							<div class="swiper categories__bottom">
+								<div class="swiper-wrapper categories__list grid">
+									{% for item in lm_category_bottom %}
+										<div class="swiper-slide categories__list-item">
+											<a href="{{ item.href }}" class="category_link">
+												<div class="category-image">
+													<picture>
+														<img loading="lazy" src="{{ item.thumb }}" class="image" alt="{{ item.name }}">
+													</picture>
+												</div>
+												<h3 class="item-title">{{ item.name }}</h3>
+											</a>
+										</div>
+									{% endfor %}
+								</div>
+								<div class="categories__list-pagination"></div>
+							</div>
+						</div>
+					</div>
+					<a href="{{ all_categories_href }}" class="btn btn-reset btn-view">{{ text_all_categories }}</a>
+				</section>
+
+				<!-- Banner Promo -->
+				<section class="section banner">
+					<div class="container banner__container">
+						<div class="banner__image">
+							<img src="{{ lm_banner_promo.image }}" alt="{{ lm_banner_promo.title }}" class="banner-image">
+						</div>
+						<div class="banner__content text-white">
+							<h3 class="section-title promo-title text-white">{{ lm_banner_promo.title }}</h3>
+							<div class="promo-data">
+								<span class="promo-text">Use code:</span>
+								<button type="button" class="btn-reset promo-code-btn" data-promo="{{ lm_banner_promo.code }}" title="Click to copy code">
+									<code>{{ lm_banner_promo.code }}</code>
+								</button>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Club -->
+				<section class="section club">
+					<div class="container">
+						<h2 class="section-title">
+							{{ text_club_title }}
+							<span class="club-logo"><img src="{{ lm_theme_assets }}img/club-list/club-logo.png" alt=""></span>
+						</h2>
+						<div class="swiper club__slider">
+							<div class="swiper-wrapper club__list grid">
+								{% for article in blog_products %}
+									<div class="swiper-slide article">
+										<div class="article-image">
+											<img loading="lazy" src="{{ article.thumb }}" class="image" alt="{{ article.name }}">
+										</div>
+										<div class="article-content">
+											<p class="article-meta">
+												<time datetime="{{ article.date_available }}" itemprop="datePublished">{{ article.date_available }}</time>
+											</p>
+											<h4 class="article-title">
+												<a href="{{ article.href }}">{{ article.name }}</a>
+											</h4>
+											<div class="article-text">{{ article.description }}</div>
+											<a href="{{ article.href }}" class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></a>
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						<a href="{{ blog_href }}" class="btn btn-reset btn-view">{{ text_club_store_bttn }}</a>
+					</div>
+				</section>
+
+				<!-- Auctions -->
+				<section class="section bg-grey auctions">
+					<div class="container">
+						<h2 class="section-title">{{ text_auctions_title }}</h2>
+						<div class="swiper auctions__slider">
+							<div class="swiper-wrapper auctions__list grid">
+								{% for product in auction_products %}
+									<div class="swiper-slide article">
+										<a href="{{ product.href }}">
+											<div class="article-image">
+												<img loading="lazy" src="{{ product.thumb }}" class="image" alt="{{ product.name }}">
+											</div>
+											<div class="article-content">
+												<h4 class="article-title">{{ product.name }}</h4>
+												<div class="article-bottom">
+													{% if product.price %}
+														<p class="price">{{ product.price }}</p>
+													{% endif %}
+													<span class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></span>
+												</div>
+											</div>
+										</a>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+						<a href="{{ auction_href }}" class="btn btn-reset btn-view">{{ text_all_auctions }}</a>
+					</div>
+				</section>
+
+				<!-- Banner Maserati -->
+				<section class="section banner banner-maserati">
+					<div class="container banner__container">
+						<div class="banner__image">
+							<img src="{{ lm_banner_maserati.image }}" alt="{{ lm_banner_maserati.title }}" class="banner-image">
+						</div>
+						<div class="banner__content text-center text-white">
+							<h3 class="section-title text-white">{{ lm_banner_maserati.title }}</h3>
+							<div class="banner-subtitle">{{ lm_banner_maserati.subtitle }}</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- News -->
+				<section class="section news">
+					<div class="container news-container">
+						<div class="swiper news__slider">
+							<div class="swiper-wrapper grid">
+								{% for item in lm_news %}
+									<div class="swiper-slide news-item">
+										<h3 class="news-title">{{ item.title }}</h3>
+										<div class="news-image">
+											<img loading="lazy" src="{{ item.thumb }}" class="image" alt="{{ item.title }}">
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- About -->
+				<section class="section bg-grey about">
+					<div class="container grid about-container">
+						<h2 class="section-title about-title">
+							About Us
+						</h2>
+						<div class="about-content">
+							<p>Our search engine currently contains over 70k individual parts, the world largest inventory of new and used Maserati parts accumulated since 1976! We are progressively adding parts and updating photos of our products on a regular basis, if you do not find what you’re looking for, please contact us with your parts request.</p>
+							<p>
+								Our new site will soon feature our tech database, VCM magazines, Classified, online live auctions, MCI, shop and dealer special member discounts.</p>
+							<p>
+								I look forward to serving you and welcome any comments that you may have.</p>
+						</div>
+						<div class="about-bottom">
+							<p class="about-fio">Jacques Pozzo di Borgo</p>
+							<div class="about-status">President</div>
+						</div>
+						<div class="about-image">
+							<picture>
+								<source srcset="{{ lm_theme_assets }}img/Subtract.webp" type="image/webp">
+								<img loading="lazy" src="{{ lm_theme_assets }}img/Subtract.jpg" class="image" width="" height="" alt="Jacques Pozzo di Borgo">
+							</picture>
+						</div>
+					</div>
+				</section>
+
+				<!-- SEO -->
+				<section class="section seo">
+					<div class="container">
+						<div class="seo__content">
+							{{ lm_seo|raw }}
+						</div>
+					</div>
+				</section>
+
+			</main>
+
+			<!-- Footer -->
+			<footer class="section footer">
+				<div class="container">
+					<div class="footer__top grid">
+						<div class="footer__col footer__col-left">
+							<div class="footer-logo">
+								<img src="{{ lm_theme_assets }}img/svg/logo-footer.svg" alt="{{ name }}">
+							</div>
+							<p class="footer-text">{{ text_footer_info }}</p>
+						</div>
+						<div class="footer__col col__2">
+							<ul class="list-reset menu__list">
+								<li>
+									<a href="#">{{ text_shipping }}</a>
+								</li>
+								<li>
+									<a href="#">{{ text_returns }}</a>
+								</li>
+								<li>
+									<a href="#">{{ text_faq }}</a>
+								</li>
+								<li>
+									<a href="#">{{ text_terms }}</a>
+								</li>
+								<li>
+									<a href="#">{{ text_privacy }}</a>
+								</li>
+								<li>
+									<a href="#">{{ text_contact_us }}</a>
+								</li>
+							</ul>
+						</div>
+						<div class="footer__col col__3">
+							<ul class="list-reset menu__list">
+								<li>
+									<a href="{{ home }}">{{ text_home }}</a>
+								</li>
+								<li>
+									<a href="{{ blog_href }}">{{ text_blog }}</a>
+								</li>
+								<li>
+									<a href="#">{{ text_about_us }}</a>
+								</li>
+							</ul>
+						</div>
+						<div class="footer__col col__4">
+							<ul class="list-reset menu__list">
+								<li>
+									<a href="#">{{ text_terms }}</a>
+								</li>
+								<li>
+									<a href="#">{{ text_privacy }}</a>
+								</li>
+							</ul>
+						</div>
+						<div class="footer__col footer__col-right">
+							<div class="lang js-toggle">
+								<div class="m-select">
+									<div class="m-select__header bg-white lang__btn">
+										<span class="m-select__current">
+											{% for lang_item in lm_languages %}
+												{% if lang_item.code == lm_current_lang_code %}
+													<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">
+													{{ lang_item.name }}
+												{% endif %}
+											{% endfor %}
+										</span>
+										<div class="m-select__icon">
+											<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="">
+										</div>
+									</div>
+									<ul class="list-reset m-select__body lang__menu">
+										{% for lang_item in lm_languages %}
+											<li class="m-select__item" data-lang="{{ lang_item.code }}">
+												<a class="lang__link m-select__item-inner" href="{{ lang_item.href }}">
+													<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">{{ lang_item.name }}
+												</a>
+											</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+							<ul class="list-reset menu__list text-right">
+								<li>{{ text_contacts }}</li>
+								<li>
+									<a href="tel:{{ telephone }}">{{ telephone }}</a>
+								</li>
+								<li>
+									<a href="mailto:{{ config_email }}">{{ config_email }}</a>
+								</li>
+							</ul>
+							<ul class="list-reset social__list">
+								<li>
+									<a href="#"><img src="{{ lm_theme_assets }}img/social/fb.svg" alt=""></a>
+								</li>
+								<li>
+									<a href="#"><img src="{{ lm_theme_assets }}img/social/inst.svg" alt=""></a>
+								</li>
+								<li>
+									<a href="#"><img src="{{ lm_theme_assets }}img/social/yt.svg" alt=""></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="footer__bottom">
+						<div class="footer__bottom-rights">
+							© 1976-2026 MIE Corporation. All rights reserved.
+						</div>
+						<div class="footer__bottom-policy">
+							FedEx Shipping FAQ’s Privacy & Security Policy Terms & Conditions
+						</div>
+						<div class="footer__bottom-liberty">
+							Developed by
+							<a href=""><img src="{{ lm_theme_assets }}/img/svg/liberty.svg" alt="liberty"></a>
+						</div>
+					</div>
+				</div>
+			</footer>
+
+		</div>
+
+		{% for script in lm_scripts %}
+			<script {{ script }}></script>
+		{% endfor %}
+	</body>
+</html>

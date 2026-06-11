@@ -1,0 +1,327 @@
+{{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
+      <!-- Main :: Start-->
+      <main class="main">
+        <!-- Breadcrumbs :: Start-->
+        <div class="breadcrumbs">
+          <div class="container-fluid">
+            <ul class="breadcrumbs__menu">
+			{% for i,breadcrumb in breadcrumbs %}
+				{% if (i + 1 < (breadcrumbs)|length) %} 
+				<li><a class="breadcrumbs__link" href="{{ breadcrumb['href'] }}"><span>{{ breadcrumb['text'] }}</span></a></li>
+				{% else %} 
+				<li>{{ breadcrumb['text'] }}</li>
+				{% endif %}
+			{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Breadcrumbs :: End-->
+		{{ content_top }}
+        <!-- Page :: Start-->
+        <div class="page">
+          <div class="container-fluid">
+            <h1 class="page__heading">{{ heading_title }}</h1>
+            <div class="row">
+			{{ column_left ? '<div id="column-left" class="col-xl-3">' ~ column_left ~ '</div>' : ''}}
+			<div class="col-xl-9">
+			{% if garages %}
+				{% set garage_row = 1 %}
+				{% for garage in garages %}
+                  <div class="row">
+					<div class="col-xl-5">
+						<img src="{{ garage['thumb'] }}">
+					</div>
+					<div class="col-xl-5">
+						<div class="garage_row garage_name">
+							<a href="{{ garage['href'] }}">
+								{{ garage['name'] }}
+							</a>
+						</div>
+						
+						<div class="row">
+							<span class="col-xl-5">{{ text_year }}</span>
+							<div class="col-xl-7">{{ garage['year'] }}</div>
+						</div>
+						
+						<div class="row">
+							<span class="col-xl-5">{{ text_volume }}</span>
+							<div class="col-xl-7">{{ garage['volume'] }}</div>
+						</div>
+						
+						<div class="row">
+							<span class="col-xl-5">{{ text_tipo }}</span>
+							<div class="col-xl-7">{{ garage['tipo'] }}</div>
+						</div>
+						
+						<div class="row">
+							<span class="col-xl-5">{{ text_vin }}</span>
+							<div class="col-xl-7">{{ garage['vin'] }}</div>
+						</div>
+                                    <div class="row">
+							<span class="col-xl-5">{{ text_status }}</span>
+							<div class="col-xl-7"><input type="checkbox" class="ajax_data" {% if garage['status'] %} checked {% endif %} data-name="status" data-garage_id="{{ garage['garage_id'] }}" value="1"></div>
+						</div>
+                                   <div class="row">
+							<span class="col-xl-5">{{ text_sort }}</span>
+							<div class="col-xl-7"><input type="text" class="ajax_data" data-garage_id="{{ garage['garage_id'] }}" data-name="sort_order" value="{{ garage['sort_order'] }}"></div>
+						</div>
+                 			
+					</div>
+
+                              <div class="col-xl-2">
+					
+						<div class="products__micro-action">
+							  <a data-for="{{ product['product_id'] }}" title="{{ text_product_view_btn }}" class="btn btn--preview js-btn-preview" href="#popupprod">
+								<svg class="icon-preview">
+									<use xlink:href="catalog/view/theme/technics/sprites/sprite.svg#icon-preview"></use>
+								</svg>
+							  </a>
+						  
+							  <a class="btn btn--like btn--like-clear" title="{{ button_remote_garage }}" href="{{ garage.remove }}">
+								  {{ button_remove }} 
+							  </a>
+						</div>
+					</div>
+				</div>
+				{% set garage_row = garage_row + 1 %}
+				{% endfor %}
+			{% else %}
+			<p>{{ text_empty }}</p>
+			{% endif %}
+			<div class="personal__data">
+				<div class="personal__action">
+					<a href="javascript:;" class="btn btn--transparent button_add">{{ button_add }}</a>
+				</div>
+			</div>
+			</div>
+			{{ column_right ? '<div id="column-right" class="col-xl-3">' ~ column_right ~ '</div>' : ''}}
+            </div>
+          </div>
+        </div>
+        <!-- Page :: End-->
+		{{ content_bottom }}
+      </main>
+      
+      
+      <!-- ПОПАП ДОБАВЛЕНИЯ -->
+      <script>
+            $(document).on('click', '.add_popup_back, .button_close_form', function(){
+                 
+                 $('.add_popup').hide();
+                 $('.add_popup_back').hide();
+                     
+            });
+            $(document).on('click', '.button_add', function(){
+                 
+                 $('.add_popup').show();
+                 $('.add_popup_back').show();
+                     
+            });
+            $(document).on('change', '.add_garage_form select[name="modeli"]', function(){
+               
+                  if($(this).val() < 1){
+                        
+                        var $select = $('.add_garage_form select[name="mark"]');                        
+                        $select.find('option').remove();
+                        $('<option>').val(0).text('{{ text_mark }}').appendTo($select);     
+                             
+                        return false;
+                  }
+               
+                  $.ajax({
+                        url: 'index.php?route=account/garage/get_marks&mark_id='+$(this).val(),
+                        type: 'get',
+                        dataType: 'json',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              
+                              var $select = $('.add_garage_form select[name="mark"]');                        
+                              $select.find('option').remove();
+                              $('<option>').val(0).text('{{ text_mark }}').appendTo($select);     
+                              $.each(json.marks, function(key, value) {
+                                  $('<option>').val(value.mark_id).text(value.name).appendTo($select);     
+                              });
+                              
+                              $('.add_garage_form .add_image').prop('src', json.thumb);
+                        },
+                  });
+                  
+            });
+            
+            
+            
+            $(document).on('change', '.ajax_data', function(){
+               
+                  garage_id = $(this).data('garage_id');
+                  name = $(this).data('name');
+                  value = $(this).val();
+                  parent = $(this).parent('div');
+                  
+                  if(name == 'status'){
+                        value = 0;
+                        if($(this).prop('checked')){
+                              value = 1;
+                        }
+                  }
+               
+                  $.ajax({
+                        url: 'index.php?route=account/garage/ajax_data&garage_id='+garage_id+'&name='+name+'&value='+value,
+                        type: 'get',
+                        dataType: 'text',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              
+                              //console.log(json);
+                              
+                              /* Тут подкраска по обновлению
+                              parent.css('background-color','#c6dcbb');
+                              setTimeout(function(){
+                                    parent.css('background-color','#fff');     
+                              },1000);
+                              */
+
+                        },
+                  });
+                  
+            });
+            $(document).on('change', '.add_garage_form select[name="mark"]', function(){
+               
+                  $.ajax({
+                        url: 'index.php?route=account/garage/get_mark&mark_id='+$(this).val(),
+                        type: 'get',
+                        dataType: 'json',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              
+                              console.log(json);
+                              
+                              $('.add_garage_form .add_image').prop('src', json.thumb);
+
+                        },
+                  });
+                  
+            });
+            $(document).on('click', '.button_add_form', function(){
+               
+                  $.ajax({
+                        url: 'index.php?route=account/garage/add',
+                        type: 'post',
+                        data: $('.add_garage_form').serialize(),
+                        dataType: 'json',
+                        beforeSend: function () {
+                        },
+                        complete: function () {
+                        },
+                        success: function (json) {
+                              
+                              //console.log(json);
+                              
+                              $('.msg').html(json.msg);
+                              
+                              setTimeout(function(){
+                                   $('.add_popup_back').trigger('click');
+                                   location.reload();
+                              }, 2000);
+                              
+
+                        },
+                  });
+                  
+            });
+      </script>
+      
+      <div class="add_popup_back"></div>
+      <div class="add_popup container-fluid">
+            <form action="{{ add }}" method="post" enctype="multipart/form-data" class="add_garage_form">
+            <div class="row">
+                  <div class="col-xl-12">
+                        <h3>{{ add_garage_title }}</h3>
+                  </div>
+                  <div class="col-xl-5">
+                        <img class="add_image" src="">
+                  </div>
+                  <div class="col-xl-7">
+                        <div class="row">
+                              <select name="modeli">
+                                    <option value="0">{{ text_modeli }}</option>
+                                    {% for mark in marks %}
+                                    <option value="{{ mark.mark_id }}">{{ mark.name }}</option>
+                                    {% endfor %}
+                              </select>
+                        </div>
+                       <div class="row">
+                              <select name="mark">
+                                    <option value="0">{{ text_mark }}</option>
+                              </select>
+                        </div>
+                        <div class="row">
+                              <input type="text" name="year" placeholder="{{ text_year }}" value="">
+                        </div>
+                        <div class="row">
+                              <input type="text" name="volume" placeholder="{{ text_volume }}" value="">
+                        </div>
+                        <div class="row">
+                              <input type="text" name="tipo" placeholder="{{ text_tipo }}" value="">
+                        </div>
+                        <div class="row">
+                              <input type="text" name="vin" placeholder="{{ text_vin }}" value="">
+                        </div>
+                        <div class="row">
+                              <input type="text" name="sort_order" placeholder="{{ text_sort }}" value="">
+                              <input type="hidden" name="status" value="1">
+                        </div>
+                  </div>
+                  <div class="col-xl-12">
+                        <div class="msg"></div>
+                  </div>
+                  <div class="col-xl-6">
+                        <div class="personal__action">
+					<a href="javascript:;" class="btn btn--transparent button_add_form">{{ button_add }}</a>
+				</div>
+                  </div>
+                 <div class="col-xl-6">
+                        <div class="personal__action">
+					<a href="javascript:;" class="btn btn--transparent button_close_form">{{ button_cancel }}</a>
+				</div>
+                  </div>
+            </div>
+            </form>
+      </div>
+      <!-- Main :: End-->
+      
+      <style>
+            .add_popup_back{
+                  width: 100vw;
+                  height: 100vh;
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  opacity: 0.7;
+                  background-color: black;
+                  display: none;
+                  z-index: 1000;
+            }
+            .add_popup{
+                  width: 70vw;
+                  height: 70vh;
+                  position: fixed;
+                  top: 50vh;
+                  left: 50vw;
+                  margin-right: -50%;
+                  transform: translate(-50%, -50%);
+                  background-color: white;
+                  display: none;
+                  opacity: 1;
+                  z-index: 1001;
+            }
+      </style>
+{{ footer }}</body></html>

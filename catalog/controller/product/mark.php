@@ -1,0 +1,783 @@
+<?php
+class ControllerProductMark extends Controller {
+	
+	public function breadList_mark($category_id) {
+		$this->load->model('catalog/mark');
+		$data = array();
+		$categories = $this->model_catalog_mark->getMarks($category_id);
+		foreach($categories as $category){
+			$data[] = array(
+				'name'		=> $category['name'],
+				'href'       => $this->url->link('product/mark', 'mark_id=' . $category['mark_id'])
+			);
+		}
+		return $data;
+	}
+	public function breadlistcr_mark() {
+
+		$this->load->model('catalog/mark');
+		$category_id = $this->request->get['cat_id'];
+		$data['breadLists'] = array();
+		$categories = $this->model_catalog_mark->getMarks($category_id);
+		foreach($categories as $category){
+			$data['breadLists'][] = array(
+				'name'		=> $category['name'],
+				'href'       => $this->url->link('product/mark', 'mark_id=' . $category['mark_id'])
+			);
+		}
+		$this->response->setOutput($this->load->view('product/bread_popup',$data));
+	}
+	
+
+	public function index() {
+
+		if(isset($this->session->data['show_as_diagram']) AND $this->session->data['show_as_diagram'] == 1){
+			$data['show_as_diagram'] = true;
+		}else{ //if($query->row['image2']){
+			$data['show_as_diagram'] = false;
+		}	
+	
+		/*
+		//Добавление ЧПУ
+		$keyword = 'affiliate_login';
+		$query_l = 'affiliate/login';
+		
+		$query = $this->db->query("DELETE FROM " . DB_PREFIX . "seo_url WHERE query='".$query_l."'");
+		
+		for($lang = 1; $lang < 7; $lang++){
+			
+			if($query->num_rows == 0){
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_url SET
+									  store_id = 0,
+									  language_id = '" . (int)$lang . "',
+									  `query`='".$query_l."',
+									  keyword='".$keyword."'");
+				echo 'Добавил<br><br><br><br>';
+			}else{
+				echo 'Уже есть!!!<br><br><br><br>';
+			}	  
+		}
+		*/
+			
+		
+		
+		$this->load->language('product/category');
+		$this->load->language('product/blog_product');
+		$this->load->language('product/mark');
+
+		$this->load->model('catalog/mark');
+		$this->load->model('catalog/blog_product');
+		$this->load->model('catalog/product');
+		$this->load->model('tool/image');
+		$this->load->model('tool/tool');
+
+		$data['is_mobile'] = $this->model_tool_tool->isMobile();
+	
+		$data['mark_id'] = $data['model_id'] = false;
+		
+		if(isset($this->session->data['mark_id'])){
+			$data['mark_id'] = $this->session->data['mark_id'];
+		}
+		
+
+		
+		if(isset($this->session->data['model_id'])){
+			$data['model_id'] = $this->session->data['model_id'];
+		}else{
+			$children = $this->model_catalog_mark->getMarks($data['mark_id'], false, true);
+			if($data['is_mobile']){
+				$data['model_id'] = $children[0]['mark_id'];
+			}else{
+				if(isset($children[1])){
+					$data['model_id'] = $children[1]['mark_id'];
+				}else{
+					$data['model_id'] = $children[0]['mark_id'];
+				}
+			}
+
+			
+			$this->response->redirect($this->url->link('product/mark', 'mark_id=' .  $data['model_id'] ));
+		}
+		
+		$data['club_href'] =  $this->url->link('product/category', 'path=' . CLUB_CATEGORY_ID);
+	
+ 		$data['info14']['href'] = $this->url->link('product/blog_category', 'blogpath=3', true);
+
+	 	
+		
+		$data['marks'] = array();
+		$model_count = 1;
+			$results = $this->model_catalog_mark->getMarks($data['mark_id']);
+
+				
+			foreach ($results as $result) {
+				$filter_data = array(
+					'filter_mark_id'  => $result['mark_id'],
+					'filter_sub_mark' => true
+				);
+	
+				$data['marks'][] = array(
+					'name' => $result['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+					'href' => $this->url->link('product/mark', 'mark_id=' .  $result['mark_id'] )
+				);
+			}
+
+		
+		
+		if (isset($this->request->get['filter'])) {
+			$filter = $this->request->get['filter'];
+		} else {
+			$filter = '';
+		}
+
+		if (isset($this->request->get['sort'])) {
+			$sort = $this->request->get['sort'];
+		} else {
+			$sort = 'p.sort_order';
+		}
+
+		if (isset($this->request->get['order'])) {
+			$order = $this->request->get['order'];
+		} else {
+			$order = 'ASC';
+		}
+
+		if (isset($this->request->get['page'])) {
+			$page = (int)$this->request->get['page'];
+		} else {
+			$page = 1;
+		}
+
+		if (isset($this->request->get['limit'])) {
+			$limit = (int)$this->request->get['limit'];
+		} else {
+			$limit = $this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
+		}
+
+		$data['breadcrumbs'] = array();
+
+		$data['breadcrumbs'][] = array(
+			'text' => $this->language->get('text_home'),
+			'href' => $this->url->link('common/home')
+		);
+
+
+	
+		if (isset($this->request->get['mark_id'])) {
+			
+			$mark_id = $this->request->get['mark_id'];
+			
+			$url = '';
+
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			if (isset($this->request->get['limit'])) {
+				$url .= '&limit=' . $this->request->get['limit'];
+			}
+
+			$path = '';
+
+			$parts = $this->model_catalog_mark->getMarkPach($mark_id);
+			
+			//$parts = explode('_', (string)$this->request->get['path']);
+
+			$mark_id = (int)array_pop($parts);
+
+			foreach ($parts as $path_id) {
+				if (!$path) {
+					$path = (int)$path_id;
+				} else {
+					//$path .= '_' . (int)$path_id;
+					$path = (int)$path_id;
+				}
+
+				$mark_info = $this->model_catalog_mark->getMark($path_id);
+
+				if ($mark_info) {
+					$data['breadcrumbs'][] = array(
+						'text' => $mark_info['name'],
+						'breadList' => $this->breadList_mark(0),// technics
+						'cat_id' => $data['mark_id'],// technics
+						'href' => $this->url->link('product/mark', 'mark_id=' . $path_id . $url)
+					);
+				}
+				
+			}
+		} else {
+			$mark_id = 0;
+		}
+
+		
+		$mark_info = $this->model_catalog_mark->getMark($mark_id);
+	
+		if ($mark_info) {
+			
+			if((int)$mark_info['parent_id'] > 0){
+				$parent_info = $this->model_catalog_mark->getMark((int)$mark_info['parent_id']);
+				$mark_info['meta_title'] = str_replace('[name_mark]', $parent_info['name'], $this->language->get('text_title'));
+				$mark_info['meta_title'] = str_replace('[name_model]', $mark_info['name'], $mark_info['meta_title']);
+
+				$mark_info['meta_description'] = str_replace('[name_mark]', $parent_info['name'], $this->language->get('text_description'));
+				$mark_info['meta_description'] = str_replace('[name_model]', $mark_info['name'], $mark_info['meta_description']);
+			}else{
+				$mark_info['meta_title'] = str_replace('[name_model]', $mark_info['name'], $this->language->get('text_title'));
+				$mark_info['meta_title'] = str_replace('[name_mark]', '', $mark_info['meta_title']);
+			
+				$mark_info['meta_description'] = str_replace('[name_model]', $mark_info['name'], $this->language->get('text_description'));
+				$mark_info['meta_description'] = str_replace('[name_mark]', '', $mark_info['meta_description']);
+			}
+			
+			$this->document->setTitle($mark_info['meta_title']);
+			$this->document->setDescription($mark_info['meta_description']);
+			$this->document->setKeywords($mark_info['meta_keyword']);
+
+			$data['heading_title'] = $mark_info['name'];
+
+			$data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
+
+			// Set the last mark breadcrumb
+			$data['breadcrumbs'][] = array(
+				'text' => $mark_info['name'],
+				'breadList' => ((isset($path_id)) ? $this->breadList_mark($path_id) : $this->breadList_mark(0)),// technics
+				'cat_id' => $data['mark_id'],// technics
+				'href' => $this->url->link('product/mark', 'mark_id=' . $mark_id)
+			);
+			
+			$data['view_last'] = true;
+
+			if ($mark_info['image']) {
+				$data['thumb'] = $this->model_tool_image->resize($mark_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_category_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_category_height'));
+			} else {
+				$data['thumb'] = '';
+			}
+
+		
+			$data['description'] = html_entity_decode($mark_info['description'], ENT_QUOTES, 'UTF-8');
+			$data['compare'] = $this->url->link('product/compare');
+
+			$url = '';
+
+			if (isset($this->request->get['filter'])) {
+				$url .= '&filter=' . $this->request->get['filter'];
+			}
+
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			if (isset($this->request->get['limit'])) {
+				$url .= '&limit=' . $this->request->get['limit'];
+			}
+
+			
+			
+			$data['products'] = array();
+
+			$filter_data = array(
+				'filter_mark_id' => $mark_id,
+				'filter_filter'      => $filter,
+				'filter_sub_category' > true,
+				'filter_diagram'      => false,
+				'filter_model'          => true,
+				'sort'               => $sort,
+				'order'              => $order,
+				'start'              => ($page - 1) * $limit,
+				'limit'              => $limit
+			);
+
+
+			//Если первый уровень вложенности то товары не выводим
+			/*
+			if((int)$mark_info['parent_id'] > 0){
+				$product_total = $this->model_catalog_product->getTotalProducts($filter_data);
+				$results = $this->model_catalog_product->getProducts($filter_data);
+			}else{
+				$product_total = 0;
+				$results = array();
+			}
+			*/
+			$mark_id = $this->session->data['model_id'];
+			/*
+			foreach ($results as $result) {
+				
+					
+				if ($result['image']) {
+					$image = $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'));
+				} else {
+					$image = $this->model_tool_image->resize('placeholder.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'));
+				}
+
+				if($result['price'] <= 0){
+					$price = 'inquire';
+				}elseif ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+					$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+					$price = false;
+				}
+
+				if (!is_null($result['special']) && (float)$result['special'] >= 0) {
+					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$tax_price = (float)$result['special'];
+				} else {
+					$special = false;
+					$tax_price = (float)$result['price'];
+				}
+	
+				if ($this->config->get('config_tax')) {
+					$tax = $this->currency->format($tax_price, $this->session->data['currency']);
+				} else {
+					$tax = false;
+				}
+
+				if ($this->config->get('config_review_status')) {
+					$rating = (int)$result['rating'];
+				} else {
+					$rating = false;
+				}
+	
+	
+				$data['products'][] = array(
+					'product_id'  => $result['product_id'],
+					'thumb'       => $image,
+					'name'        => $result['name'],
+					'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',
+					'price'       => $price,
+					'special'     => $special,
+					'tax'         => $tax,
+					'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
+					'rating'      => $result['rating'],
+					'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'] . $url)
+				);
+			}
+			*/
+			
+			$this->session->data['model_id'] = $mark_id;
+			
+			$url = '';
+
+			if (isset($this->request->get['filter'])) {
+				$url .= '&filter=' . $this->request->get['filter'];
+			}
+
+			if (isset($this->request->get['limit'])) {
+				$url .= '&limit=' . $this->request->get['limit'];
+			}
+
+			$data['sorts'] = array();
+
+			$data['sorts'][] = array(
+				'text'  => $this->language->get('text_default'),
+				'value' => 'p.sort_order-ASC',
+				'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=p.sort_order&order=ASC' . $url)
+			);
+
+			$data['sorts'][] = array(
+				'text'  => $this->language->get('text_name_asc'),
+				'value' => 'pd.name-ASC',
+				'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=pd.name&order=ASC' . $url)
+			);
+
+			$data['sorts'][] = array(
+				'text'  => $this->language->get('text_name_desc'),
+				'value' => 'pd.name-DESC',
+				'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=pd.name&order=DESC' . $url)
+			);
+
+			$data['sorts'][] = array(
+				'text'  => $this->language->get('text_price_asc'),
+				'value' => 'p.price-ASC',
+				'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=p.price&order=ASC' . $url)
+			);
+
+			$data['sorts'][] = array(
+				'text'  => $this->language->get('text_price_desc'),
+				'value' => 'p.price-DESC',
+				'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=p.price&order=DESC' . $url)
+			);
+
+			if ($this->config->get('config_review_status')) {
+				$data['sorts'][] = array(
+					'text'  => $this->language->get('text_rating_desc'),
+					'value' => 'rating-DESC',
+					'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=rating&order=DESC' . $url)
+				);
+
+				$data['sorts'][] = array(
+					'text'  => $this->language->get('text_rating_asc'),
+					'value' => 'rating-ASC',
+					'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=rating&order=ASC' . $url)
+				);
+			}
+
+			$data['sorts'][] = array(
+				'text'  => $this->language->get('text_model_asc'),
+				'value' => 'p.model-ASC',
+				'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=p.model&order=ASC' . $url)
+			);
+
+			$data['sorts'][] = array(
+				'text'  => $this->language->get('text_model_desc'),
+				'value' => 'p.model-DESC',
+				'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . '&sort=p.model&order=DESC' . $url)
+			);
+
+			
+			
+			$this->load->model('catalog/category');
+			/* Убираем категории из обращения/ Если надо будет вернуть то не забыть добавить в схемах Категории с картинками для схемі Модели
+			$categories = $this->model_catalog_category->getCategories(0);
+	
+			foreach ($categories as $category) {
+				
+				$tmp_href = $this->url->link('product/category', 'path=' . $category['category_id']);
+				
+				
+				$filter_data = array(
+					'filter_category_id'  => $category['category_id'],
+					'filter_mark_id'  => isset($this->session->data['model_id']) ? $this->session->data['model_id'] : $this->session->data['mark_id'],
+					'filter_sub_category' => true
+				);
+				
+				
+				if($this->model_catalog_product->getTotalProducts($filter_data) > 0){
+					$data['categories'][] = array(
+						'category_id' => $category['category_id'],
+						'name'        => $category['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+						'thumb'    =>  $this->model_tool_image->resize($category['image'], 270,272),
+						//'short_href'        => str_replace($data['mark_href'], '',str_replace($data['model_href'], '',$tmp_href)),
+						'href'        => $tmp_href,
+						
+					);
+				}
+			}
+			*/
+			
+			//$product_list = $this->model_catalog_product->getNeiboProducts($product_id, 0, $mark_id, (int)$product_info['diagram']);
+			$filter_data = array(
+				'filter_category_id' => 0,
+				'filter_diagram'      => true,
+				'filter_model'	=> true,
+				'filter_sub_category' > true,
+				'sort'               => 'pd.name',
+				'order'              => 'ASC',
+				'start'              => 0,//($page - 1) * $limit,
+				'limit'              => 1000,//$limit
+			);
+			
+			if($data['show_as_diagram']){
+				$filter_data['filter_second_photos'] = false;
+			}else{
+				$filter_data['filter_second_photos'] = true;
+			}
+
+			$product_list = $this->model_catalog_product->getProducts($filter_data);
+			
+			$data['product_prev'] = false;
+			$data['product_next'] = false;
+			$data['product_shema_list'] = array();
+			
+			$this->load->model('account/wishlist');
+			
+			foreach($product_list as $result){
+				$result['in_wishlist'] = $this->model_account_wishlist->isWishlist($result['product_id']);
+			
+				if ($result['image']) {
+					$image = $this->model_tool_image->resize($result['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'), 'product_list');
+				} else {
+					$image = $this->model_tool_image->resize('placeholder.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_product_height'));
+				}
+
+				if ($this->customer->isLogged() || !$this->config->get('config_customer_price')) {
+					$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				} else {
+					$price = false;
+				}
+
+				if (!is_null($result['special']) && (float)$result['special'] >= 0) {
+					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$tax_price = (float)$result['special'];
+				} else {
+					$special = false;
+					$tax_price = (float)$result['price'];
+				}
+	
+	
+				if ($this->config->get('config_tax')) {
+					$tax = $this->currency->format($tax_price, $this->session->data['currency']);
+				} else {
+					$tax = false;
+				}
+
+				if ($this->config->get('config_review_status')) {
+					$rating = (int)$result['rating'];
+				} else {
+					$rating = false;
+				}
+
+				if(isset($result['auction'])){
+					
+					$result['auction']['detail'] = array();
+					
+					$auction_history = $this->model_catalog_product->getProductAuctionHistory($result['auction']['auction_id']);
+					$result['auction']['price_start_cur'] = $this->currency->format($this->tax->calculate($result['auction']['price_start'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$result['auction']['price_end_cur'] = $this->currency->format($this->tax->calculate($result['auction']['price_end'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$result['auction']['price_step_cur'] = $this->currency->format($this->tax->calculate($result['auction']['price_step'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					
+					
+					$result['auction']['last_bet'] = $result['auction']['price_start'];
+					$result['auction']['z_last_bet'] = $result['auction']['price_start'];
+					foreach($auction_history as $index => $row){
+						$result['auction']['last_bet'] = $row['price_add'] + $result['auction']['price_step'];
+						$result['auction']['z_last_bet'] = $row['price_add'];
+					}
+					$result['auction']['last_bet_cur'] = $this->currency->format($this->tax->calculate($result['auction']['last_bet'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					$result['auction']['z_last_bet_cur'] = $this->currency->format($this->tax->calculate($result['auction']['z_last_bet'], $result['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+					
+					$result['auction']['timer_y'] = date('Y', strtotime($result['auction']['date_end']));
+					$result['auction']['timer_m'] = date('m', strtotime($result['auction']['date_end']));
+					$result['auction']['timer_d'] = date('d', strtotime($result['auction']['date_end']));
+					$result['auction']['timer_h'] = date('H', strtotime($result['auction']['date_end']));
+					$result['auction']['timer_i'] = date('i', strtotime($result['auction']['date_end']));
+					$result['auction']['timer_s'] = date('s', strtotime($result['auction']['date_end']));
+					
+					$end = strtotime($result['auction']['date_end']);
+					$now = strtotime(date('Y-m-d H:i:s'));
+					$result['auction']['days_to_end'] = ceil(($end-$now)/(60*60*24));
+				}
+				
+				$data['products'][] = array(
+					'product_id'  => $result['product_id'],
+					'thumb'       => $image,
+					'name'        => $result['name'],
+					'stock_status_id' => $result['stock_status_id'],
+					'stock_status'    => $result['stock_status'],
+					'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',
+					'price'       => $price,
+					'sku'        => $result['sku'],				
+					'in_wishlist'        => $result['in_wishlist'],				
+					'year_manuf'        => $result['year_manuf'],				
+					'special'     => $special,
+					'tax'         => $tax,
+					'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
+					'auction'     => isset($result['auction']) ? $result['auction'] : array(),
+					'rating'      => $result['rating'],
+					'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id'] . $url)
+				);
+			}
+			/*
+			foreach($product_list as $index => $list){
+				if((int)$list['product_id'] == (int)$product_id){
+					
+					if(isset($product_list[$index - 1])){
+						$data['product_prev'] = $this->url->link('product/product', 'product_id=' . $product_list[$index - 1]['product_id']. $url);
+					}
+
+					if(isset($product_list[$index + 1])){
+						$data['product_next'] =  $this->url->link('product/product', 'product_id=' . $product_list[$index + 1]['product_id']. $url);
+					}
+					
+				}
+				
+				if ($list['image']) {
+					$image = $this->model_tool_image->resize($list['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_related_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_related_height'), 'product_related');
+				} else {
+					$image = $this->model_tool_image->resize('placeholder.png', $this->config->get('theme_' . $this->config->get('config_theme') . '_image_related_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_related_height'));
+				}
+
+				$data['product_shema_list'][] = array(
+					'product_id'  => $list['product_id'],
+					'thumb'       => $image,
+					'name'        => $list['name'],
+					'href'        => $this->url->link('product/product', 'product_id=' . $list['product_id']),
+					'active'      => ($list['product_id'] == $product_id) ? true : false,
+				);
+				
+			}
+			*/
+			$filter_data = array(
+				'filter_category_id' => 0,
+				'filter_sub_category' > true,
+				'sort'               => 'p.date_modified',
+				'order'              => 'DESC',
+				'start'              => 0,
+				'limit'              => 3
+			);
+			$blogs = $this->model_catalog_blog_product->getProducts($filter_data);
+			
+			$data['blog_products'] = array();
+			
+			foreach($blogs as $blog){
+				
+				if ($blog['image']) {
+					$image = $this->model_tool_image->resize($blog['image'], 372, 264);
+				} else {
+					$image = $this->model_tool_image->resize('placeholder.png', 372, 264);
+				}
+				
+				$blog['thumb'] = $image;
+				
+				$blog['description'] = utf8_substr(strip_tags(html_entity_decode($blog['description'], ENT_QUOTES, 'UTF-8')), 0, 150).'...';
+				
+				$blog['href'] = $this->url->link('product/blog_product', 'blog_product_id=' . $blog['blog_product_id'] );
+	
+				$data['blog_products'][] = $blog;
+				
+			}
+			
+				
+			$url = '';
+
+			if (isset($this->request->get['filter'])) {
+				$url .= '&filter=' . $this->request->get['filter'];
+			}
+
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			$data['limits'] = array();
+
+			$limits = array_unique(array($this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit'), 40, 60));
+
+			sort($limits);
+
+			foreach($limits as $value) {
+				$data['limits'][] = array(
+					'text'  => $value,
+					'value' => $value,
+					'href'  => $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . $url . '&limit=' . $value)
+				);
+			}
+
+			$url = '';
+
+			if (isset($this->request->get['filter'])) {
+				$url .= '&filter=' . $this->request->get['filter'];
+			}
+
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			if (isset($this->request->get['limit'])) {
+				$url .= '&limit=' . $this->request->get['limit'];
+			}
+
+			/*
+			$pagination = new Pagination();
+			$pagination->total = $product_total;
+			$pagination->page = $page;
+			$pagination->limit = $limit;
+			$pagination->url = $this->url->link('product/mark', 'mark_id=' . $this->request->get['mark_id'] . $url . '&page={page}');
+			$data['pagination'] = $pagination->render();
+			*/
+			
+			$data['pagination'] = '';
+
+			if(!isset($product_total)) $product_total = 0;
+			
+			$data['results'] = sprintf($this->language->get('text_pagination'), ($product_total) ? (($page - 1) * $limit) + 1 : 0, ((($page - 1) * $limit) > ($product_total - $limit)) ? $product_total : ((($page - 1) * $limit) + $limit), $product_total, ceil($product_total / $limit));
+
+			// http://googlewebmastercentral.blogspot.com/2011/09/pagination-with-relnext-and-relprev.html
+			if ($page == 1) {
+			    $this->document->addLink($this->url->link('product/mark', 'mark_id=' . $mark_info['mark_id']), 'canonical');
+			} else {
+				$this->document->addLink($this->url->link('product/mark', 'mark_id=' . $mark_info['mark_id'] . '&page='. $page), 'canonical');
+			}
+			
+			if ($page > 1) {
+			    $this->document->addLink($this->url->link('product/mark', 'mark_id=' . $mark_info['mark_id'] . (($page - 2) ? '&page='. ($page - 1) : '')), 'prev');
+			}
+
+			if ($limit && ceil($product_total / $limit) > $page) {
+			    $this->document->addLink($this->url->link('product/mark', 'mark_id=' . $mark_info['mark_id'] . '&page='. ($page + 1)), 'next');
+			}
+
+			$data['productsview'] = $this->load->view('product/category_grid', $data);
+			
+			
+			$data['sort'] = $sort;
+			$data['order'] = $order;
+			$data['limit'] = $limit;
+
+			$data['continue'] = $this->url->link('common/home');
+
+			$data['column_left'] = $this->load->controller('common/column_left');
+			$data['column_right'] = $this->load->controller('common/column_right');
+			$data['content_top'] = $this->load->controller('common/content_top');
+			$data['content_bottom'] = $this->load->controller('common/content_bottom');
+			$data['footer'] = $this->load->controller('common/footer');
+			$data['header'] = $this->load->controller('common/header');
+	
+			
+
+			$data['breadcrumbs_twig'] = $this->load->view('includes/_breadcrumbs', $data);
+			$this->response->setOutput($this->load->view('product/mark', $data));
+		} else {
+			$url = '';
+
+			if (isset($this->request->get['path'])) {
+				$url .= '&path=' . $this->request->get['path'];
+			}
+
+			if (isset($this->request->get['filter'])) {
+				$url .= '&filter=' . $this->request->get['filter'];
+			}
+
+			if (isset($this->request->get['sort'])) {
+				$url .= '&sort=' . $this->request->get['sort'];
+			}
+
+			if (isset($this->request->get['order'])) {
+				$url .= '&order=' . $this->request->get['order'];
+			}
+
+			if (isset($this->request->get['page'])) {
+				$url .= '&page=' . $this->request->get['page'];
+			}
+
+			if (isset($this->request->get['limit'])) {
+				$url .= '&limit=' . $this->request->get['limit'];
+			}
+
+			$data['breadcrumbs'][] = array(
+				'text' => $this->language->get('text_error'),
+				'href' => $this->url->link('product/mark', $url)
+			);
+
+			$this->document->setTitle($this->language->get('text_error'));
+
+			$data['continue'] = $this->url->link('common/home');
+
+			$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 404 Not Found');
+
+			$data['column_left'] = $this->load->controller('common/column_left');
+			$data['column_right'] = $this->load->controller('common/column_right');
+			$data['content_top'] = $this->load->controller('common/content_top');
+			$data['content_bottom'] = $this->load->controller('common/content_bottom');
+			$data['footer'] = $this->load->controller('common/footer');
+			$data['header'] = $this->load->controller('common/header');
+
+			$data['breadcrumbs_twig'] = $this->load->view('includes/_breadcrumbs', $data);
+			$this->response->setOutput($this->load->view('error/not_found', $data));
+		}
+	}
+}
