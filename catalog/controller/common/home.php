@@ -97,24 +97,40 @@ class ControllerCommonHome extends Controller {
 					$data['lm_first_categories'][] = array(
 						'category_id' => $category['category_id'],
 						'name'        => $category['name'],
-						'href'        => $this->url->link('product/category', 'path=' . $first_mark_id . '_' . $model_id . '_' . $category['category_id'])
+						'href'        => $this->_buildCategoryUrl($category['category_id'], $first_mark_id, $model_id)
 					);
 				}
 			}
 		}
 
-		// === 5. Category bottom — all categories with images ===
+		// === 5. Category bottom — model-filtered categories with images ===
 		$this->load->model('catalog/category');
+		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 		$data['lm_category_bottom'] = array();
+		$model_id = !empty($data['lm_first_models']) ? $data['lm_first_models'][0]['model_id'] : 0;
+		$mark_id = $first_mark ? $first_mark['mark_id'] : 0;
 		$categories = $this->model_catalog_category->getCategories(0);
-		$categories = array_slice($categories, 0, 6);
+		$bottom_count = 0;
 		foreach ($categories as $category) {
+			if ($bottom_count >= 6) break;
+			if ($model_id) {
+				$filter_data = array(
+					'filter_category_id'  => $category['category_id'],
+					'filter_sub_category' => true,
+					'filter_model'        => true,
+					'model_id'            => $model_id,
+					'start'               => 0,
+					'limit'               => 1
+				);
+				if ($this->model_catalog_product->getTotalProducts($filter_data) == 0) continue;
+			}
 			$data['lm_category_bottom'][] = array(
 				'name'  => $category['name'],
 				'thumb' => $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '',
-				'href'  => $this->url->link('product/category', 'path=' . $category['category_id'])
+				'href'  => $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id)
 			);
+			$bottom_count++;
 		}
 
 		$data['all_categories_href'] = $this->url->link('product/category', 'path=0');
@@ -365,7 +381,6 @@ class ControllerCommonHome extends Controller {
 		if (isset($this->request->get['mark_id']) && isset($this->request->get['model_id'])) {
 			$this->load->model('catalog/category');
 			$this->load->model('catalog/product');
-			$this->load->model('tool/image');
 			$mark_id  = (int)$this->request->get['mark_id'];
 			$model_id = (int)$this->request->get['model_id'];
 			$categories = $this->model_catalog_category->getCategories(0);
@@ -382,7 +397,7 @@ class ControllerCommonHome extends Controller {
 					$json[] = array(
 						'category_id' => $category['category_id'],
 						'name'        => $category['name'],
-						'href'        => $this->url->link('product/category', 'path=' . $mark_id . '_' . $model_id . '_' . $category['category_id'])
+						'href'        => $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id)
 					);
 				}
 			}
@@ -393,18 +408,63 @@ class ControllerCommonHome extends Controller {
 
 	public function getCategoryBottom() {
 		$json = array();
-		$this->load->model('catalog/category');
-		$this->load->model('tool/image');
-		$categories = $this->model_catalog_category->getCategories(0);
-		$categories = array_slice($categories, 0, 6);
-		foreach ($categories as $category) {
-			$json[] = array(
-				'name'  => $category['name'],
-				'thumb' => $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '',
-				'href'  => $this->url->link('product/category', 'path=' . $category['category_id'])
-			);
+		if (isset($this->request->get['mark_id']) && isset($this->request->get['model_id'])) {
+			$this->load->model('catalog/category');
+			$this->load->model('catalog/product');
+			$this->load->model('tool/image');
+			$mark_id  = (int)$this->request->get['mark_id'];
+			$model_id = (int)$this->request->get['model_id'];
+			$categories = $this->model_catalog_category->getCategories(0);
+			$count = 0;
+			foreach ($categories as $category) {
+				if ($count >= 6) break;
+				$filter_data = array(
+					'filter_category_id'  => $category['category_id'],
+					'filter_sub_category' => true,
+					'filter_model'        => true,
+					'model_id'            => $model_id,
+					'start'               => 0,
+					'limit'               => 1
+				);
+				if ($this->model_catalog_product->getTotalProducts($filter_data) > 0) {
+					$json[] = array(
+						'name'  => $category['name'],
+						'thumb' => $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '',
+						'href'  => $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id)
+					);
+					$count++;
+				}
+			}
 		}
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
+	}
+
+	private function _buildCategoryUrl($category_id, $mark_id, $model_id) {
+		$language_id = (int)$this->config->get('config_language_id');
+		$store_id = (int)$this->config->get('config_store_id');
+
+		$this->load->model('localisation/language');
+		$lang_info = $this->model_localisation_language->getLanguage($language_id);
+		$lang_prefix = ($lang_info['url'] != '') ? '/' . $lang_info['url'] : '';
+
+		$path = '';
+
+		$query = $this->db->query("SELECT keyword FROM " . DB_PREFIX . "seo_url WHERE query='mark_id=" . (int)$mark_id . "' AND store_id=" . $store_id . " AND language_id=" . $language_id);
+		if ($query->num_rows) {
+			$path .= '/' . $query->row['keyword'];
+		}
+
+		$query = $this->db->query("SELECT keyword FROM " . DB_PREFIX . "seo_url WHERE query='mark_id=" . (int)$model_id . "' AND store_id=" . $store_id . " AND language_id=" . $language_id);
+		if ($query->num_rows) {
+			$path .= '/' . $query->row['keyword'];
+		}
+
+		$query = $this->db->query("SELECT ua.keyword FROM " . DB_PREFIX . "category_path cp LEFT JOIN " . DB_PREFIX . "seo_url ua ON ua.query = CONCAT('category_id=', cp.path_id) WHERE cp.category_id=" . (int)$category_id . " AND ua.language_id=" . $language_id . " ORDER BY cp.level");
+		foreach ($query->rows as $row) {
+			$path .= '/' . $row['keyword'];
+		}
+
+		return rtrim(HTTPS_SERVER, '/') . $lang_prefix . $path;
 	}
 }

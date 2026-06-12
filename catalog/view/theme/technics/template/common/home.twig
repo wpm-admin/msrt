@@ -19,14 +19,14 @@
 		<link rel="preload" href="{{ lm_theme_assets }}fonts/Hand.woff2" as="font" type="font/woff2" crossorigin>
 		<link rel="stylesheet" href="{{ lm_theme_assets }}css/vendor.css">
 		<link rel="stylesheet" href="{{ lm_theme_assets }}css/main.css">
-		<link rel="stylesheet" href="{{ lm_theme_assets }}css/custom.css?v311">
+		<link rel="stylesheet" href="{{ lm_theme_assets }}css/custom.css?v222">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 		{% for style in lm_styles %}
 			<link {{ style }}>
 		{% endfor %}
 		<script defer src="{{ lm_theme_assets }}js/main.js"></script>
-		<script defer src="{{ lm_theme_assets }}js/custom.js?v33"></script>
+		<script defer src="{{ lm_theme_assets }}js/custom.js?v322"></script>
 	</head>
 	<body class="page__body">
 		<div
@@ -295,8 +295,8 @@ $(".mobi_menu_box").addClass("open");
 									<div class="c-select" id="lm-category-select">
 										<select name="category" class="c-select__native">
 											<option value="">{{ text_select_category }}</option>
-											{% for cat in lm_first_categories %}
-												<option value="{{ cat.category_id }}" data-href="{{ cat.href }}">{{ cat.name }}</option>
+											{% for item in lm_first_categories %}
+												<option value="{{ item.category_id }}" data-href="{{ item.href }}">{{ item.name }}</option>
 											{% endfor %}
 										</select>
 										<div class="c-select__custom">
@@ -305,10 +305,12 @@ $(".mobi_menu_box").addClass("open");
 												<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="" class="c-select__icon">
 											</div>
 											<div class="c-select__dropdown">
-												{% for cat in lm_first_categories %}
-													<div class="c-select__option" data-value="{{ cat.category_id }}" data-href="{{ cat.href }}">
-														<span>{{ cat.name }}</span>
+												{% for item in lm_first_categories %}
+													<div class="c-select__option" data-value="{{ item.category_id }}" data-href="{{ item.href }}">
+														<span>{{ item.name }}</span>
 													</div>
+												{% else %}
+													<div class="c-select__option" data-value="">{{ text_select_category }}</div>
 												{% endfor %}
 											</div>
 										</div>
