@@ -14,3 +14,4 @@ CATEGORY_SECTION_GUIDE.md
 HOMEPAGE-NOTES.md
 .gitignore
 .idea/php.xml
+.idea/

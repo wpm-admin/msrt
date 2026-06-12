@@ -303,6 +303,32 @@ class ControllerCommonHome extends Controller {
 		$data['contact_href'] = $this->url->link('information/contact');
 		$data['customer_service_href'] = $this->url->link('information/information', 'information_id=5');
 
+		// === Live search setup ===
+		$this->load->language('common/search');
+		$this->load->language('product/search');
+		$this->load->model('localisation/language');
+		$lang_code = '';
+		$language = $this->model_localisation_language->getLanguage($this->config->get('config_language_id'));
+		if ($language['url'] != '') {
+			$lang_code = $language['url'] . '/';
+		}
+		$data['search_href'] = HTTPS_SERVER . $lang_code . 'search';
+		$data['autocomplete_href'] = HTTPS_SERVER . $lang_code . 'product_autocomplete';
+
+		$text_view_all_results = $this->config->get('live_search_view_all_results');
+		$data['live_search_options'] = array(
+			'text_view_all_results'               => htmlspecialchars($text_view_all_results[$this->config->get('config_language_id')]['name']),
+			'text_empty'                          => $this->language->get('text_empty'),
+			'module_live_search_show_image'       => $this->config->get('live_search_show_image'),
+			'module_live_search_show_price'       => $this->config->get('live_search_show_price'),
+			'module_live_search_show_description' => $this->config->get('live_search_show_description'),
+			'module_live_search_min_length'       => $this->config->get('live_search_min_length'),
+			'module_live_search_show_add_button'  => $this->config->get('live_search_show_add_button'),
+			'search_href'                         => $data['search_href'],
+			'autocomplete_href'                   => $data['autocomplete_href'],
+		);
+		$this->document->addStyle('catalog/view/javascript/live_search/live_search.css');
+
 		// === 15. Content modules (for styles/scripts side effects) ===
 		$data['content_top'] = $this->load->controller('common/content_top');
 		$data['content_bottom'] = $this->load->controller('common/content_bottom');

@@ -19,7 +19,7 @@
 		<link rel="preload" href="{{ lm_theme_assets }}fonts/Hand.woff2" as="font" type="font/woff2" crossorigin>
 		<link rel="stylesheet" href="{{ lm_theme_assets }}css/vendor.css">
 		<link rel="stylesheet" href="{{ lm_theme_assets }}css/main.css">
-		<link rel="stylesheet" href="{{ lm_theme_assets }}css/custom.css">
+		<link rel="stylesheet" href="{{ lm_theme_assets }}css/custom.css?v311">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
 		{% for style in lm_styles %}
@@ -215,7 +215,7 @@ $(".mobi_menu_box").addClass("open");
 							<nav class="nav hero-nav js-sticky">
 								<div id="search" class="search js-search">
 									<div class="search__wrapper">
-										<a href="#" class="search__btn">
+										<a href="#" class="search__btn search__btn-icon">
 											<img src="{{ lm_theme_assets }}img/svg/search.svg" alt="">
 										</a>
 										<input type="text" name="search" value="" placeholder="Search by part number or description" class="form-control" autocomplete="off">
@@ -224,10 +224,11 @@ $(".mobi_menu_box").addClass("open");
 												<img src="{{ lm_theme_assets }}img/svg/s-close.svg" alt="search close button" type="button">
 											</a>
 											<span class="vertical-line"></span>
-											<a href="#" class="search__btn">SEARCH</a>
+											<a href="#" class="search__btn search__btn-text">SEARCH</a>
 										</div>
 										<div class="live-search">
 											<ul></ul>
+											<div class="result-text"></div>
 										</div>
 									</div>
 								</div>
@@ -414,6 +415,67 @@ $(".mobi_menu_box").addClass("open");
 											</div>
 										</a>
 									</div>
+								{% else %}
+									<div class="swiper-slide article">
+										<div class="article-image">
+											<picture>
+												<source srcset="{{ lm_theme_assets }}img/auction/1.webp" type="image/webp">
+												<img loading="lazy" src="{{ lm_theme_assets }}img/auction/1.jpg" class="image" width="" height="" alt="">
+											</picture>
+
+										</div>
+										<div class="article-content">
+											<h4 class="article-title">
+												A6 GCS/53 Berlinetta (s/n 2060)
+											</h4>
+											<div class="article-bottom">
+												<p class="price">
+													15 000 $
+												</p>
+												<a href="#" class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></a>
+											</div>
+
+										</div>
+									</div>
+									<div class="swiper-slide article">
+										<div class="article-image">
+											<picture>
+												<source srcset="{{ lm_theme_assets }}img/auction/2.webp" type="image/webp">
+												<img loading="lazy" src="{{ lm_theme_assets }}img/auction/2.jpg" class="image" width="" height="" alt="">
+											</picture>
+
+										</div>
+										<div class="article-content">
+											<h4 class="article-title">
+												Ferrari Is Ending Its Engine Supply Deal With Maserati
+											</h4>
+											<div class="article-bottom">
+												<p class="price">
+													7 000 $
+												</p>
+												<a href="#" class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></a>
+											</div>
+
+										</div>
+									</div>
+									<div class="swiper-slide article">
+										<div class="article-image">
+											<img src="{{ lm_theme_assets }}img/auction/3.jpg" alt="">
+										</div>
+										<div class="article-content">
+											<h4 class="article-title">
+												Steering wheel / dashboard to Maserati Boomerang 1971
+											</h4>
+											<div class="article-bottom">
+												<p class="price">
+													1000 $
+												</p>
+												<a href="#" class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></a>
+											</div>
+
+										</div>
+									</div>
+
 								{% endfor %}
 							</div>
 						</div>
@@ -613,5 +675,146 @@ $(".mobi_menu_box").addClass("open");
 		{% for script in lm_scripts %}
 			<script {{ script }}></script>
 		{% endfor %}
+
+		<script>
+			$(function () {
+var search_href = '{{ search_href }}';
+var autocomplete_href = '{{ autocomplete_href }}';
+
+var $searchInput = $('#search input[name="search"]');
+var $liveSearch = $('.live-search');
+
+// --- LiveSearchJs autocomplete (adapted from search.twig) ---
+var LiveSearchJs = function () {
+var init = function (options) {
+var live_search = {
+selector: "#search input[name='search']",
+text_no_matches: options.text_empty,
+height: '50px'
+}
+
+$(live_search.selector).autocomplete({
+'source': function (request, response) {
+var filter_name = $(live_search.selector).val();
+var cat_id = 0;
+var live_search_min_length = options.module_live_search_min_length;
+
+if (filter_name.length < live_search_min_length) {
+$liveSearch.removeClass('search-show');
+} else {
+var url = options.autocomplete_href + '?filter_name=' + encodeURIComponent(filter_name);
+var all_search_href = options.search_href + '?search=' + encodeURIComponent(filter_name);
+
+$liveSearch.find('ul').html('<li style="text-align: center;height:10px;"><img class="loading" src="catalog/view/javascript/live_search/loading.gif" /></li>');
+$liveSearch.addClass('search-show');
+
+$.ajax({
+url: url,
+dataType: 'json',
+success: function (result) {
+var products = result.products;
+$liveSearch.find('ul li').remove();
+$liveSearch.find('.result-text').html('');
+if (!$.isEmptyObject(products)) {
+var show_image = options.module_live_search_show_image;
+var show_price = options.module_live_search_show_price;
+var show_description = options.module_live_search_show_description;
+var show_add_button = options.module_live_search_show_add_button;
+
+$liveSearch.find('.result-text').html('<a href="' + all_search_href + '" class="btn btn-primary btn-block btn-xs live_all_result">' + options.text_view_all_results + '</a>');
+
+$.each(products, function (index, product) {
+var html = '<li>';
+if (show_add_button == "1") {
+if (product.minimum == 0) 
+product.minimum = 1;
+
+
+
+html += '<div class="product-add-cart"><a href="javascript:;" onclick="cart.add(' + product.product_id + ', ' + product.minimum + ');" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></a></div>';
+}
+html += '<a href="' + product.url + '" class="live_search_model" title="' + product.model + '">';
+if (product.image && show_image == "1") {
+html += '<div class="product-image"><img alt="' + product.name + '" src="' + product.image + '"></div>';
+}
+html += '<div class="product-name"><span>' + product.model + '</span><br>' + product.name;
+if (show_description == "1") {
+html += '<p>' + product.extra_info + '</p>';
+}
+html += '</div>';
+if (show_price == "1") {
+if (product.special) {
+html += '<div class="product-price"><span class="special">' + product.price + '</span><span class="price">' + product.special + '</span></div>';
+} else {
+html += '<div class="product-price"><span class="price">' + product.price + '</span></div>';
+}
+}
+html += '</a>';
+html += '</li>';
+$liveSearch.find('ul').append(html);
+});
+} else {
+$liveSearch.find('ul').html('<li style="text-align: center;height:10px;">' + live_search.text_no_matches + '</li>');
+} $liveSearch.addClass('search-show');
+return false;
+}
+});
+}
+},
+'select': function (product) {
+$(live_search.selector).val(product.name);
+}
+});
+
+$(document).bind("mouseup touchend", function (e) {
+if (! $liveSearch.is(e.target) && $liveSearch.has(e.target).length === 0) {
+$liveSearch.removeClass('search-show');
+}
+});
+}
+
+return {
+init: function (options) {
+init(options);
+}
+};
+}();
+
+// Initialize live search
+var options = {{ live_search_options|json_encode|raw }};
+LiveSearchJs.init(options);
+
+// --- Button handlers ---
+function doSearch() {
+var query = $searchInput.val().trim();
+if (query) {
+location.href = search_href + '?search=' + encodeURIComponent(query);
+}
+}
+
+$('.search__btn-icon').on('click', function (e) {
+e.preventDefault();
+doSearch();
+});
+
+$('.search__btn-text').on('click', function (e) {
+e.preventDefault();
+doSearch();
+});
+
+$searchInput.on('keydown', function (e) {
+if (e.keyCode == 13) {
+e.preventDefault();
+doSearch();
+}
+});
+
+$('.search__list-close').on('click', function (e) {
+e.preventDefault();
+$searchInput.val('');
+$liveSearch.removeClass('search-show');
+});
+});
+		</script>
 	</body>
 </html>
