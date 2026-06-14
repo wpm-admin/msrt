@@ -56,7 +56,11 @@ body {
     position: relative;
 }
 .categories {
-z-index: 1;
+    z-index: 1;
+}
+.categories__top {
+    position: relative;
+    z-index: 1;
 }
 .product-name br {
     display: none;

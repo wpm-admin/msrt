@@ -1149,7 +1149,7 @@ code, kbd, samp {
 
 .search__desc {
   width: 57px;
-  background: url(../img/svg/cart.svg) no-repeat center center;
+  background: url(../../img/svg/cart.svg) no-repeat center center;
   top: 45%;
   height: 40px;
 }

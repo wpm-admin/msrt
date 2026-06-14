@@ -1,4 +1,65 @@
-$(function() {
+$(function () {
+  // Init sliders via App bundle
+  App.initSwiper('.hero-slider', {
+    speed: 1000,
+    effect: 'fade',
+    pagination: { el: '.hero-pagination', clickable: true }
+  });
+  App.initSwiper('.categories__slider', {
+    speed: 1000,
+    slidesPerView: 3,
+    centeredSlides: true,
+    navigation: {
+      nextEl: '.categories__slider-next',
+      prevEl: '.categories__slider-prev'
+    }
+  });
+  App.initResponsiveSwiper('.categories__bottom', 980, {
+    loop: true,
+    slidesPerView: 2,
+    spaceBetween: 20,
+    pagination: { el: '.categories__list-pagination', clickable: true },
+    breakpoints: { 580: { slidesPerView: 3, spaceBetween: 30 } }
+  });
+  App.initResponsiveSwiper('.news__slider', 980, {
+    loop: true,
+    slidesPerView: 1.2,
+    spaceBetween: 20,
+    breakpoints: {
+      480: { slidesPerView: 2 },
+      680: { slidesPerView: 3, spaceBetween: 30 }
+    }
+  });
+  App.initResponsiveSwiper('.club__slider', 800, {
+    loop: true,
+    slidesPerView: 1.2,
+    spaceBetween: 20,
+  });
+  App.initResponsiveSwiper('.auctions__slider', 800, {
+    loop: true,
+    slidesPerView: 1.2,
+    spaceBetween: 20,
+  });
+
+  // Promo code copy
+  document.querySelectorAll('.promo-code-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var code = this.dataset.promo;
+      if (!code) return;
+      var tooltip = this.querySelector('.tooltip');
+      navigator.clipboard.writeText(code).then(function () {
+        if (tooltip) tooltip.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          if (tooltip) tooltip.textContent = 'Click to copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(function () {
+        if (tooltip) tooltip.textContent = 'Failed to copy';
+      });
+    });
+  });
+
   var currentMarkId = null;
 
   function rebuildSelect(container, items, labelText) {
@@ -11,7 +72,7 @@ $(function() {
     def.value = '';
     def.text = labelText;
     native.appendChild(def);
-    items.forEach(function(item) {
+    items.forEach(function (item) {
       var nopt = document.createElement('option');
       nopt.value = item.value || item.model_id || item.category_id || '';
       nopt.textContent = item.name;
@@ -42,23 +103,27 @@ $(function() {
   }
 
   function setupDelegatedClicks() {
-    document.querySelectorAll('.c-select__dropdown').forEach(function(dd) {
-      dd.onclick = function(e) {
+    document.querySelectorAll('.c-select__dropdown').forEach(function (dd) {
+      dd.onclick = function (e) {
         var opt = e.target.closest('.c-select__option');
         if (!opt) return;
-        var href = opt.dataset.href;
-        if (href) {
-          window.location.href = href;
-          return;
-        }
         var select = this.closest('.c-select');
         var label = select.querySelector('.c-select__label');
         var native = select.querySelector('.c-select__native');
         var dropdown = select.querySelector('.c-select__dropdown');
         var value = opt.dataset.value;
+        var href = opt.dataset.href;
+
+        // Only redirect for category select
+        if (href && select.id === 'lm-category-select') {
+          window.location.href = href;
+          return;
+        }
+
+        // For model select (and others): just update selection, trigger change event
         label.innerHTML = opt.innerHTML;
         native.value = value;
-        select.querySelectorAll('.c-select__option').forEach(function(o) {
+        select.querySelectorAll('.c-select__option').forEach(function (o) {
           o.classList.remove('is-active');
         });
         opt.classList.add('is-active');
@@ -74,29 +139,29 @@ $(function() {
 
   function loadModels(markId) {
     currentMarkId = markId;
-    $.getJSON('index.php?route=common/home/getModels&mark_id=' + markId, function(data) {
+    $.getJSON('index.php?route=extension/module/lm_category_section/models&mark_id=' + markId, function (data) {
       var container = document.querySelector('#lm-model-select');
       rebuildSelect(container, data, $('.select__models .color-grey').text());
       setupDelegatedClicks();
-      if (data.length > 0) loadCategories(markId, data[0].model_id);
+      if (data.length > 0) loadCategories(data[0].model_id);
     });
   }
 
-  function loadCategories(markId, modelId) {
-    $.getJSON('index.php?route=common/home/getCategories&mark_id=' + markId + '&model_id=' + modelId, function(data) {
+  function loadCategories(modelId) {
+    $.getJSON('index.php?route=extension/module/lm_category_section/categories&model_id=' + modelId, function (data) {
       var container = document.querySelector('#lm-category-select');
       rebuildSelect(container, data, $('#lm-category-select').closest('.select__category').find('.color-grey').text());
       setupDelegatedClicks();
     });
-    loadCategoryBottom(markId, modelId);
+    loadCategoryBottom(modelId);
   }
 
-  function loadCategoryBottom(markId, modelId) {
-    $.getJSON('index.php?route=common/home/getCategoryBottom&mark_id=' + markId + '&model_id=' + modelId, function(data) {
+  function loadCategoryBottom(modelId) {
+    $.getJSON('index.php?route=extension/module/lm_category_section/categoryBottom&model_id=' + modelId, function (data) {
       var wrapper = document.querySelector('.categories__bottom .swiper-wrapper');
       if (!wrapper) return;
       wrapper.innerHTML = '';
-      data.forEach(function(item) {
+      data.forEach(function (item) {
         var slide = document.createElement('div');
         slide.className = 'swiper-slide categories__list-item';
         var a = document.createElement('a');
@@ -113,6 +178,10 @@ $(function() {
         pic.appendChild(img);
         div.appendChild(pic);
         a.appendChild(div);
+        var title = document.createElement('h3');
+        title.className = 'item-title';
+        title.textContent = item.name;
+        a.appendChild(title);
         slide.appendChild(a);
         wrapper.appendChild(slide);
       });
@@ -123,10 +192,10 @@ $(function() {
 
   var swiperEl = document.querySelector('.categories__slider');
   if (swiperEl) {
-    var check = setInterval(function() {
+    var check = setInterval(function () {
       if (swiperEl.swiper) {
         clearInterval(check);
-        swiperEl.swiper.on('slideChange', function() {
+        swiperEl.swiper.on('slideChange', function () {
           var slide = this.slides[this.activeIndex];
           var markId = slide.getAttribute('data-mark-id');
           if (markId) loadModels(markId);
@@ -138,15 +207,106 @@ $(function() {
     }, 200);
   }
 
-  $(document).on('change', '#lm-model-select .c-select__native', function() {
+  $(document).on('change', '#lm-model-select .c-select__native', function () {
     var modelId = this.value;
-    if (modelId && currentMarkId) loadCategories(currentMarkId, modelId);
+    if (modelId) loadCategories(modelId);
   });
 
-  $(document).on('change', '#lm-category-select .c-select__native', function() {
+  $(document).on('change', '#lm-category-select .c-select__native', function () {
     var opt = this.options[this.selectedIndex];
     if (opt && opt.dataset.href) {
       window.location.href = opt.dataset.href;
     }
   });
 });
+
+// from main
+//search
+
+function initSearch() {
+  const searchBlock = document.querySelector('#search');
+  if (!searchBlock) return;
+
+  const liveSearch = searchBlock.querySelector('.live-search');
+  const triggers = searchBlock.querySelectorAll('.search__btn');
+  const closeBtn = searchBlock.querySelector('#search .search__list-close');
+  const input = searchBlock.querySelector('input[name="search"]');
+
+  const toggleSearch = (isOpen) => {
+    liveSearch.classList.toggle('is-open', isOpen);
+    gsap.to(liveSearch, {
+      duration: 0.3,
+      opacity: isOpen ? 1 : 0,
+      y: isOpen ? 0 : -10,
+      autoAlpha: isOpen ? 1 : 0,
+      ease: isOpen ? 'power2.out' : 'power2.in'
+    });
+  };
+
+  triggers.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleSearch(true);
+    });
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleSearch(false);
+    });
+  }
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      toggleSearch(true);
+    }
+  });
+}
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.c-select.is-open').forEach(select => {
+    select.classList.remove('is-open');
+    gsap.to(select.querySelector('.c-select__dropdown'), {
+      duration: 0.3,
+      opacity: 0,
+      y: -10,
+      autoAlpha: 0,
+      ease: 'power2.in'
+    });
+  });
+
+  const searchBlock = document.querySelector('#search');
+  const liveSearch = searchBlock?.querySelector('.live-search');
+  const closeBtn = searchBlock.querySelector('#search .search__list-close');
+  if (liveSearch && liveSearch.classList.contains('is-open')) {
+    closeBtn.classList.add('close-open')
+    // Only close if clicking outside the search block
+    // This is handled by the event bubble unless we stopPropagation in the triggers
+  }
+});
+
+initSearch();
+
+document.addEventListener('click', (e) => {
+  const searchBlock = document.querySelector('#search');
+  const liveSearch = searchBlock?.querySelector('.live-search');
+  const closeBtn = searchBlock.querySelector('#search .search__list-close');
+  if (searchBlock && !searchBlock.contains(e.target) && liveSearch?.classList.contains('is-open')) {
+    const closeBtnTrigger = () => {
+      liveSearch.classList.remove('is-open');
+      closeBtn.classList.add('close-open');
+      gsap.to(liveSearch, {
+        duration: 0.3,
+        opacity: 0,
+        y: -10,
+        autoAlpha: 0,
+        ease: 'power2.in'
+      });
+    };
+    closeBtnTrigger();
+  }
+});
+
+

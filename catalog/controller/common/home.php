@@ -94,10 +94,14 @@ class ControllerCommonHome extends Controller {
 					'limit'               => 1
 				);
 				if ($this->model_catalog_product->getTotalProducts($filter_data) > 0) {
+					$lm_product_id = $this->_lm_findDiagramProduct($category['category_id'], $model_id);
+					$lm_href = $lm_product_id
+						? $this->url->link('product/product', 'product_id=' . $lm_product_id)
+						: $this->_buildCategoryUrl($category['category_id'], $first_mark_id, $model_id);
 					$data['lm_first_categories'][] = array(
 						'category_id' => $category['category_id'],
 						'name'        => $category['name'],
-						'href'        => $this->_buildCategoryUrl($category['category_id'], $first_mark_id, $model_id)
+						'href'        => $lm_href
 					);
 				}
 			}
@@ -124,11 +128,25 @@ class ControllerCommonHome extends Controller {
 					'limit'               => 1
 				);
 				if ($this->model_catalog_product->getTotalProducts($filter_data) == 0) continue;
+				$lm_product_id = $this->_lm_findDiagramProduct($category['category_id'], $model_id);
+				if ($lm_product_id) {
+					$lm_pinfo = $this->model_catalog_product->getProduct($lm_product_id);
+					$lm_thumb = ($lm_pinfo && $lm_pinfo['image'])
+						? $this->model_tool_image->resize($lm_pinfo['image'], 265, 184)
+						: ($category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '');
+					$lm_href = $this->url->link('product/product', 'product_id=' . $lm_product_id);
+				} else {
+					$lm_thumb = $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '';
+					$lm_href = $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id);
+				}
+			} else {
+				$lm_thumb = $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '';
+				$lm_href = $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id);
 			}
 			$data['lm_category_bottom'][] = array(
 				'name'  => $category['name'],
-				'thumb' => $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '',
-				'href'  => $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id)
+				'thumb' => $lm_thumb,
+				'href'  => $lm_href
 			);
 			$bottom_count++;
 		}
@@ -394,10 +412,14 @@ class ControllerCommonHome extends Controller {
 					'limit'               => 1
 				);
 				if ($this->model_catalog_product->getTotalProducts($filter_data) > 0) {
+					$lm_product_id = $this->_lm_findDiagramProduct($category['category_id'], $model_id);
+					$lm_href = $lm_product_id
+						? $this->url->link('product/product', 'product_id=' . $lm_product_id)
+						: $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id);
 					$json[] = array(
 						'category_id' => $category['category_id'],
 						'name'        => $category['name'],
-						'href'        => $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id)
+						'href'        => $lm_href
 					);
 				}
 			}
@@ -427,10 +449,21 @@ class ControllerCommonHome extends Controller {
 					'limit'               => 1
 				);
 				if ($this->model_catalog_product->getTotalProducts($filter_data) > 0) {
+					$lm_product_id = $this->_lm_findDiagramProduct($category['category_id'], $model_id);
+					if ($lm_product_id) {
+						$lm_pinfo = $this->model_catalog_product->getProduct($lm_product_id);
+						$lm_thumb = ($lm_pinfo && $lm_pinfo['image'])
+							? $this->model_tool_image->resize($lm_pinfo['image'], 265, 184)
+							: ($category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '');
+						$lm_href = $this->url->link('product/product', 'product_id=' . $lm_product_id);
+					} else {
+						$lm_thumb = $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '';
+						$lm_href = $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id);
+					}
 					$json[] = array(
 						'name'  => $category['name'],
-						'thumb' => $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '',
-						'href'  => $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id)
+						'thumb' => $lm_thumb,
+						'href'  => $lm_href
 					);
 					$count++;
 				}
@@ -438,6 +471,23 @@ class ControllerCommonHome extends Controller {
 		}
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
+	}
+
+	private function _lm_findDiagramProduct($category_id, $model_id) {
+		$sql = "SELECT p.product_id
+				FROM " . DB_PREFIX . "product p
+				LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p.product_id = p2c.product_id)
+				LEFT JOIN " . DB_PREFIX . "product_to_mark p2m ON (p.product_id = p2m.product_id)
+				WHERE p.status = '1'
+				  AND p.diagram = '1'
+				  AND p2c.category_id IN (
+					  SELECT category_id FROM " . DB_PREFIX . "category_path WHERE path_id = " . (int)$category_id . "
+				  )
+				  AND p2m.mark_id = " . (int)$model_id . "
+				ORDER BY p.sort_order ASC, p.product_id
+				LIMIT 1";
+		$query = $this->db->query($sql);
+		return $query->num_rows ? (int)$query->row['product_id'] : false;
 	}
 
 	private function _buildCategoryUrl($category_id, $mark_id, $model_id) {
