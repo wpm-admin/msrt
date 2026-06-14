@@ -93,3 +93,8 @@ body.html {
 body.is-menu-open {
     overflow: hidden;
 }
+
+.js-fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+}

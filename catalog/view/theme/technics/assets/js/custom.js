@@ -1,3 +1,6 @@
+var gsap = window.gsap;
+var ScrollTrigger = window.ScrollTrigger;
+
 function decodeEntities(str) {
   var txt = document.createElement('textarea');
   txt.innerHTML = str;
@@ -65,6 +68,20 @@ $(function () {
       });
     });
   });
+
+  document.querySelectorAll('.js-fade-in').forEach(function(el) {
+    gsap.to(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 90%'
+      },
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power2.out'
+    });
+  });
+  ScrollTrigger.refresh();
 
   var currentMarkId = null;
 
@@ -271,6 +288,8 @@ function initSearch() {
   });
 }
 
+initSearch();
+
 document.addEventListener('click', () => {
   document.querySelectorAll('.c-select.is-open').forEach(select => {
     select.classList.remove('is-open');
@@ -282,36 +301,22 @@ document.addEventListener('click', () => {
       ease: 'power2.in'
     });
   });
-
-  const searchBlock = document.querySelector('#search');
-  const liveSearch = searchBlock?.querySelector('.live-search');
-  const closeBtn = searchBlock.querySelector('#search .search__list-close');
-  if (liveSearch && liveSearch.classList.contains('is-open')) {
-    closeBtn.classList.add('close-open')
-    // Only close if clicking outside the search block
-    // This is handled by the event bubble unless we stopPropagation in the triggers
-  }
 });
-
-initSearch();
 
 document.addEventListener('click', (e) => {
   const searchBlock = document.querySelector('#search');
   const liveSearch = searchBlock?.querySelector('.live-search');
-  const closeBtn = searchBlock.querySelector('#search .search__list-close');
+  const closeBtn = searchBlock?.querySelector('#search .search__list-close');
   if (searchBlock && !searchBlock.contains(e.target) && liveSearch?.classList.contains('is-open')) {
-    const closeBtnTrigger = () => {
-      liveSearch.classList.remove('is-open');
-      closeBtn.classList.add('close-open');
-      gsap.to(liveSearch, {
-        duration: 0.3,
-        opacity: 0,
-        y: -10,
-        autoAlpha: 0,
-        ease: 'power2.in'
-      });
-    };
-    closeBtnTrigger();
+    liveSearch.classList.remove('is-open');
+    if (closeBtn) closeBtn.classList.add('close-open');
+    gsap.to(liveSearch, {
+      duration: 0.3,
+      opacity: 0,
+      y: -10,
+      autoAlpha: 0,
+      ease: 'power2.in'
+    });
   }
 });
 
