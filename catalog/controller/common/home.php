@@ -1,4 +1,6 @@
 <?php
+require_once(DIR_APPLICATION . 'helper/asset.php');
+
 class ControllerCommonHome extends Controller {
 	public function index() {
 		$config_meta_title = $this->config->get('config_meta_title');
@@ -370,6 +372,7 @@ class ControllerCommonHome extends Controller {
 		$data['lm_scripts'] = $this->document->getScripts('footer');
 
 		$data['lm_theme_assets'] = $theme_assets;
+		$data['lm_assets_ver'] = lm_assets_ver();
 
 		$data['home'] = $this->url->link('common/home');
 

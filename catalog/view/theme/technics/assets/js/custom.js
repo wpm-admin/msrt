@@ -1,3 +1,9 @@
+function decodeEntities(str) {
+  var txt = document.createElement('textarea');
+  txt.innerHTML = str;
+  return txt.value;
+}
+
 $(function () {
   // Init sliders via App bundle
   App.initSwiper('.hero-slider', {
@@ -75,7 +81,7 @@ $(function () {
     items.forEach(function (item) {
       var nopt = document.createElement('option');
       nopt.value = item.value || item.model_id || item.category_id || '';
-      nopt.textContent = item.name;
+      nopt.textContent = decodeEntities(item.name);
       if (item.href) nopt.setAttribute('data-href', item.href);
       native.appendChild(nopt);
       var opt = document.createElement('div');
@@ -89,7 +95,7 @@ $(function () {
         opt.appendChild(img);
       }
       var span = document.createElement('span');
-      span.textContent = item.name;
+      span.textContent = decodeEntities(item.name);
       opt.appendChild(span);
       dropdown.appendChild(opt);
     });
@@ -174,13 +180,13 @@ $(function () {
         img.loading = 'lazy';
         img.src = item.thumb;
         img.className = 'image';
-        img.alt = item.name;
+        img.alt = decodeEntities(item.name);
         pic.appendChild(img);
         div.appendChild(pic);
         a.appendChild(div);
         var title = document.createElement('h3');
         title.className = 'item-title';
-        title.textContent = item.name;
+        title.textContent = decodeEntities(item.name);
         a.appendChild(title);
         slide.appendChild(a);
         wrapper.appendChild(slide);
@@ -308,5 +314,27 @@ document.addEventListener('click', (e) => {
     closeBtnTrigger();
   }
 });
+
+// Mobile menu toggle
+function toggleMenu(open) {
+  var menu = document.querySelector('.mobi_menu_box');
+  var overlay = document.querySelector('.mobi_menu_overlay');
+  if (!menu) return;
+
+  if (open) {
+    document.body.classList.add('is-menu-open');
+    menu.classList.add('open');
+    if (overlay) overlay.classList.add('is-active');
+  } else {
+    menu.classList.remove('open');
+    document.body.classList.remove('is-menu-open');
+    if (overlay) overlay.classList.remove('is-active');
+  }
+}
+
+$('.mobi_menu_togle').on('click', function() { toggleMenu(true); });
+$('.mobi_menu_togle_close').on('click', function() { toggleMenu(false); });
+$(document).on('click', '.mobi_menu_overlay', function() { toggleMenu(false); });
+
 
 

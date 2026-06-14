@@ -1,4 +1,4 @@
-body {
+body.html {
     font-family: var(--font-family);
 }
 .article {
@@ -42,7 +42,7 @@ body {
     box-shadow: 0 2px 2px #dddddd;
     left: 0;
     overflow-y: auto;
-    
+    font-family: var(--font-family);
 }
 .live-search.search-show {
     display: block;
@@ -51,6 +51,7 @@ body {
     pointer-events: auto;
     display: block;
     visibility: visible;
+    font-family: var(--font-family);
 }
 .search.js-search {
     position: relative;
@@ -60,11 +61,35 @@ body {
 }
 .categories__top {
     position: relative;
-    z-index: 1;
+    z-index: 2;
+    font-family: var(--font-family);
+}
+.select__group {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-family);
 }
 .product-name br {
     display: none;
 }
 .product-name span {
     display: block;
+    font-family: var(--font-family);
+}
+
+.mobi_menu_overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9;
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+.mobi_menu_overlay.is-active {
+    pointer-events: auto;
+    opacity: 1;
+}
+body.is-menu-open {
+    overflow: hidden;
 }

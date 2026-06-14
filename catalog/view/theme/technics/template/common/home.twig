@@ -19,14 +19,14 @@
 		<link rel="preload" href="{{ lm_theme_assets }}fonts/Hand.woff2" as="font" type="font/woff2" crossorigin>
 		<link rel="stylesheet" href="{{ lm_theme_assets }}css/vendor.css">
 		<link rel="stylesheet" href="{{ lm_theme_assets }}css/main.css">
-		<link rel="stylesheet" href="{{ lm_theme_assets }}css/custom.css?v224">
+		<link rel="stylesheet" href="{{ lm_theme_assets }}css/custom.css?v{{ lm_assets_ver }}">
 		<script src="{{ lm_theme_assets }}js/jquery.min.js"></script>
 		<script src="{{ lm_theme_assets }}js/jquery-ui.min.js"></script>
 		{% for style in lm_styles %}
 			<link {{ style }}>
 		{% endfor %}
-		<script defer src="{{ lm_theme_assets }}js/main.js"></script>
-		<script defer src="{{ lm_theme_assets }}js/custom.js?v327"></script>
+		<script defer src="{{ lm_theme_assets }}js/main.js?v{{ lm_assets_ver }}"></script>
+		<script defer src="{{ lm_theme_assets }}js/custom.js?v{{ lm_assets_ver }}"></script>
 	</head>
 	<body class="page__body">
 		<div
@@ -88,6 +88,7 @@
 									<span></span>
 								</div>
 							</button>
+							<div class="mobi_menu_overlay"></div>
 							<div class="mobi_menu_box">
 								<div class="mobi_menu_box_content">
 									<div class="mobi_menu_box_top">
@@ -179,16 +180,6 @@
 										</ul>
 									</div>
 								</div>
-								<script>
-									var icon = $('.mobi_menu_togle');
-$(".mobi_menu_togle, .mobi_menu_togle_close").click(function () {
-if ($(".mobi_menu_box").hasClass("open")) {
-$(".mobi_menu_box").removeClass("open");
-} else {
-$(".mobi_menu_box").addClass("open");
-}
-});
-								</script>
 							</div>
 						</div>
 					</div>
@@ -414,8 +405,17 @@ $(".mobi_menu_box").addClass("open");
 														<p class="price">{{ product.price }}</p>
 													{% endif %}
 													<span class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></span>
-												</div>
-											</div>
+									</div>
+								<script>// var icon = $('.mobi_menu_togle');
+// $(".mobi_menu_togle, .mobi_menu_togle_close").click(function () {
+// if ($(".mobi_menu_box").hasClass("open")) {
+// $(".mobi_menu_box").removeClass("open");
+// } else {
+// $(".mobi_menu_box").addClass("open");
+// }
+// });
+							</script>
+							</div>
 										</a>
 									</div>
 								{% else %}
