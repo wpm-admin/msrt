@@ -20026,6 +20026,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param {string} selector - Селектор элемента
  */
 const animateElement = (selector, duration = 1) => {
+  if (!document.querySelector(selector)) return;
   gsap__WEBPACK_IMPORTED_MODULE_0__["default"].from(selector, {
     duration: duration,
     y: 30,

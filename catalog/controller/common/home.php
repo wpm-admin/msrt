@@ -55,6 +55,9 @@ class ControllerCommonHome extends Controller {
 			);
 		}
 
+		// === 1.1. Ordered mark IDs for JS slider sync ===
+		$data['lm_mark_ids'] = array_keys($data['lm_marks']);
+
 		// === 2. Marks for mobile menu ===
 		$data['marks'] = $marks;
 		foreach ($data['marks'] as $index => $row) {
