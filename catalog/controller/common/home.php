@@ -83,77 +83,53 @@ class ControllerCommonHome extends Controller {
 		// === 4. First model → categories (initial load) ===
 		$data['lm_first_categories'] = array();
 		if (!empty($data['lm_first_models'])) {
-			$first_mark_id = $first_mark['mark_id'];
 			$first_model = $data['lm_first_models'][0];
 			$model_id = $first_model['model_id'];
-			$this->load->model('catalog/category');
+			$this->session->data['model_id'] = $model_id;
 			$this->load->model('catalog/product');
-			$categories = $this->model_catalog_category->getCategories(0);
-			foreach ($categories as $category) {
-				$filter_data = array(
-					'filter_category_id'  => $category['category_id'],
-					'filter_sub_category' => true,
-					'filter_model'        => true,
-					'model_id'            => $model_id,
-					'start'               => 0,
-					'limit'               => 1
+			$filter_data = array(
+				'filter_diagram'        => true,
+				'filter_model'          => true,
+				'filter_second_photos'  => true,
+				'model_id'              => $model_id,
+				'start'                 => 0,
+				'limit'                 => 10000
+			);
+			$products = $this->model_catalog_product->getProducts($filter_data);
+			foreach ($products as $product) {
+				$data['lm_first_categories'][] = array(
+					'product_id' => (int)$product['product_id'],
+					'name'       => $product['name'],
+					'href'       => $this->url->link('product/product', 'product_id=' . $product['product_id'])
 				);
-				if ($this->model_catalog_product->getTotalProducts($filter_data) > 0) {
-					$lm_product_id = $this->_lm_findDiagramProduct($category['category_id'], $model_id);
-					$lm_href = $lm_product_id
-						? $this->url->link('product/product', 'product_id=' . $lm_product_id)
-						: $this->_buildCategoryUrl($category['category_id'], $first_mark_id, $model_id);
-					$data['lm_first_categories'][] = array(
-						'category_id' => $category['category_id'],
-						'name'        => $category['name'],
-						'href'        => $lm_href
-					);
-				}
 			}
 		}
 
-		// === 5. Category bottom — model-filtered categories with images ===
-		$this->load->model('catalog/category');
+		// === 5. Category bottom — diagram products with images ===
 		$this->load->model('catalog/product');
 		$this->load->model('tool/image');
 		$data['lm_category_bottom'] = array();
 		$model_id = !empty($data['lm_first_models']) ? $data['lm_first_models'][0]['model_id'] : 0;
-		$mark_id = $first_mark ? $first_mark['mark_id'] : 0;
-		$categories = $this->model_catalog_category->getCategories(0);
-		$bottom_count = 0;
-		foreach ($categories as $category) {
-			if ($bottom_count >= 6) break;
-			if ($model_id) {
-				$filter_data = array(
-					'filter_category_id'  => $category['category_id'],
-					'filter_sub_category' => true,
-					'filter_model'        => true,
-					'model_id'            => $model_id,
-					'start'               => 0,
-					'limit'               => 1
-				);
-				if ($this->model_catalog_product->getTotalProducts($filter_data) == 0) continue;
-				$lm_product_id = $this->_lm_findDiagramProduct($category['category_id'], $model_id);
-				if ($lm_product_id) {
-					$lm_pinfo = $this->model_catalog_product->getProduct($lm_product_id);
-					$lm_thumb = ($lm_pinfo && $lm_pinfo['image'])
-						? $this->model_tool_image->resize($lm_pinfo['image'], 265, 184)
-						: ($category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '');
-					$lm_href = $this->url->link('product/product', 'product_id=' . $lm_product_id);
-				} else {
-					$lm_thumb = $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '';
-					$lm_href = $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id);
-				}
-			} else {
-				$lm_thumb = $category['image'] ? $this->model_tool_image->resize($category['image'], 265, 184) : '';
-				$lm_href = $this->_buildCategoryUrl($category['category_id'], $mark_id, $model_id);
-			}
-			$data['lm_category_bottom'][] = array(
-				'name'  => $category['name'],
-				'thumb' => $lm_thumb,
-				'href'  => $lm_href
+		if ($model_id) {
+			$this->session->data['model_id'] = $model_id;
+			$filter_data = array(
+				'filter_diagram'        => true,
+				'filter_model'          => true,
+				'filter_second_photos'  => true,
+				'model_id'              => $model_id,
+				'start'                 => 0,
+				'limit'                 => 6
 			);
-			$bottom_count++;
+			$products = $this->model_catalog_product->getProducts($filter_data);
+			foreach ($products as $product) {
+				$thumb = $product['image'] ? $this->model_tool_image->resize($product['image'], 265, 184) : '';
+				$data['lm_category_bottom'][] = array(
+					'product_id' => (int)$product['product_id'],
+					'name'       => $product['name'],
+					'thumb'      => $thumb,
+					'href'       => $this->url->link('product/product', 'product_id=' . $product['product_id'])
+				);
+			}
 		}
 
 		$data['all_categories_href'] = $this->url->link('product/category', 'path=0');
@@ -169,7 +145,7 @@ class ControllerCommonHome extends Controller {
 			'sort'                        => 'p.date_available',
 			'order'                       => 'DESC',
 			'start'                       => 0,
-			'limit'                       => 6
+			'limit'                       => 3
 		);
 
 		$data['blog_href'] = $this->url->link('product/blog_category', 'blogpath=3');

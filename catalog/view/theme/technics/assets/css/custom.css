@@ -20,6 +20,12 @@ body.html {
     object-fit: cover;
     object-position: center;
 }
+.hero__content {
+    pointer-events: none;
+}
+.box_home_search {
+    pointer-events: all;
+}
 .categories .select__models, 
 .categories .select__category {
     font-weight: 500;
@@ -44,22 +50,24 @@ body.html {
     max-height: 700px;
     position: absolute;
     padding: 25px 0 0px;
-    margin-top: -20px;
     background-color: #FFF;
     border: 1px solid #DDD;
     box-shadow: 0 2px 2px #dddddd;
     left: 0;
+    top: calc(100% - 8px);
     overflow-y: auto;
     font-family: var(--font-family);
 }
 .live-search.search-show {
     display: block;
-    top: calc(100% + 20px);
+    top: calc(100% - 8px);
     opacity: 1;
     pointer-events: auto;
     display: block;
     visibility: visible;
     font-family: var(--font-family);
+    z-index: -2;
+    box-shadow: rgba(255, 255, 255, 0.3) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.75) 0px 50px 100px -20px, rgba(0, 0, 0, 0.8) 0px 40px 80px -40px;
 }
 .search.js-search {
     position: relative;
@@ -111,16 +119,63 @@ body.is-menu-open {
     transform: translateX(0);
 }
 
-.js-fade-in {
-    opacity: 0;
-    transform: translateY(150px);
-}
 
-#smooth-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+.categories .c-select__label {
+    margin-top: 14px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.categories .select__group .color-grey {
+    left: 5px;
+    top: 6px;
+}
+.c-select.is-open .c-select__trigger {
+    background-color: #ebebee;
+}
+.categories .c-select__option span {
+    margin-left: 0;
+}
+.select__category .c-select__option span,
+.c-select__trigger .c-select__label span {
+    margin-left: 12px;
+}
+.c-select__dropdown::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+.c-select.is-open .c-select__dropdown {
+    border-top: 1px solid  #d6d6d6;
+}
+.mobi_menu_box_select_items a {
+    transition: color .25s ease-in-out background-color .25s ease-in-out;
+}
+.mobi_menu_box_select_items a:hover,
+.box_menu_articles a:hover {
+    color: var(--color-blue);
+    background-color: #dfdfe7;
+}
+.live-search .result-text .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 7px;
+    width: fit-content;
+    line-height: 49px;
+    background-color: #2452a8;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+.live-search ul {
+    padding: 0 15px 10px;
+}
+.live-search::-webkit-scrollbar-thumb {
+    background: #BABABA;
+}
+.live-search::-webkit-scrollbar-track {
+    border-radius: 16px;
 }

@@ -6,7 +6,7 @@ config.php
 /catalog-old
 /catalog/view/.htaccess
 plan.txt
-session-ses_15cf.md
+session-ses_*.md
 temp_header_part.txt
 temp_old_section.txt
 .idea/vcs.xml
@@ -15,6 +15,7 @@ HOMEPAGE-NOTES.md
 .gitignore
 .idea/php.xml
 .idea/
-session-ses_13ab.md
 plan-green.md
+donor.css
+donor.js
 # OpenCart working state backup
