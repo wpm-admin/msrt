@@ -19,6 +19,7 @@ class ControllerCommonHome extends Controller {
 		$this->load->language('common/footer');
 		$this->load->language('common/language');
 		$this->load->language('product/blog_product');
+		$this->load->language('common/home');
 
 		$server = $this->request->server['HTTPS'] ? $this->config->get('config_ssl') : $this->config->get('config_url');
 
@@ -284,49 +285,87 @@ class ControllerCommonHome extends Controller {
 		$data['lm_current_lang_code'] = $this->session->data['language'];
 
 		// === 14. Homepage text strings ===
-		$data['text_home_title'] = 'Supplying quality parts for iconic cars since 1976';
+		$data['text_home_title'] = $this->language->get('text_home_title');
 		$data['text_select_model'] = $this->language->get('text_select_modeli');
-		$data['text_select_category'] = 'Select Category';
-		$data['text_promo_code'] = 'Use code:';
-		$data['text_copy'] = 'Copy';
+		$data['text_select_category'] = $this->language->get('text_select_category');
+		$data['text_promo_code'] = $this->language->get('text_promo_code');
+		$data['text_copy'] = $this->language->get('text_copy');
 		$data['text_club_title'] = $this->language->get('text_club_news');
-		$data['text_about_signature'] = 'Jacques Pozzo di Borgo';
-		$data['text_about_status'] = 'President';
-		$data['text_auctions_title'] = 'Auctions';
-		$data['text_all_auctions'] = 'To Auctions Page';
-		$data['text_all_categories'] = 'View All Categories';
-		$data['text_footer_info'] = 'Maseratinet, MIE Corporation is a privately owned and not connected with the Factory or any of its distributors or dealers.';
-		$data['text_blog'] = 'Blog';
-		$data['text_about_us'] = 'About Us';
-		$data['text_shipping'] = 'Shipping';
+		$data['text_about_signature'] = $this->language->get('text_about_signature');
+		$data['text_about_status'] = $this->language->get('text_about_status');
+		$data['text_auctions_title'] = $this->language->get('text_auctions_title');
+		$data['text_all_auctions'] = $this->language->get('text_all_auctions');
+		$data['text_all_categories'] = $this->language->get('text_all_categories');
+		$data['text_footer_info'] = $this->language->get('text_footer_info');
+		$data['text_blog'] = $this->language->get('text_blog');
+		$data['text_about_us'] = $this->language->get('text_about_us');
+		$data['text_shipping'] = $this->language->get('text_shipping');
 		$data['text_returns'] = $this->language->get('text_return');
-		$data['text_faq'] = 'FAQ';
-		$data['text_terms'] = 'Terms & Conditions';
-		$data['text_privacy'] = 'Privacy & Security Policy';
+		$data['text_faq'] = $this->language->get('text_faq');
+		$data['text_terms'] = $this->language->get('text_terms');
+		$data['text_privacy'] = $this->language->get('text_privacy');
 		$data['text_contact_us'] = $this->language->get('text_contact');
 		$data['text_contacts'] = $this->language->get('text_contact');
-		$data['text_copyright'] = '&copy; 1976-' . date('Y') . ' MIE Corporation. All rights reserved.';
+		$data['text_copyright'] = sprintf($this->language->get('text_copyright'), date('Y'));
 		$data['text_powered'] = sprintf($this->language->get('text_powered'), $this->config->get('config_name'), date('Y'));
 		$data['text_language'] = $this->language->get('text_language');
 		$data['text_car_parts'] = $this->language->get('text_car_parts');
 		$data['text_club_store'] = $this->language->get('text_club_store');
 		$data['text_auction'] = $this->language->get('text_auction');
-		$data['text_club_store_bttn'] = 'To Club News';
+		$data['text_club_store_bttn'] = $this->language->get('text_club_store_bttn');
 		$data['text_home'] = $this->language->get('text_home');
 		$data['text_search'] = $this->language->get('text_search');
-		$data['about_href'] = $this->url->link('information/information', 'information_id=4');
-		$data['contact_href'] = $this->url->link('information/contact');
-		$data['customer_service_href'] = $this->url->link('information/information', 'information_id=5');
+		// Template-only hardcoded strings moved to language
+		$data['text_search_placeholder'] = $this->language->get('text_search_placeholder');
+		$data['text_login'] = $this->language->get('text_login');
+		$data['text_cart_empty'] = $this->language->get('text_cart_empty');
+		$data['text_mci_store'] = $this->language->get('text_mci_store');
+		$data['text_club_news_link'] = $this->language->get('text_club_news_link');
+		$data['text_customer_service'] = $this->language->get('text_customer_service');
+		$data['text_contact_us_heading'] = $this->language->get('text_contact_us_heading');
+		$data['text_manufacturer_link'] = $this->language->get('text_manufacturer_link');
+		$data['text_delivery'] = $this->language->get('text_delivery');
+		$data['text_fedex_name'] = $this->language->get('text_fedex_name');
+		$data['text_developed_by'] = $this->language->get('text_developed_by');
+		$data['text_footer_bottom_links'] = $this->language->get('text_footer_bottom_links');
 
-		// === Live search setup ===
-		$this->load->language('common/search');
-		$this->load->language('product/search');
+		// === User cabinet data ===
+		$data['logged'] = $this->customer->isLogged();
+		$data['account'] = $this->url->link('account/account', '', true);
+		$data['register'] = $this->url->link('account/login', '', true);
+		$data['garage'] = $this->url->link('account/garage', '', true);
+		$data['order'] = $this->url->link('account/order', '', true);
+		$data['wishlist'] = $this->url->link('account/wishlist', '', true);
+		$data['auction'] = $this->url->link('account/auction', '', true);
+		$data['logout'] = $this->url->link('account/logout', '', true);
+		$data['login_url'] = $this->url->link('account/login', '', true);
+		$data['text_garage'] = $this->language->get('text_garage');
+		$data['text_order'] = $this->language->get('text_order');
+		$data['text_wishlist'] = $this->language->get('text_wishlist');
+		$data['text_auction_href'] = $this->language->get('text_auction_href');
+		$data['text_logout'] = $this->language->get('text_logout');
+		$data['text_register'] = $this->language->get('text_register');
+
+		// === Language code for hrefs ===
 		$this->load->model('localisation/language');
 		$lang_code = '';
 		$language = $this->model_localisation_language->getLanguage($this->config->get('config_language_id'));
 		if ($language['url'] != '') {
 			$lang_code = $language['url'] . '/';
 		}
+
+		$data['about_href'] = $this->url->link('information/information', 'information_id=4');
+		$data['contact_href'] = $this->url->link('information/contact');
+		$data['customer_service_href'] = $this->url->link('information/information', 'information_id=5');
+		$data['privacy_href'] = HTTPS_SERVER . $lang_code . 'privacy-security-policy';
+		$data['terms_href'] = HTTPS_SERVER . $lang_code . 'terms-conditions';
+		$data['manufacturer_href'] = HTTPS_SERVER . $lang_code . 'manufacturer';
+		$data['delivery_href'] = HTTPS_SERVER . $lang_code . 'delivery';
+		$data['fedex_href'] = HTTPS_SERVER . $lang_code . 'fedex-shipping-faqs';
+
+		// === Live search setup ===
+		$this->load->language('common/search');
+		$this->load->language('product/search');
 		$data['search_href'] = HTTPS_SERVER . $lang_code . 'search';
 		$data['autocomplete_href'] = HTTPS_SERVER . $lang_code . 'product_autocomplete';
 

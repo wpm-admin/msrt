@@ -44,21 +44,63 @@
 					</div>
 					<div class="header__user">
 						<div class="header__user-cabinet">
-							<button type="button" class="btn-reset bg-white btn">
-								<img src="{{ lm_theme_assets }}img/svg/user.svg" alt="Login">
-								Login
-							</button>
+							<div class="m-select">
+								<div class="m-select__header bg-white user__btn">
+									<span class="m-select__current">
+										<img src="{{ lm_theme_assets }}img/svg/user.svg" alt="{{ text_login }}">
+										{% if logged %}
+											{{ text_account }}
+										{% else %}
+											{{ text_login }}
+										{% endif %}
+									</span>
+									<div class="m-select__icon">
+										<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="">
+									</div>
+								</div>
+								{% if logged %}
+									<ul class="list-reset m-select__body">
+										<li class="m-select__item">
+											<a class="m-select__item-inner" href="{{ account }}">{{ text_account }}</a>
+										</li>
+										<li class="m-select__item">
+											<a class="m-select__item-inner" href="{{ garage }}">{{ text_garage }}</a>
+										</li>
+										<li class="m-select__item">
+											<a class="m-select__item-inner" href="{{ order }}">{{ text_order }}</a>
+										</li>
+										<li class="m-select__item">
+											<a class="m-select__item-inner" href="{{ wishlist }}">{{ text_wishlist }}</a>
+										</li>
+										<li class="m-select__item">
+											<a class="m-select__item-inner" href="{{ auction }}">{{ text_auction_href }}</a>
+										</li>
+										<li class="m-select__item">
+											<a class="m-select__item-inner" href="{{ logout }}">{{ text_logout }}</a>
+										</li>
+									</ul>
+								{% else %}
+									<ul class="list-reset m-select__body">
+										<li class="m-select__item">
+											<a class="m-select__item-inner" href="{{ login_url }}">{{ text_login }}</a>
+										</li>
+										<li class="m-select__item">
+											<a class="m-select__item-inner" href="{{ register }}">{{ text_register }}</a>
+										</li>
+									</ul>
+								{% endif %}
+							</div>
 						</div>
 						<div class="header__user-cart">
 							<button type="button" class="btn-reset bg-white btn">
 								<img src="{{ lm_theme_assets }}img/svg/cart.svg" alt="cart">
-								<span>Empty</span>
+								<span>{{ text_cart_empty }}</span>
 							</button>
 						</div>
 					</div>
 
 					<div class="header__right">
-						<div class="m-select">
+						<div class="m-select lang__select">
 							<div class="m-select__header bg-white lang__btn">
 								<span class="m-select__current">
 									{% for lang_item in lm_languages %}
@@ -94,35 +136,83 @@
 							<div class="mobi_menu_box">
 								<div class="mobi_menu_box_content">
 									<div class="mobi_menu_box_top">
-										<div class="logged_mobi">
-											<button type="button" class="btn-reset bg-white btn">
-												<img src="{{ lm_theme_assets }}img/svg/user.svg" alt="Login">
-												Login
-											</button>
+										<div class="header__user-cabinet">
+											<div class="m-select">
+												<div class="m-select__header bg-white user__btn">
+													<span class="m-select__current">
+														<img src="{{ lm_theme_assets }}img/svg/user.svg" alt="{{ text_login }}">
+														{% if logged %}
+															{{ text_account }}
+														{% else %}
+															{{ text_login }}
+														{% endif %}
+													</span>
+													<div class="m-select__icon">
+														<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="">
+													</div>
+												</div>
+												{% if logged %}
+													<ul class="list-reset m-select__body">
+														<li class="m-select__item">
+															<a class="m-select__item-inner" href="{{ account }}">{{ text_account }}</a>
+														</li>
+														<li class="m-select__item">
+															<a class="m-select__item-inner" href="{{ garage }}">{{ text_garage }}</a>
+														</li>
+														<li class="m-select__item">
+															<a class="m-select__item-inner" href="{{ order }}">{{ text_order }}</a>
+														</li>
+														<li class="m-select__item">
+															<a class="m-select__item-inner" href="{{ wishlist }}">{{ text_wishlist }}</a>
+														</li>
+														<li class="m-select__item">
+															<a class="m-select__item-inner" href="{{ auction }}">{{ text_auction_href }}</a>
+														</li>
+														<li class="m-select__item">
+															<a class="m-select__item-inner" href="{{ logout }}">{{ text_logout }}</a>
+														</li>
+													</ul>
+												{% else %}
+													<ul class="list-reset m-select__body">
+														<li class="m-select__item">
+															<a class="m-select__item-inner" href="{{ login_url }}">{{ text_login }}</a>
+														</li>
+														<li class="m-select__item">
+															<a class="m-select__item-inner" href="{{ register }}">{{ text_register }}</a>
+														</li>
+													</ul>
+												{% endif %}
+											</div>
 										</div>
 										<div class="cart_mobi_menu">
 											<button type="button" class="btn-reset bg-white btn">
 												<img src="{{ lm_theme_assets }}img/svg/cart.svg" alt="cart">
-												<span>Empty</span>
+												<span>{{ text_cart_empty }}</span>
 											</button>
 										</div>
-										<div class="lang js-toggle">
-											<button class="btn-reset bg-white btn lang__btn js-toggle-btn">{{ text_language }}</button>
-											<div class="lang__dropdown js-toggle-dropdown">
-												<div class="lang__dropdown_title">{{ text_language }}
-													<span class="close_model_lang"></span>
-												</div>
-												<ul class="lang__menu">
-
+										<div class="m-select lang__select">
+											<div class="m-select__header bg-white lang__btn">
+												<span class="m-select__current">
 													{% for lang_item in lm_languages %}
-														<li data-lang="{{ lang_item.code }}">
-															<a class="lang__link" href="{{ lang_item.href }}">{{ lang_item.name }}</a>
-														</li>
+														{% if lang_item.code == lm_current_lang_code %}
+															<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">
+															{{ lang_item.name }}
+														{% endif %}
 													{% endfor %}
-												</ul>
+												</span>
+												<div class="m-select__icon">
+													<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="">
+												</div>
 											</div>
-											<input type="hidden" name="code" value="">
-											<input type="hidden" name="redirect" value="{{ base }}">
+											<ul class="list-reset m-select__body lang__menu">
+												{% for lang_item in lm_languages %}
+													<li class="m-select__item" data-lang="{{ lang_item.code }}">
+														<a class="lang__link m-select__item-inner" href="{{ lang_item.href }}">
+															<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">{{ lang_item.name }}
+														</a>
+													</li>
+												{% endfor %}
+											</ul>
 										</div>
 										<div class="mobi_menu_togle_close menu-close">
 											<svg class="icon-back" width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -141,31 +231,31 @@
 									<div class="box_menu_articles">
 										<ul class="list-reset">
 											<li>
-												<a href="/maserati/">Shop Maserati Parts</a>
+												<a href="/maserati/">{{ text_car_parts }}</a>
 											</li>
 											<li>
-												<a href="{{ blog_href }}">MCI Store</a>
+												<a href="{{ blog_href }}">{{ text_club_store }}</a>
 											</li>
 											<li>
-												<a href="{{ auction_href }}">Auctions</a>
+												<a href="{{ auction_href }}">{{ text_auction }}</a>
 											</li>
 											<li>
-												<a href="{{ blog_href }}">Maserati Club News</a>
+												<a href="{{ blog_href }}">{{ text_club_news_link }}</a>
 											</li>
 											<li>
-												<a href="{{ customer_service_href }}">Customer service</a>
+												<a href="{{ customer_service_href }}">{{ text_customer_service }}</a>
 											</li>
 											<li>
-												<a href="{{ about_href }}">About Us</a>
+												<a href="{{ about_href }}">{{ text_about_us }}</a>
 											</li>
 											<li>
-												<a href="{{ contact_href }}">Contacts</a>
+												<a href="{{ contact_href }}">{{ text_contacts }}</a>
 											</li>
 										</ul>
 									</div>
 									<div class="box_menu__bottom">
 										<div class="box_menu__contact">
-											<p class="contacts-title">Contact us:</p>
+											<p class="contacts-title">{{ text_contact_us_heading }}</p>
 											<a href="tel:{{ telephone }}">{{ telephone }}</a>
 											<a href="mailto:{{ config_email }}">{{ config_email }}</a>
 										</div>
@@ -193,15 +283,16 @@
 
 				<!-- Hero -->
 				<section class="hero" data-reveal-container>
-					<div class="swiper hero-slider">
-						<div class="swiper-wrapper">
-							{% for slide in lm_hero_slides %}
-								<div class="swiper-slide">
-									<img src="{{ slide.image }}" class="hero-bg" alt="{{ slide.title }}">
-								</div>
-							{% endfor %}
-						</div>
-					</div>
+					{{ content_top  }}
+{#					<div class="swiper hero-slider">#}
+{#						<div class="swiper-wrapper">#}
+{#							{% for slide in lm_hero_slides %}#}
+{#								<div class="swiper-slide">#}
+{#									<img src="{{ slide.image }}" class="hero-bg" alt="{{ slide.title }}">#}
+{#								</div>#}
+{#							{% endfor %}#}
+{#						</div>#}
+{#					</div>#}
 					<div class="hero__content">
 						<h1 class="page-title">{{ text_home_title }}</h1>
 						<div class="box_home_search">
@@ -211,13 +302,13 @@
 										<a href="#" class="search__btn search__btn-icon">
 											<img src="{{ lm_theme_assets }}img/svg/search.svg" alt="">
 										</a>
-										<input type="text" name="search" value="" placeholder="Search by part number or description" class="form-control" autocomplete="off">
+										<input type="text" name="search" value="" placeholder="{{ text_search_placeholder }}" class="form-control" autocomplete="off">
 										<div class="search__right">
 											<a href="#" class="search__list-close">
 												<img src="{{ lm_theme_assets }}img/svg/s-close.svg" alt="search close button" type="button">
 											</a>
 											<span class="vertical-line"></span>
-											<a href="#" class="search__btn search__btn-text">SEARCH</a>
+											<a href="#" class="search__btn search__btn-text">{{ text_search }}</a>
 										</div>
 										<div class="live-search">
 											<ul></ul>
@@ -255,7 +346,7 @@
 								</div>
 							</div>
 							<form class="select__group">
-								<div class="select__models">
+								<div class="select__models" data-reveal="txt">
 									<p class="color-grey">{{ text_select_model }}</p>
 									<div class="c-select" id="lm-model-select">
 										<select name="model" class="c-select__native">
@@ -283,7 +374,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="select__category">
+								<div class="select__category" data-reveal="txt" style="transition-delay: 0.25s;">
 									<p class="color-grey">{{ text_select_category }}</p>
 									<div class="c-select" id="lm-category-select">
 										<select name="category" class="c-select__native">
@@ -347,7 +438,7 @@
 						<div class="banner__content text-white" data-reveal="txt">
 							<h3 class="section-title promo-title text-white">{{ lm_banner_promo.title }}</h3>
 							<div class="promo-data">
-								<span class="promo-text">Use code:</span>
+								<span class="promo-text">{{ text_promo_code }}</span>
 								<button type="button" class="btn-reset promo-code-btn" data-promo="{{ lm_banner_promo.code }}" title="Click to copy code">
 									<code>{{ lm_banner_promo.code }}</code>
 								</button>
@@ -390,7 +481,7 @@
 
 				<!-- Auctions -->
 				<section class="section bg-grey auctions">
-					<section class="container">
+					<div class="container">
 						<h2 class="section-title" data-reveal="txt">{{ text_auctions_title }}</h2>
 						<div class="swiper auctions__slider">
 							<div class="swiper-wrapper auctions__list grid">
@@ -400,7 +491,7 @@
 											<div class="article-image">
 												<img src="{{ product.thumb }}" class="image" alt="{{ product.name }}">
 											</div>
-											<div class="article-content">
+											<div class="article-content" data-reveal="txt" style="transition-delay: 0.25s;">
 												<h4 class="article-title">{{ product.name }}</h4>
 												<div class="article-bottom">
 													{% if product.price %}
@@ -485,217 +576,209 @@
 						</div>
 					</div>
 					<a href="{{ auction_href }}" class="btn btn-reset btn-view">{{ text_all_auctions }}</a>
-				</section>
+				</div>
+			</div>
+		</section>
 
+		<!-- Banner Maserati -->
+		<section class="section banner banner-maserati ">
+			<div class="container banner__container">
+				<div class="banner__image">
+					<img src="{{ lm_banner_maserati.image }}" alt="{{ lm_banner_maserati.title }}" class="banner-image">
+				</div>
+				<div class="banner__content text-center text-white">
+					<h3 class="section-title text-white" data-reveal="txt">{{ lm_banner_maserati.title }}</h3>
+					<div class="banner-subtitle" data-reveal="txt">{{ lm_banner_maserati.subtitle }}</div>
+				</div>
+			</div>
+		</section>
 
-				<!-- Banner Maserati -->
-				<section class="section banner banner-maserati ">
-					<div class="container banner__container">
-						<div class="banner__image">
-							<img src="{{ lm_banner_maserati.image }}" alt="{{ lm_banner_maserati.title }}" class="banner-image">
-						</div>
-						<div class="banner__content text-center text-white">
-							<h3 class="section-title text-white" data-reveal="txt">{{ lm_banner_maserati.title }}</h3>
-							<div class="banner-subtitle" data-reveal="txt">{{ lm_banner_maserati.subtitle }}</div>
-						</div>
-					</div>
-				</section>
-
-				<!-- News -->
-				<section class="section news ">
-					<div class="container news-container">
-						<div class="swiper news__slider">
-							<div class="swiper-wrapper grid">
-								{% for item in lm_news %}
-									<div class="swiper-slide news-item" data-reveal="elem">
-										<h3 class="news-title">{{ item.title }}</h3>
-										<div class="news-image">
-											<img src="{{ item.thumb }}" class="image" alt="{{ item.title }}">
-										</div>
-									</div>
-								{% endfor %}
-							</div>
-						</div>
-					</div>
-				</section>
-
-				<!-- About -->
-				<section class="section bg-grey about" data-reveal="elem">
-					<div class="container grid about-container">
-						<h2 class="section-title about-title">
-							About Us
-						</h2>
-						<div class="about-content">
-							<p>Our search engine currently contains over 70k individual parts, the world largest inventory of new and used Maserati parts accumulated since 1976! We are progressively adding parts and updating photos of our products on a regular basis, if you do not find what you’re looking for, please contact us with your parts request.</p>
-							<p>
-								Our new site will soon feature our tech database, VCM magazines, Classified, online live auctions, MCI, shop and dealer special member discounts.</p>
-							<p>
-								I look forward to serving you and welcome any comments that you may have.</p>
-						</div>
-						<div class="about-bottom">
-							<p class="about-fio">Jacques Pozzo di Borgo</p>
-							<div class="about-status">President</div>
-						</div>
-						<div class="about-image">
-							<picture>
-								<source srcset="{{ lm_theme_assets }}img/Subtract.webp" type="image/webp">
-								<img src="{{ lm_theme_assets }}img/Subtract.jpg" class="image" width="" height="" alt="Jacques Pozzo di Borgo">
-							</picture>
-						</div>
-					</div>
-				</section>
-
-				<!-- SEO -->
-				<section class="section seo ">
-					<div class="container">
-						<div class="seo__content">
-							<h2>Online Catalog Genuine and OEM Maserati 3500 GT Vignale Spyder parts for sale</h2>
-							<h3>About Maserati 3500 GT Vignale Spyder</h3>
-							<p>The Maserati 3500 GT Vignale Spyder is a 2-door roadster of the GT class that was available in coupe and convertible versions. This car was produced by the Italian company Maserati from 1957 to 1964. The 3500 GT was the first production Gran Turismo in the company’s history.</p>
-							<p>
-								In 1958, an open version of the Touring Spyder was presented at the Turin Motor Show, but another Spyder, created by the Vignale atelier and designed by Giovanni Michelotti, entered the market. This car was presented at the 1959 Paris Motor Show. The new Maserati 3500 GT Vignale Spyder was a 2+2 convertible with a wheelbase shortened to 2500 mm. Its body was made primarily of steel, with the exception of the aluminum hood, trunk and removable hardtop. Among the options available for this Spyder was a hard top in a unique color that, when installed, created a spectacular roofline that made the car particularly attractive and desirable. The Maserati 3500GT Vignale Spyder is a true masterpiece that can compete in beauty with cars from other eras. This rare Vignale-bodied convertible was produced in only 232 units. It is powered by the original 3.5-liter inline six-cylinder engine with three Weber twin carburetors that ensure its excellent performance. The engine is mated to a 5-speed ZF transmission that provides smooth and precise power delivery. The car features a black leather interior with black carpets, just as it left the factory, front disc brakes and a stainless steel exhaust system.</p>
-							<p>The Maserati 3500 GT Vignale Spyder is a 2-door roadster of the GT class that was available in coupe and convertible versions. This car was produced by the Italian company Maserati from 1957 to 1964. The 3500 GT was the first production Gran Turismo in the company’s history.</p>
-							<p>
-								In 1958, an open version of the Touring Spyder was presented at the Turin Motor Show, but another Spyder, created by the Vignale atelier and designed by Giovanni Michelotti, entered the market. This car was presented at the 1959 Paris Motor Show. The new Maserati 3500 GT Vignale Spyder was a 2+2 convertible with a wheelbase shortened to 2500 mm. Its body was made primarily of steel, with the exception of the aluminum hood, trunk and removable hardtop. Among the options available for this Spyder was a hard top in a unique color that, when installed, created a spectacular roofline that made the car particularly attractive and desirable. The Maserati 3500GT Vignale Spyder is a true masterpiece that can compete in beauty with cars from other eras. This rare Vignale-bodied convertible was produced in only 232 units. It is powered by the original 3.5-liter inline six-cylinder engine with three Weber twin carburetors that ensure its excellent performance. The engine is mated to a 5-speed ZF transmission that provides smooth and precise power delivery. The car features a black leather interior with black carpets, just as it left the factory, front disc brakes and a stainless steel exhaust system.</p>
-							<p>The Maserati 3500 GT Vignale Spyder is a 2-door roadster of the GT class that was available in coupe and convertible versions. This car was produced by the Italian company Maserati from 1957 to 1964. The 3500 GT was the first production Gran Turismo in the company’s history.</p>
-							<p>
-								In 1958, an open version of the Touring Spyder was presented at the Turin Motor Show, but another Spyder, created by the Vignale atelier and designed by Giovanni Michelotti, entered the market. This car was presented at the 1959 Paris Motor Show. The new Maserati 3500 GT Vignale Spyder was a 2+2 convertible with a wheelbase shortened to 2500 mm. Its body was made primarily of steel, with the exception of the aluminum hood, trunk and removable hardtop. Among the options available for this Spyder was a hard top in a unique color that, when installed, created a spectacular roofline that made the car particularly attractive and desirable. The Maserati 3500GT Vignale Spyder is a true masterpiece that can compete in beauty with cars from other eras. This rare Vignale-bodied convertible was produced in only 232 units. It is powered by the original 3.5-liter inline six-cylinder engine with three Weber twin carburetors that ensure its excellent performance. The engine is mated to a 5-speed ZF transmission that provides smooth and precise power delivery. The car features a black leather interior with black carpets, just as it left the factory, front disc brakes and a stainless steel exhaust system.</p>
-							<p>The Maserati 3500 GT Vignale Spyder is a 2-door roadster of the GT class that was available in coupe and convertible versions. This car was produced by the Italian company Maserati from 1957 to 1964. The 3500 GT was the first production Gran Turismo in the company’s history.</p>
-							<p>
-								In 1958, an open version of the Touring Spyder was presented at the Turin Motor Show, but another Spyder, created by the Vignale atelier and designed by Giovanni Michelotti, entered the market. This car was presented at the 1959 Paris Motor Show. The new Maserati 3500 GT Vignale Spyder was a 2+2 convertible with a wheelbase shortened to 2500 mm. Its body was made primarily of steel, with the exception of the aluminum hood, trunk and removable hardtop. Among the options available for this Spyder was a hard top in a unique color that, when installed, created a spectacular roofline that made the car particularly attractive and desirable. The Maserati 3500GT Vignale Spyder is a true masterpiece that can compete in beauty with cars from other eras. This rare Vignale-bodied convertible was produced in only 232 units. It is powered by the original 3.5-liter inline six-cylinder engine with three Weber twin carburetors that ensure its excellent performance. The engine is mated to a 5-speed ZF transmission that provides smooth and precise power delivery. The car features a black leather interior with black carpets, just as it left the factory, front disc brakes and a stainless steel exhaust system.</p>
-						</div>
-					</div>
-				</section>
-
-			</main>
-
-			<!-- Footer -->
-			<footer class="section footer">
-				<div class="container">
-					<div class="footer__top grid">
-						<div class="footer__col footer__col-left">
-							<div class="footer-logo">
-								<img src="{{ lm_theme_assets }}img/svg/logo-footer.svg" alt="{{ name }}">
-							</div>
-							<p class="footer-text">{{ text_footer_info }}</p>
-						</div>
-						<div class="footer__col col__2">
-							<ul class="list-reset menu__list" data-reveal="txt">
-								<li>
-									<a href="#">{{ text_shipping }}</a>
-								</li>
-								<li>
-									<a href="#">{{ text_returns }}</a>
-								</li>
-								<li>
-									<a href="#">{{ text_faq }}</a>
-								</li>
-								<li>
-									<a href="#">{{ text_terms }}</a>
-								</li>
-								<li>
-									<a href="#">{{ text_privacy }}</a>
-								</li>
-								<li>
-									<a href="#">{{ text_contact_us }}</a>
-								</li>
-							</ul>
-						</div>
-						<div class="footer__col col__3" data-reveal="txt">
-							<ul class="list-reset menu__list">
-								<li>
-									<a href="{{ home }}">{{ text_home }}</a>
-								</li>
-								<li>
-									<a href="{{ blog_href }}">{{ text_blog }}</a>
-								</li>
-								<li>
-									<a href="#">{{ text_about_us }}</a>
-								</li>
-							</ul>
-						</div>
-						<div class="footer__col col__4" data-reveal="txt">
-							<ul class="list-reset menu__list">
-								<li>
-									<a href="#">{{ text_terms }}</a>
-								</li>
-								<li>
-									<a href="#">{{ text_privacy }}</a>
-								</li>
-							</ul>
-						</div>
-						<div class="footer__col footer__col-right" data-reveal="txt">
-							<div class="lang js-toggle">
-								<div class="m-select">
-									<div class="m-select__header bg-white lang__btn">
-										<span class="m-select__current">
-											{% for lang_item in lm_languages %}
-												{% if lang_item.code == lm_current_lang_code %}
-													<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">
-													{{ lang_item.name }}
-												{% endif %}
-											{% endfor %}
-										</span>
-										<div class="m-select__icon">
-											<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="">
-										</div>
-									</div>
-									<ul class="list-reset m-select__body lang__menu">
-										{% for lang_item in lm_languages %}
-											<li class="m-select__item" data-lang="{{ lang_item.code }}">
-												<a class="lang__link m-select__item-inner" href="{{ lang_item.href }}">
-													<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">{{ lang_item.name }}
-												</a>
-											</li>
-										{% endfor %}
-									</ul>
+		<!-- News -->
+		<section class="section news ">
+			<div class="container news-container">
+				<div class="swiper news__slider">
+					<div class="swiper-wrapper grid">
+						{% for item in lm_news %}
+							<div class="swiper-slide news-item" data-reveal="elem">
+								<h3 class="news-title">{{ item.title }}</h3>
+								<div class="news-image">
+									<img src="{{ item.thumb }}" class="image" alt="{{ item.title }}">
 								</div>
 							</div>
-							<ul class="list-reset menu__list text-right">
-								<li>{{ text_contacts }}</li>
-								<li>
-									<a href="tel:{{ telephone }}">{{ telephone }}</a>
-								</li>
-								<li>
-									<a href="mailto:{{ config_email }}">{{ config_email }}</a>
-								</li>
-							</ul>
-							<ul class="list-reset social__list">
-								<li>
-									<a href="#"><img src="{{ lm_theme_assets }}img/social/fb.svg" alt=""></a>
-								</li>
-								<li>
-									<a href="#"><img src="{{ lm_theme_assets }}img/social/inst.svg" alt=""></a>
-								</li>
-								<li>
-									<a href="#"><img src="{{ lm_theme_assets }}img/social/yt.svg" alt=""></a>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<div class="footer__bottom" data-reveal="txt">
-						<div class="footer__bottom-rights">
-							© 1976-2026 MIE Corporation. All rights reserved.
-						</div>
-						<div class="footer__bottom-policy">
-							FedEx Shipping FAQ’s Privacy & Security Policy Terms & Conditions
-						</div>
-						<div class="footer__bottom-liberty">
-							Developed by
-							<a href=""><img src="{{ lm_theme_assets }}/img/svg/liberty.svg" alt="liberty"></a>
-						</div>
+						{% endfor %}
 					</div>
 				</div>
-			</footer>
+			</div>
+		</section>
 
+		<!-- About -->
+		<section class="section bg-grey about" data-reveal="elem">
+			<div class="container grid about-container">
+				<h2 class="section-title about-title">
+					{{ text_about_us }}
+				</h2>
+				<div class="about-content">
+					<p>Our search engine currently contains over 70k individual parts, the world largest inventory of new and used Maserati parts accumulated since 1976! We are progressively adding parts and updating photos of our products on a regular basis, if you do not find what you’re looking for, please contact us with your parts request.</p>
+					<p>
+						Our new site will soon feature our tech database, VCM magazines, Classified, online live auctions, MCI, shop and dealer special member discounts.</p>
+					<p>
+						I look forward to serving you and welcome any comments that you may have.</p>
+				</div>
+				<div class="about-bottom">
+					<p class="about-fio">{{ text_about_signature }}</p>
+					<div class="about-status">{{ text_about_status }}</div>
+				</div>
+				<div class="about-image">
+					<picture>
+						<source srcset="{{ lm_theme_assets }}img/Subtract.webp" type="image/webp">
+						<img src="{{ lm_theme_assets }}img/Subtract.jpg" class="image" width="" height="" alt="{{ text_about_signature }}">
+					</picture>
+				</div>
+			</div>
+		</section>
+
+		<!-- SEO -->
+		<section class="section seo ">
+			<div class="container">
+				<div class="seo__content">
+					<h2>Online Catalog Genuine and OEM Maserati 3500 GT Vignale Spyder parts for sale</h2>
+					<h3>About Maserati 3500 GT Vignale Spyder</h3>
+					<p>The Maserati 3500 GT Vignale Spyder is a 2-door roadster of the GT class that was available in coupe and convertible versions. This car was produced by the Italian company Maserati from 1957 to 1964. The 3500 GT was the first production Gran Turismo in the company’s history.</p>
+					<p>
+						In 1958, an open version of the Touring Spyder was presented at the Turin Motor Show, but another Spyder, created by the Vignale atelier and designed by Giovanni Michelotti, entered the market. This car was presented at the 1959 Paris Motor Show. The new Maserati 3500 GT Vignale Spyder was a 2+2 convertible with a wheelbase shortened to 2500 mm. Its body was made primarily of steel, with the exception of the aluminum hood, trunk and removable hardtop. Among the options available for this Spyder was a hard top in a unique color that, when installed, created a spectacular roofline that made the car particularly attractive and desirable. The Maserati 3500GT Vignale Spyder is a true masterpiece that can compete in beauty with cars from other eras. This rare Vignale-bodied convertible was produced in only 232 units. It is powered by the original 3.5-liter inline six-cylinder engine with three Weber twin carburetors that ensure its excellent performance. The engine is mated to a 5-speed ZF transmission that provides smooth and precise power delivery. The car features a black leather interior with black carpets, just as it left the factory, front disc brakes and a stainless steel exhaust system.</p>
+					<p>The Maserati 3500 GT Vignale Spyder is a 2-door roadster of the GT class that was available in coupe and convertible versions. This car was produced by the Italian company Maserati from 1957 to 1964. The 3500 GT was the first production Gran Turismo in the company’s history.</p>
+					<p>
+						In 1958, an open version of the Touring Spyder was presented at the Turin Motor Show, but another Spyder, created by the Vignale atelier and designed by Giovanni Michelotti, entered the market. This car was presented at the 1959 Paris Motor Show. The new Maserati 3500 GT Vignale Spyder was a 2+2 convertible with a wheelbase shortened to 2500 mm. Its body was made primarily of steel, with the exception of the aluminum hood, trunk and removable hardtop. Among the options available for this Spyder was a hard top in a unique color that, when installed, created a spectacular roofline that made the car particularly attractive and desirable. The Maserati 3500GT Vignale Spyder is a true masterpiece that can compete in beauty with cars from other eras. This rare Vignale-bodied convertible was produced in only 232 units. It is powered by the original 3.5-liter inline six-cylinder engine with three Weber twin carburetors that ensure its excellent performance. The engine is mated to a 5-speed ZF transmission that provides smooth and precise power delivery. The car features a black leather interior with black carpets, just as it left the factory, front disc brakes and a stainless steel exhaust system.</p>
+					<p>The Maserati 3500 GT Vignale Spyder is a 2-door roadster of the GT class that was available in coupe and convertible versions. This car was produced by the Italian company Maserati from 1957 to 1964. The 3500 GT was the first production Gran Turismo in the company’s history.</p>
+					<p>
+						In 1958, an open version of the Touring Spyder was presented at the Turin Motor Show, but another Spyder, created by the Vignale atelier and designed by Giovanni Michelotti, entered the market. This car was presented at the 1959 Paris Motor Show. The new Maserati 3500 GT Vignale Spyder was a 2+2 convertible with a wheelbase shortened to 2500 mm. Its body was made primarily of steel, with the exception of the aluminum hood, trunk and removable hardtop. Among the options available for this Spyder was a hard top in a unique color that, when installed, created a spectacular roofline that made the car particularly attractive and desirable. The Maserati 3500GT Vignale Spyder is a true masterpiece that can compete in beauty with cars from other eras. This rare Vignale-bodied convertible was produced in only 232 units. It is powered by the original 3.5-liter inline six-cylinder engine with three Weber twin carburetors that ensure its excellent performance. The engine is mated to a 5-speed ZF transmission that provides smooth and precise power delivery. The car features a black leather interior with black carpets, just as it left the factory, front disc brakes and a stainless steel exhaust system.</p>
+					<p>The Maserati 3500 GT Vignale Spyder is a 2-door roadster of the GT class that was available in coupe and convertible versions. This car was produced by the Italian company Maserati from 1957 to 1964. The 3500 GT was the first production Gran Turismo in the company’s history.</p>
+					<p>
+						In 1958, an open version of the Touring Spyder was presented at the Turin Motor Show, but another Spyder, created by the Vignale atelier and designed by Giovanni Michelotti, entered the market. This car was presented at the 1959 Paris Motor Show. The new Maserati 3500 GT Vignale Spyder was a 2+2 convertible with a wheelbase shortened to 2500 mm. Its body was made primarily of steel, with the exception of the aluminum hood, trunk and removable hardtop. Among the options available for this Spyder was a hard top in a unique color that, when installed, created a spectacular roofline that made the car particularly attractive and desirable. The Maserati 3500GT Vignale Spyder is a true masterpiece that can compete in beauty with cars from other eras. This rare Vignale-bodied convertible was produced in only 232 units. It is powered by the original 3.5-liter inline six-cylinder engine with three Weber twin carburetors that ensure its excellent performance. The engine is mated to a 5-speed ZF transmission that provides smooth and precise power delivery. The car features a black leather interior with black carpets, just as it left the factory, front disc brakes and a stainless steel exhaust system.</p>
+				</div>
+			</div>
+		</section>
+
+	</main>
+
+	<!-- Footer -->
+	<footer class="section footer" data-reveal-container>
+		<div class="container">
+			<div class="footer__top grid">
+				<div class="footer__col footer__col-left">
+					<div class="footer-logo">
+						<img src="{{ lm_theme_assets }}img/svg/logo-footer.svg" alt="{{ name }}">
+					</div>
+					<p class="footer-text">{{ text_footer_info }}</p>
+				</div>
+				{% set mid = (lm_first_categories|length / 2)|round(0, 'ceil') %}
+				<div class="footer__col col__2" data-reveal="txt">
+					<ul class="list-reset menu__list" id="footer-categories-col1">
+						{% for item in lm_first_categories|slice(0, mid) %}
+							<li>
+								<a href="{{ item.href }}">{{ item.name }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="footer__col col__3" data-reveal="txt">
+					<ul class="list-reset menu__list" id="footer-categories-col2">
+						{% for item in lm_first_categories|slice(mid) %}
+							<li>
+								<a href="{{ item.href }}">{{ item.name }}</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="footer__col col__4" data-reveal="txt">
+					<ul class="list-reset menu__list">
+						<li>
+							<a href="{{ about_href }}">{{ text_about_us }}</a>
+						</li>
+						<li>
+							<a href="{{ privacy_href }}">{{ text_privacy }}</a>
+						</li>
+						<li>
+							<a href="{{ terms_href }}">{{ text_terms }}</a>
+						</li>
+						<li>
+							<a href="{{ manufacturer_href }}">{{ text_manufacturer_link }}</a>
+						</li>
+						<li>
+							<a href="{{ delivery_href }}">{{ text_delivery }}</a>
+						</li>
+						<li>
+							<a href="{{ fedex_href }}">{{ text_fedex_name }}</a>
+						</li>
+						<li>
+							<a href="{{ contact_href }}">{{ text_contact_us }}</a>
+						</li>
+					</ul>
+				</div>
+				<div class="footer__col footer__col-right" data-reveal="txt">
+					<div class="lang js-toggle">
+						<div class="m-select">
+							<div class="m-select__header bg-white lang__btn">
+								<span class="m-select__current">
+									{% for lang_item in lm_languages %}
+										{% if lang_item.code == lm_current_lang_code %}
+											<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">
+											{{ lang_item.name }}
+										{% endif %}
+									{% endfor %}
+								</span>
+								<div class="m-select__icon">
+									<img src="{{ lm_theme_assets }}img/svg/down.svg" alt="">
+								</div>
+							</div>
+							<ul class="list-reset m-select__body lang__menu">
+								{% for lang_item in lm_languages %}
+									<li class="m-select__item" data-lang="{{ lang_item.code }}">
+										<a class="lang__link m-select__item-inner" href="{{ lang_item.href }}">
+											<img src="{{ lm_theme_assets }}img/lang/{{ lang_item.code[:2] }}.svg" alt="{{ lang_item.long_name }}">{{ lang_item.name }}
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+					<ul class="list-reset menu__list text-right">
+						<li>{{ text_contacts }}</li>
+						<li>
+							<a href="tel:{{ telephone }}">{{ telephone }}</a>
+						</li>
+						<li>
+							<a href="mailto:{{ config_email }}">{{ config_email }}</a>
+						</li>
+					</ul>
+					<ul class="list-reset social__list">
+						<li>
+							<a href="#"><img src="{{ lm_theme_assets }}img/social/fb.svg" alt=""></a>
+						</li>
+						<li>
+							<a href="#"><img src="{{ lm_theme_assets }}img/social/inst.svg" alt=""></a>
+						</li>
+						<li>
+							<a href="#"><img src="{{ lm_theme_assets }}img/social/yt.svg" alt=""></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="footer__bottom">
+				<div class="footer__bottom-rights">
+					{{ text_copyright }}
+				</div>
+				<div class="footer__bottom-policy">
+					{{ text_footer_bottom_links }}
+				</div>
+				<div class="footer__bottom-liberty">
+					{{ text_developed_by }}
+					<a href=""><img src="{{ lm_theme_assets }}/img/svg/liberty.svg" alt="liberty"></a>
+				</div>
+			</div>
 		</div>
-
-		{% for script in lm_scripts %}
-			<script {{ script }}></script>
-		{% endfor %}
-
-		<script>
-			$(function () {
+	</footer>
+</body></html></div>{% for script in lm_scripts %}<script {{ script }}></script>{% endfor %}<script>$(function () {
 var search_href = '{{ search_href }}';
 var autocomplete_href = '{{ autocomplete_href }}';
 
@@ -832,7 +915,4 @@ e.preventDefault();
 $searchInput.val('');
 $liveSearch.removeClass('search-show');
 });
-});
-		</script>
-	</body>
-</html>
+});</script></body></html>

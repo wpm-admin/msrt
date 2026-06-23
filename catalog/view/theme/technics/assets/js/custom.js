@@ -204,6 +204,36 @@ $(function () {
     });
   }
 
+  function updateFooterCategories(items) {
+    var mid = Math.ceil(items.length / 2);
+    var col1 = items.slice(0, mid);
+    var col2 = items.slice(mid);
+    var list1 = document.querySelector('#footer-categories-col1');
+    var list2 = document.querySelector('#footer-categories-col2');
+    if (list1) {
+      list1.innerHTML = '';
+      col1.forEach(function (item) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = item.href;
+        a.textContent = decodeEntities(item.name);
+        li.appendChild(a);
+        list1.appendChild(li);
+      });
+    }
+    if (list2) {
+      list2.innerHTML = '';
+      col2.forEach(function (item) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = item.href;
+        a.textContent = decodeEntities(item.name);
+        li.appendChild(a);
+        list2.appendChild(li);
+      });
+    }
+  }
+
   function loadCategories(modelId) {
     $.getJSON('index.php?route=extension/module/lm_category_section/categories&model_id=' + modelId, function (data) {
       var container = document.querySelector('#lm-category-select');
@@ -211,6 +241,7 @@ $(function () {
       setupDelegatedClicks();
       var openLink = document.querySelector('#category-open-link');
       if (openLink && data.length > 0 && data[0].href) openLink.href = data[0].href;
+      updateFooterCategories(data);
       document.dispatchEvent(new CustomEvent('lm:content-updated'));
     });
     loadCategoryBottom(modelId);
