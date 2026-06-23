@@ -1,0 +1,397 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <a href="javascript:void(0);" id="button-sync-subscribers" data-toggle="tooltip" title="{{ button_sync }}" class="btn btn-success"><i class="fa fa-refresh"></i></a>
+        <a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <a href="{{ import }}" data-toggle="tooltip" title="{{ button_import }}" class="btn btn-primary"><i class="fa fa-upload"></i></a>
+        <a href="{{ unsubscribe }}" data-toggle="tooltip" title="{{ button_unsubscribe }}" class="btn btn-warning"><i class="fa fa-bell-slash"></i></a>
+        <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-subscriber').submit() : false;"><i class="fa fa-trash-o"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="well">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label class="control-label" for="input-name">{{ entry_name }}</label>
+                <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="input-email">{{ entry_email }}</label>
+                <input type="text" name="filter_email" value="{{ filter_email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+              </div>
+            </div>
+            <div class="col-sm-3">
+               <div class="form-group hidden">
+                 <label class="control-label" for="input-customer-id">{{ entry_customer_id }}</label>
+                 <input type="text" name="filter_customer_id" value="{{ filter_customer_id }}" placeholder="{{ entry_customer_id }}" id="input-customer-id" class="form-control" />
+               </div>
+              <div class="form-group">
+                <label class="control-label" for="input-customer-group">{{ entry_customer_group }}</label>
+                <select name="filter_customer_group_id" id="input-customer-group" class="form-control">
+                  <option value="*"></option>
+                  {% for customer_group in customer_groups %}
+                  {% if customer_group.customer_group_id == filter_customer_group_id %}
+                  <option value="{{ customer_group.customer_group_id }}" selected="selected">{{ customer_group.name }}</option>
+                  {% else %}
+                  <option value="{{ customer_group.customer_group_id }}">{{ customer_group.name }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="input-country-id">{{ entry_country }}</label>
+                <select name="filter_country_id" id="input-country-id" class="form-control">
+                  <option value="*"></option>
+                  {% for country in countries %}
+                  {% if country.country_id == filter_country_id %}
+                  <option value="{{ country.country_id }}" selected="selected">{{ country.name }}</option>
+                  {% else %}
+                  <option value="{{ country.country_id }}">{{ country.name }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+               <div class="form-group">
+                <label class="control-label" for="input-status">{{ entry_status }}</label>
+                <select name="filter_status" id="input-status" class="form-control">
+                  <option value="*"></option>
+                  {% if filter_status %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  {% endif %}
+                  {% if not filter_status and filter_status is not null %}
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="0">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="input-source">{{ entry_source }}</label>
+                <select name="filter_source" id="input-source" class="form-control">
+                  <option value="*"></option>
+                  {% for source in sources %}
+                  {% if source.code == filter_source %}
+                  <option value="{{ source.code }}" selected="selected">{{ source.name }}</option>
+                  {% else %}
+                  <option value="{{ source['code'] }}">{{ source.name }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="form-group">
+                <label class="control-label" for="input-date-added">{{ entry_date_added }}</label>
+                <div class="input-group date">
+                  <input type="text" name="filter_date_added" value="{{ filter_date_added }}" placeholder="{{ entry_date_added }}" data-date-format="YYYY-MM-DD" id="input-date-added" class="form-control" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                  </span></div>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="input-date-modified">{{ entry_date_modified }}</label>
+                <div class="input-group date">
+                  <input type="text" name="filter_date_modified" value="{{ filter_date_modified }}" placeholder="{{ entry_date_modified }}" data-date-format="YYYY-MM-DD" id="input-date-modified" class="form-control" />
+                  <span class="input-group-btn">
+                  <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                  </span></div>
+              </div>
+              <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ button_filter }}</button>
+            </div>
+          </div>
+        </div>
+        <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-subscriber">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                  <td class="text-left">{% if sort == 'name' %}
+                    <a href="{{ sort_name }}" class="{{ order }}">{{ column_name }}</a>
+                    {% else %}
+                    <a href="{{ sort_name }}">{{ column_name }}</a>
+                    {% endif %}</td>
+                  <td class="text-left">{% if sort == 's.email' %}
+                    <a href="{{ sort_email }}" class="{{ order }}">{{ column_email }}</a>
+                    {% else %}
+                    <a href="{{ sort_email }}">{{ column_email }}</a>
+                    {% endif %}</td>
+                  <td class="text-center hidden">{% if sort == 's.customer_id' %}
+                     <a href="{{ sort_customer_id }}" class="{{ order }}">{{ column_customer_id }}</a>
+                     {% else %}
+                     <a href="{{ sort_customer_id }}">{{ column_customer_id }}</a>
+                     {% endif %}</td>
+                  <td class="text-center">{% if sort == 'customer_group' %}
+                    <a href="{{ sort_customer_group }}" class="{{ order }}">{{ column_customer_group }}</a>
+                    {% else %}
+                    <a href="{{ sort_customer_group }}">{{ column_customer_group }}</a>
+                    {% endif %}</td>
+                  <td class="text-center">{% if sort == 'country' %}
+                      <a href="{{ sort_country }}" class="{{ order }}">{{ column_country }}</a>
+                      {% else %}
+                      <a href="{{ sort_country }}">{{ column_country }}</a>
+                      {% endif %}</td>
+                  <td class="text-center">{% if sort == 's.rating' %}
+                      <a href="{{ sort_rating }}" class="{{ order }}">{{ column_rating }}</a>
+                      {% else %}
+                      <a href="{{ sort_rating }}">{{ column_rating }}</a>
+                      {% endif %}</td>
+                  <td class="text-center">{% if sort == 's.status' %}
+                    <a href="{{ sort_status }}" class="{{ order }}">{{ column_status }}</a>
+                    {% else %}
+                    <a href="{{ sort_status }}">{{ column_status }}</a>
+                    {% endif %}</td>
+                  <td class="text-center">{% if sort == 's.source' %}
+                    <a href="{{ sort_source }}" class="{{ order }}">{{ column_source }}</a>
+                    {% else %}
+                    <a href="{{ sort_source }}">{{ column_source }}</a>
+                    {% endif %}</td>
+                  <td class="text-center">{% if sort == 's.date_added' %}
+                    <a href="{{ sort_date_added }}" class="{{ order }}">{{ column_date_added }}</a>
+                    {% else %}
+                    <a href="{{ sort_date_added }}">{{ column_date_added }}</a>
+                    {% endif %}</td>
+                  <td class="text-center">{% if sort == 's.date_modified' %}
+                    <a href="{{ sort_date_modified }}" class="{{ order }}">{{ column_date_modified }}</a>
+                    {% else %}
+                    <a href="{{ sort_date_modified }}">{{ column_date_modified }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">{{ column_action }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if subscribers %}
+                {% for subscriber in subscribers %}
+                <tr>
+                  <td class="text-center">{% if subscriber.subscriber_id in selected %} ?>
+                    <input type="checkbox" name="selected[]" value="{{ subscriber.subscriber_id }}" checked="checked" />
+                    {% else %}
+                    <input type="checkbox" name="selected[]" value="{{ subscriber.subscriber_id }}" />
+                    {% endif %}</td>
+                  <td class="text-left">{{ subscriber.name }}</td>
+                  <td class="text-left">{{ subscriber.email }}</td>
+                  <td class="text-center hidden">{{ subscriber.customer_id }}</td>
+                  <td class="text-center">{{ subscriber.customer_group }}</td>
+                  <td class="text-center">
+                     {% if subscriber['iso_code_2'] %}
+                     <span data-toggle="tooltip" title="{{ subscriber.country }}">{{ subscriber.iso_code_2 ~ '   (UTC' ~ '+' ~ subscriber['utc'] ~ ')' }}</span>
+                     {% else %}
+                     -
+                     {% endif %}
+                  </td>
+                  <td class="text-center">
+                     {% if subscriber.rating %}
+                     {{ subscriber.rating }} <i class="fa fa-star rating-star"></i>
+                     {% else %}
+                     -
+                     {% endif %}
+                  </td>
+                  <td class="text-center">
+                     {{ subscriber.status }}
+                     {% if subscriber.note %}
+                     <span data-toggle="tooltip" data-html="true" title="{{ subscriber.note }}"><i class="fa fa-info-circle"></i></span>
+                     {% endif %}
+                  </td>
+                  <td class="text-center">{{ subscriber.source }}</td>
+                  <td class="text-center">{{ subscriber.date_added }}</td>
+                  <td class="text-center">{{ subscriber.date_modified }}</td>
+                  <td class="text-right">
+                    <a href="{{ subscriber.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="10">{{ text_no_results }}</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+
+        <div class="loading-mask-overlay">
+           <div class="loading-mask-loading fixed">
+             <div class='uil-ripple-css'><div></div><div></div></div>
+           </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+<script type="text/javascript"><!--
+$('#button-sync-subscribers').on('click', function(){
+   $.ajax({
+		url: 'index.php?route=extension/module/smart_marketing/subscriber/sync&user_token=' + getURLVar('user_token'),
+		dataType: 'json',
+		beforeSend: function() {
+         $('.loading-mask-overlay').show();
+		},
+		complete: function() {
+         $('.loading-mask-overlay').hide();
+		},
+		success: function(json) {
+         $('.alert-warning, .alert-danger, .alert-success').remove();
+
+         if (json['error']) {
+            $('#content .panel.panel-default ').before('<div class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> ' + json['error'] + '</div>');
+         }
+
+         if (json['success']) {
+            $('#content .panel.panel-default ').before('<div class="alert alert-success"><i class="fa fa-check-circle"></i> ' + json['success'] + '</div>');
+
+            // refresh page to rebuild list after sync - no timeout because session['success'] is set in sync
+            location.reload();
+         }
+		}
+	});
+});
+
+$('#button-filter').on('click', function() {
+	url = 'index.php?route=extension/module/smart_marketing/subscriber&user_token={{ user_token }}';
+
+	var filter_name = $('input[name=\'filter_name\']').val();
+
+	if (filter_name) {
+		url += '&filter_name=' + encodeURIComponent(filter_name);
+	}
+
+	var filter_email = $('input[name=\'filter_email\']').val();
+
+	if (filter_email) {
+		url += '&filter_email=' + encodeURIComponent(filter_email);
+	}
+
+   var filter_customer_id = $('select[name=\'filter_customer_id\']').val();
+
+	if (filter_customer_id) {
+		url += '&filter_customer_id=' + encodeURIComponent(filter_customer_id);
+	}
+
+	var filter_customer_group_id = $('select[name=\'filter_customer_group_id\']').val();
+
+	if (filter_customer_group_id != '*') {
+		url += '&filter_customer_group_id=' + encodeURIComponent(filter_customer_group_id);
+	}
+
+   var filter_country_id = $('select[name=\'filter_country_id\']').val();
+
+	if (filter_country_id != '*') {
+		url += '&filter_country_id=' + encodeURIComponent(filter_country_id);
+	}
+
+   var filter_rating = $('select[name=\'filter_rating\']').val();
+
+	if (filter_customer_id) {
+		url += '&filter_rating=' + encodeURIComponent(filter_rating);
+	}
+
+	var filter_status = $('select[name=\'filter_status\']').val();
+
+	if (filter_status != '*') {
+		url += '&filter_status=' + encodeURIComponent(filter_status);
+	}
+
+   var filter_source = $('select[name=\'filter_source\']').val();
+
+	if (filter_source != '*') {
+		url += '&filter_source=' + encodeURIComponent(filter_source);
+	}
+
+	var filter_date_added = $('input[name=\'filter_date_added\']').val();
+
+	if (filter_date_added) {
+		url += '&filter_date_added=' + encodeURIComponent(filter_date_added);
+	}
+
+   var filter_date_modified = $('input[name=\'filter_date_modified\']').val();
+
+	if (filter_date_modified) {
+		url += '&filter_date_modified=' + encodeURIComponent(filter_date_modified);
+	}
+
+	location = url;
+});
+
+$('input[name=\'filter_name\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/module/smart_marketing/subscriber/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['subscriber_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'filter_name\']').val(item['label']);
+	}
+});
+
+$('input[name=\'filter_email\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/module/smart_marketing/subscriber/autocomplete&user_token={{ user_token }}&filter_email=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['email'],
+						value: item['subscriber_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'filter_email\']').val(item['label']);
+	}
+});
+
+$('.loading-mask-trigger').on('click', function() {
+   $('.loading-mask-overlay').show();
+});
+
+$('.date').datetimepicker({
+	pickTime: false
+});
+//--></script></div>
+{{ footer }}

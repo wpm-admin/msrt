@@ -1,0 +1,489 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-send"></i> {{ name }}</h3>
+      </div>
+      <div class="panel-body">
+         <ul class="nav nav-tabs">
+           <li class="active"><a href="#tab-report" data-toggle="tab">{{ tab_report }}</a></li>
+           {% if html_content %}
+           <li><a href="#tab-preview" data-toggle="tab">{{ tab_preview }}</a></li>
+           <li><a href="#tab-source" data-toggle="tab">{{ tab_html_source }}</a></li>
+           {% endif %}
+
+           {% if plain_content %}
+           <li><a href="#tab-plain" data-toggle="tab">{{ tab_plain_text }}</a></li>
+           {% endif %}
+
+           <li><a href="#tab-details" data-toggle="tab">{{ tab_details }}</a></li>
+         </ul>
+         <div class="tab-content">
+            <div class="tab-pane active" id="tab-report">
+               <div class="recipients-container">
+                  <div class="row">
+                     <div class="col-sm-6 recipient-item">
+                        <div class="recipient-item-container">
+                           <span class="value">{{ recipient_total }}</span>
+                           <span class="text">{{ text_recipients }}</span>
+                        </div>
+                     </div>
+                     <div class="col-sm-6 recipient-item">
+                        <div class="recipient-item-container">
+                           <span class="text">{{ text_subject }}:</span>
+                           <span class="text-regular">{{ subject }}</span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="charts-container">
+                  <div class="row">
+                     <div class="col-sm-6 chart-item">
+                        <div class="chart-title"><span>{{ chart_delivery_status }}</span></div>
+                        <div class="chart-item-container">
+                           <canvas id="chart-recipient-sent" width="400" height="400"></canvas>
+                           <span class="sent-percent-overlay">{{ delivered_percent }}%</span>
+                        </div>
+                     </div>
+                     <div class="col-sm-6 chart-item">
+                        <div class="chart-title"><span>{{ chart_engagement_status }}</span><span id="switch-engagement-chart" class="switch-engagement-chart"><i class="fa fa-exchange"></i></span></div>
+                        <div class="chart-engagement-sections">
+                           <div class="row">
+                              <div class="col-sm-6 chart-engagement-section">
+                                 <div class="chart-open-engagement">
+                                    <div class="chart-item-container">
+                                       <canvas id="chart-open-engagement" width="200" height="200"></canvas>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="col-sm-6 chart-engagement-section">
+                                 <div class="chart-click-engagement">
+                                    <div class="chart-item-container">
+                                       <canvas id="chart-click-engagement" width="200" height="200"></canvas>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="col-sm-6 chart-engagement-section">
+                                 <div class="chart-open-engagement">
+                                    <div class="chart-item-container">
+                                       <canvas id="chart-bounce-engagement" width="200" height="200"></canvas>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="col-sm-6 chart-engagement-section">
+                                 <div class="chart-open-engagement">
+                                    <div class="chart-item-container">
+                                       <canvas id="chart-unsubscribe-engagement" width="200" height="200"></canvas>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div class="chart-overall-engagement">
+                           <div class="chart-item-container">
+                              <canvas id="chart-overall-engagement" width="400" height="400"></canvas>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="stats-container">
+                  <div class="row">
+                     <div class="col-sm-3 stats-item">
+                        <div class="stats-item-container">
+                           <div class="value">{{ open_total }}</div>
+                           <div class="text">{{ text_opened }}</div>
+                           <div class="progress">
+                             <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="{{ open_percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ open_percent }}%;">{{ open_percent }}%</div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-3 stats-item">
+                        <div class="stats-item-container">
+                           <div class="value">{{ click_total }}</div>
+                           <div class="text">{{ text_clicked }}</div>
+                           <div class="progress">
+                              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ click_percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ click_percent }}%;">{{ click_percent }}%</div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-3 stats-item">
+                        <div class="stats-item-container">
+                           <div class="value">{{ bounce_total }}</div>
+                           <div class="text">{{ text_bounced }}</div>
+                           <div class="progress">
+                              <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ bounce_percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ bounce_percent }}%;">{{ bounce_percent }}%</div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-sm-3 stats-item">
+                        <div class="stats-item-container">
+                           <div class="value">{{ unsubscribe_total }}</div>
+                           <div class="text">{{ text_unsubscribed }}</div>
+                           <div class="progress">
+                              <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{ unsubscribe_percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ unsubscribe_percent }}%;">{{ unsubscribe_percent }}%</div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               {% if performance_chart_data %}
+               <div class="interval-performance">
+                  <div class="chart-title">{{ interval ~ ' ' ~ chart_performance }}</div>
+                  <div class="interval-performance-container">
+                     <canvas id="chart-interval-performance"></canvas>
+                  </div>
+               </div>
+               {% endif %}
+
+            </div>
+
+            {% if html_content %}
+            <div class="tab-pane" id="tab-preview">
+               <div class="campaign-preview-container"></div>
+            </div>
+
+            <div class="tab-pane" id="tab-source">
+               <div class="view-source-container">
+                  <textarea name="html_content" id="html-content" class="form-control summernote">{{ html_content }}</textarea>
+               </div>
+            </div>
+            {% endif %}
+
+            {% if plain_content %}
+            <div class="tab-pane" id="tab-plain">
+               <div class="view-plain-container">
+                  <textarea name="plain_content" class="form-control" rows="20" readonly>{{ plain_content }}</textarea>
+               </div>
+            </div>
+            {% endif %}
+
+            <div class="tab-pane" id="tab-details">
+               <table class="table campaign-detail">
+                  <tbody>
+                     <tr>
+                        <td class="text-left header-cell">{{ text_date_added }}</td>
+                        <td class="text-left">{{ date_added }}</td>
+                     </tr>
+                     <tr>
+                        <td class="text-left header-cell">{{ text_date_scheduled }}</td>
+                        <td class="text-left">{{ date_added }}</td>
+                     </tr>
+                     <tr>
+                        <td class="text-left header-cell">{{ text_sender_name }}</td>
+                        <td class="text-left">{{ sender_name }}</td>
+                     </tr>
+                     <tr>
+                        <td class="text-left header-cell">{{ text_sender_email }}</td>
+                        <td class="text-left">{{ sender_email }}</td>
+                     </tr>
+                     <tr>
+                        <td class="text-left header-cell">{{ text_subject }}</td>
+                        <td class="text-left">{{ subject }}</td>
+                     </tr>
+                     <tr>
+                        <td class="text-left header-cell">{{ text_recipients }}</td>
+                        <td class="text-left">{{ recipient_total }}</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+    </div>
+  </div>
+<link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/mode/css/css.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/mode/xml/xml.js"></script>
+<script type="text/javascript" src="view/javascript/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script type="text/javascript"><!--
+$('.progress .progress-bar').each(function() {
+   var current_value = (typeof($(this).attr('aria-valuenow')) != 'undefined') ? $(this).attr('aria-valuenow')  : 0;
+
+   if (current_value < 5) {
+      $(this).addClass('invert-color');
+   }
+});
+
+$('#switch-engagement-chart').on('click', function() {
+   $('.chart-engagement-sections').toggle();
+   $('.chart-overall-engagement').toggle();
+});
+
+var element_recipient_delivered = document.getElementById("chart-recipient-sent").getContext('2d');
+
+var chart_recipient_delivered = new Chart(element_recipient_delivered, {
+   type: 'doughnut',
+   data: {
+      labels: ["{{ chart_label_delivered }}", "{{ chart_label_pending }}"],
+      datasets: [{
+         data: [{{ delivered_total }}, {{ waiting_delivery_total }}],
+         backgroundColor: [
+            '#8fbb6c',
+            '#f38733'
+         ],
+         borderColor: [
+            '#ffffff',
+            '#ffffff'
+         ],
+         borderWidth: 2
+      }]
+   },
+   options: {
+      responsive: true,
+      animation: {
+         duration: 2000
+      },
+      legend : {
+         display: true,
+         position: 'bottom',
+         labels: {
+            boxWidth: 15
+         }
+      },
+      tooltips: {
+         enabled: true
+      }
+   }
+});
+
+var element_overall_engagement = document.getElementById("chart-overall-engagement").getContext('2d');
+
+var chart_overall_engagement = new Chart(element_overall_engagement, {
+   type: 'pie',
+   data: {
+      labels: ["{{ chart_label_open }}", "{{ chart_label_click }}", "{{ chart_label_bounce }}", "{{ chart_label_unsubscribe }}", "{{ chart_label_no_action }}"],
+      datasets: [{
+         data: [{{ open_total }}, {{ click_total }}, {{ bounce_total }}, {{ unsubscribe_total }}, {{ no_action_total }}],
+         backgroundColor: [
+             '#1e91cf',
+             '#8fbb6c',
+             '#f38733',
+             '#f56b6b',
+             '#f5f5f5',
+         ],
+         borderColor: [
+             '#ffffff',
+             '#ffffff',
+             '#ffffff',
+             '#ffffff',
+             '#ffffff'
+         ],
+         borderWidth: 2
+      }]
+   },
+   options: {
+      responsive: true,
+      animation: {
+         duration: 2000
+      },
+      legend : {
+         display: true,
+         position: 'bottom',
+         labels: {
+            boxWidth: 15
+         }
+      },
+      tooltips: {
+         enabled: true
+      }
+   }
+});
+
+// ---- CHARTS ENGAGEMENT SECTIONS -----
+
+// chart open
+var chart_open_options = {
+   label            : ["{{ chart_label_open }}",  "{{ chart_label_other_action }}"],
+   data             : [{{ open_total }}, {{ recipient_total - open_total }}],
+   background_color : ['#1e91cf', '#f5f5f5'],
+   border_color     : ['#ffffff', '#ffffff']
+}
+
+createEngagementChartSection('open', chart_open_options);
+
+// chart click
+var chart_click_options = {
+   label            : ["{{ chart_label_click }}",  "{{ chart_label_other_action }}"],
+   data             : [{{ click_total }}, {{ recipient_total - click_total }}],
+   background_color : ['#8fbb6c', '#f5f5f5'],
+   border_color     : ['#ffffff', '#ffffff']
+}
+
+createEngagementChartSection('click', chart_click_options);
+
+// chart bounce
+var chart_bounce_options = {
+   label            : ["{{ chart_label_bounce }}",  "{{ chart_label_other_action }}"],
+   data             : [{{ bounce_total }}, {{ recipient_total - bounce_total }}],
+   background_color : ['#f38733', '#f5f5f5'],
+   border_color     : ['#ffffff', '#ffffff']
+}
+
+createEngagementChartSection('bounce', chart_bounce_options);
+
+// chart unsubscribe
+var chart_unsubscribe_options = {
+   label            : ["{{ chart_label_unsubscribe_short }}",  "{{ chart_label_other_action }}"],
+   data             : [{{ unsubscribe_total }}, {{ recipient_total - unsubscribe_total }}],
+   background_color : ['#f56b6b', '#f5f5f5'],
+   border_color     : ['#ffffff', '#ffffff']
+}
+
+createEngagementChartSection('unsubscribe', chart_unsubscribe_options);
+
+// CHART PERFORMANCE
+{% if performance_chart_data %}
+var element_performance = document.getElementById("chart-interval-performance").getContext('2d');
+
+var chart_performance = new Chart(element_performance, {
+   type: 'line',
+   data: {
+      labels: [{{ '\'' ~ performance_chart_data.labels|join('\' , \'') ~ '\'' }}],
+      datasets: [{
+				backgroundColor: '#1e91cf',
+				borderColor: '#1978ab',
+				data: [{{ performance_chart_data['datasets'].open|join(',') }}],
+				label: 'Open',
+            fill: false
+			}, {
+				backgroundColor: '#8fbb6c',
+				borderColor: '#7aae50',
+				data: [{{ performance_chart_data['datasets'].click|join(',') }}],
+				label: 'Click',
+            fill: false
+			}, {
+				backgroundColor: '#f38733',
+				borderColor: '#ef710e',
+				data: [{{ performance_chart_data['datasets'].bounce|join(',') }}],
+				label: 'Bounce',
+            fill: false
+			}, {
+				backgroundColor: '#f56b6b',
+				borderColor: '#f24545',
+				data: [{{ performance_chart_data['datasets'].unsubscribe|join(',') }}],
+				label: 'Unsubscribe',
+            fill: false
+			}]
+   },
+   options: {
+      responsive: true,
+      animation: {
+         duration: 2000
+      },
+      legend : {
+         display: true,
+         position: 'bottom',
+         labels: {
+            boxWidth: 15
+         }
+      },
+      maintainAspectRatio: true,
+      spanGaps: false,
+      elements: {
+			line: {
+				tension: 0.000001
+			}
+		},
+		scales: {
+         xAxes: [{
+				type: 'time',
+				time: {
+					format: 'YYYY-MM-DD HH:mm:ss',
+					tooltipFormat: 'll hA'
+				}
+			}],
+			yAxes: [{
+				stacked: false
+			}]
+		}
+   }
+});
+{% endif %}
+
+// CodeMirror for HTML Source of campaign
+$('a[href="#tab-source"]').on('click', function() {
+   setTimeout(function() {
+      if ($('textarea[name=\'html_content\']').is(":visible")) {
+         initHtmlSourceCodeMirror();
+      }
+   }, 100);
+});
+
+// Campaign Preview
+$('.campaign-preview-container').prepend('<iframe frameborder="0" width="100%" height="100%" src="' + 'data:text/html,' + encodeURIComponent($('textarea[name=\'html_content\']').val()) + '"></iframe>');
+
+// FUNCTIONS -------------------------------------------
+function initHtmlSourceCodeMirror() {
+   var html_source_editor = CodeMirror.fromTextArea($('#html-content')[0], {
+      mode: 'htmlmixed',
+      lineNumbers: true,
+      viewportMargin: Infinity,
+      theme: 'default',
+      readOnly: true,
+      autoBeautify: true,
+      autoCloseTags: true,
+      autoCloseBrackets: true,
+      lineWrapping: true,
+      styleActiveLine: true,
+      smartIndent: true,
+      indentWithTabs: true
+   });
+
+   CodeMirror.commands.selectAll(html_source_editor);
+
+   html_source_editor.autoFormatRange(html_source_editor.getCursor(true), html_source_editor.getCursor(false));
+}
+
+function createEngagementChartSection(event, options) {
+   var element_engagement = document.getElementById("chart-" + event + "-engagement").getContext('2d');
+
+   var chart_engagemnt = new Chart(element_engagement, {
+      type: 'pie',
+      data: {
+         labels: options.label,
+         datasets: [{
+            data: options.data,
+            backgroundColor: options.background_color,
+            borderColor: options.border_color,
+            borderWidth: 2
+         }]
+      },
+      options: {
+         responsive: true,
+         animation: {
+            duration: 2000
+         },
+         legend : {
+            display: true,
+            position: 'bottom',
+            labels: {
+               boxWidth: 15
+            }
+         },
+         tooltips: {
+            enabled: true
+         }
+      }
+   });
+}
+
+//--></script></div>
+{{ footer }}

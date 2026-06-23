@@ -1,0 +1,195 @@
+<?php
+// Heading
+$_['heading_title']                      = 'HIT Fedex';
+
+// Text
+$_['text_shipping']                      = 'Shipping';
+$_['text_success']                       = 'Success: You have Configured Fedex shipping!';
+$_['text_edit']                          = 'Configure Fedex Shipping Account';
+$_['text_info']                          = 'Informations Before Setup';
+$_['text_info1']                         = 'Get Fedex XML Api informations and Fill all required fields.';
+$_['text_info2']                         = 'Please add Product weight/Dimansions to the require shipping products';
+$_['text_info3']                         = 'Check the Fedex From Country Currency is declared in your currency section (for Currency conversion)';
+$_['text_info4']                         = 'Please activate the Licence Key without forget.';
+$_['text_shiiping_address']              = 'Configure Fedex Shipping Address';
+$_['text_rates']                         = 'Configure Fedex Shipping rates & Services';
+$_['text_packing']                       = 'Configure Fedex Shipping Package';
+$_['FIRST_OVERNIGHT']                    = 'FedEx First Overnight';
+$_['PRIORITY_OVERNIGHT']                 = 'FedEx Priority Overnight';
+$_['STANDARD_OVERNIGHT']                 = 'FedEx Standard Overnight';
+$_['FEDEX_2_DAY_AM']                     = 'FedEx 2Day A.M';
+$_['FEDEX_2_DAY']                        = 'FedEx 2Day';
+$_['SAME_DAY']                       	 = 'FedEx Same Day';
+$_['SAME_DAY_CITY']                      = 'FedEx Same Day City';
+$_['SAME_DAY_METRO_AFTERNOON']           = 'FedEx Same Day Metro Afternoon';
+$_['SAME_DAY_METRO_MORNING']             = 'FedEx Same Day Metro Morning';
+$_['SAME_DAY_METRO_RUSH']                = 'FedEx Same Day Metro Rush';
+$_['FEDEX_EXPRESS_SAVER']                = 'FedEx Express Saver';
+$_['GROUND_HOME_DELIVERY']               = 'FedEx Ground Home Delivery';
+$_['FEDEX_GROUND']                       = 'FedEx Ground';
+$_['INTERNATIONAL_ECONOMY']              = 'FedEx International Economy';
+$_['INTERNATIONAL_ECONOMY_DISTRIBUTION'] = 'FedEx International Economy Distribution';
+$_['INTERNATIONAL_FIRST']                = 'FedEx International First';
+$_['INTERNATIONAL_GROUND']               = 'FedEx International Ground';
+$_['INTERNATIONAL_PRIORITY']             = 'FedEx International Priority';
+$_['INTERNATIONAL_PRIORITY_DISTRIBUTION']= 'FedEx International Priority Distribution';
+$_['EUROPE_FIRST_INTERNATIONAL_PRIORITY']= 'FedEx Europe First International Priority';
+$_['INTERNATIONAL_PRIORITY_EXPRESS'] 	 = 'FedEx International Priority Express';
+$_['FEDEX_INTERNATIONAL_PRIORITY_PLUS']  = 'FedEx First International Priority Plus';
+$_['INTERNATIONAL_DISTRIBUTION_FREIGHT'] = 'FedEx International Distribution Fright';
+$_['FEDEX_1_DAY_FREIGHT']                = 'FedEx 1 Day Freight';
+$_['FEDEX_2_DAY_FREIGHT']                = 'FedEx 2 Day Freight';
+$_['FEDEX_3_DAY_FREIGHT']                = 'FedEx 3 Day Freight';
+$_['INTERNATIONAL_ECONOMY_FREIGHT']      = 'FedEx Economy Freight';
+$_['INTERNATIONAL_PRIORITY_FREIGHT']     = 'FedEx Priority Freight';
+$_['SMART_POST']                         = 'FedEx Smart Post';
+$_['FEDEX_FIRST_FREIGHT']                = 'FedEx First Freight';
+$_['FEDEX_FREIGHT_ECONOMY']              = 'FedEx Freight Economy';
+$_['FEDEX_FREIGHT_PRIORITY']             = 'FedEx Freight Priority';
+$_['FEDEX_CARGO_AIRPORT_TO_AIRPORT']             = 'FedEx CARGO Airport to Airport';
+$_['FEDEX_CARGO_FREIGHT_FORWARDING']             = 'FedEx CARGO Freight FOrwarding';
+$_['FEDEX_CARGO_INTERNATIONAL_EXPRESS_FREIGHT']  = 'FedEx CARGO International Express Fright';
+$_['FEDEX_CARGO_INTERNATIONAL_PREMIUM']          = 'FedEx CARGO International Premium';
+$_['FEDEX_CARGO_MAIL']                           = 'FedEx CARGO Mail';
+$_['FEDEX_CARGO_REGISTERED_MAIL']                = 'FedEx CARGO Registered Mail';
+$_['FEDEX_CARGO_SURFACE_MAIL']                   = 'FedEx CARGO Surface Mail';
+$_['FEDEX_CUSTOM_CRITICAL_AIR_EXPEDITE_EXCLUSIVE_USE']     = 'FedEx Custom Critical Air Expedite Exclusive Use';
+$_['FEDEX_CUSTOM_CRITICAL_AIR_EXPEDITE_NETWORK']           = 'FedEx Custom Critical Air Expedite Network';
+$_['FEDEX_CUSTOM_CRITICAL_CHARTER_AIR']                    = 'FedEx Custom Critical Charter Air';
+$_['FEDEX_CUSTOM_CRITICAL_POINT_TO_POINT']                 = 'FedEx Custom Critical Point to Point';
+$_['FEDEX_CUSTOM_CRITICAL_SURFACE_EXPEDITE']               = 'FedEx Custom Critical Surface Expedite';
+$_['FEDEX_CUSTOM_CRITICAL_SURFACE_EXPEDITE_EXCLUSIVE_USE'] = 'FedEx Custom Critical Surface Expedite Exclusive Use';
+$_['FEDEX_CUSTOM_CRITICAL_TEMP_ASSURE_AIR']                = 'FedEx Custom Critical Temp Assure Air';
+$_['FEDEX_CUSTOM_CRITICAL_TEMP_ASSURE_VALIDATED_AIR']      = 'FedEx Custom Critical Temp Assure Validated Air';
+$_['FEDEX_CUSTOM_CRITICAL_WHITE_GLOVE_SERVICES']           = 'FedEx Custom Critical White Glove Services';
+$_['TRANSBORDER_DISTRIBUTION_CONSOLIDATION']               = 'Fedex Transborder Distribution Consolidation';
+
+//UK domestic services 
+$_['FEDEX_DISTANCE_DEFERRED']            = 'FedEx Distance Deferred';
+$_['FEDEX_NEXT_DAY_EARLY_MORNING']       = 'FedEx Next Day Early Morning';
+$_['FEDEX_NEXT_DAY_MID_MORNING']         = 'FedEx Next Day Mid Morning';
+$_['FEDEX_NEXT_DAY_AFTERNOON']           = 'FedEx Next Day Afternoon';
+$_['FEDEX_NEXT_DAY_END_OF_DAY']          = 'FedEx Next Day End of Day';
+$_['FEDEX_NEXT_DAY_FREIGHT']             = 'FedEx Next Day Freight';
+$_['text_regular_pickup']               = 'Regular Pickup';
+$_['text_request_courier']                     = 'Request Courier';
+$_['text_your_packaging']                      = 'Your Packaging';
+$_['text_list_rate']                           = 'List Rate';
+$_['text_account_rate']                        = 'Account Rate';
+
+//shipping Address
+$_['entry_shipper_name']						= 'Shipper name';
+$_['entry_company_name']						= 'Company name';
+$_['entry_phone_num']						= 'Phone Number';
+$_['entry_email_addr']						= 'Email Address';
+$_['entry_address1']						= 'Address Line1';
+$_['entry_address2']						= 'Address Line2';
+$_['entry_city']						= 'City';
+$_['entry_state']						= 'State';
+$_['entry_country_code']						= 'Country Code';
+$_['entry_realtime_rates']						= 'Enable Real Time Rates';
+$_['entry_show_etd']                        = 'Show Estimated Date';
+$_['entry_insurance']						= 'Enable Insurance';
+
+//packing
+$_['_entry_weight']							= 'Weight/Dimension Unit';
+$_['_entry_kgcm']							= 'KG-CM';
+$_['_entry_lbin']							= 'LBS-IN';
+$_['_entry_packing_type']							= 'Choose packing type';
+$_['text_per_item']							= 'Default: Pack items individually ';
+$_['text_dhl_box']							= 'Recommended: Pack into boxes with weights and dimensions ';
+$_['text_dhl_weight_based']							= 'Weight based: Calculate shipping on the basis of order total weight ';
+$_['text_peritem_head']							= 'Configure Pack items individually (if choosed)';
+$_['text_box_head']							= 'Configure Pack into boxes with weights and dimensions (if choosed)';
+$_['text_weight_head']							= 'Configure Weight based (if choosed)';
+$_['text_box']							= 'DHL Box';
+$_['text_fly']							= 'Flyer';
+$_['text_dhl_yp']							= 'Your Pack';
+$_['text_enable']							= 'Enable';
+$_['text_disable']							= 'Disable';
+$_['text_head1']							="Name";
+$_['text_head2']							="Length";
+$_['text_head3']							="Width";
+$_['text_head4']							="Height";
+$_['text_head5']							="Box Weight";
+$_['text_head6']							="Max Weight";
+$_['text_head7']							="Enabled";
+$_['text_head8']							="Package Type";
+$_['text_head9']							="Add Box";
+$_['text_head10']							="Remove selected box(es)";
+$_['text_head11']							="Preloaded the Dimension and Weight in unit Inches and Pound. If you have selected unit as Centimetre and Kilogram please convert it accordingly.";
+$_['text_head12']							="Maximum Weight / Packing";
+$_['text_head13']							="Pack heavier items first";
+$_['text_head14']							="Pack lighter items first";
+$_['text_head15']							="Pack purely divided by weight";
+$_['text_head16']							="PaperLess Trade (PLT)";
+$_['text_head17']							="Saturday Delivery (SD)";
+$_['text_head18']							="DHL Tracking Message to Customers";
+$_['text_head19']							="Request Archive Air Waybill";
+$_['text_head20']							="Printing Size ";
+$_['text_head21']							="8X4_A4_PDF";
+$_['text_head22']							="8X4_thermal";
+$_['text_head23']							="8X4_A4_TC_PDF";
+$_['text_head24']							="8X4_CI_PDF";
+$_['text_head25']							="8X4_CI_thermal";
+$_['text_head26']							="8X4_RU_A4_PDF";
+$_['text_head27']							="8X4_PDF";
+$_['text_head28']							="8X4_CustBarCode_PDF";
+$_['text_head29']							="8X4_CustBarCode_thermal";
+$_['text_head30']							="6X4_A4_PDF";
+$_['text_head31']							="6X4_thermal";
+$_['text_head32']							="6X4_PDF";
+$_['text_head33']							="Label Output Type";
+$_['text_head34']							="PDF Output ";
+$_['text_head35']							="ZPL2 Output";
+$_['text_head36']							="EPL2 Output";
+$_['text_head37']							="None";
+$_['text_head38']							="Shipper";
+$_['text_head39']							="Recipient";
+$_['text_head40']							="Third Party/Other";
+$_['text_head41']							="Duty Payment";
+$_['text_head42']							="Shipping Content Description";
+$_['text_head43']							="Company Logo URL";
+
+//label
+$_['text_label']										="Configure Shipping Label";
+
+// Entry
+$_['entry_key']                                = 'Web Service Key';
+$_['entry_password']                           = 'Web Service Password';
+$_['entry_account']                            = 'Account Number';
+$_['entry_meter']                              = 'Meter Number';
+$_['entry_postcode']                           = 'Post Code';
+$_['entry_test']                               = 'Test Mode';
+$_['entry_service']                            = 'Services';
+$_['entry_dimension']                          = 'Box Dimensions (L x W x H)';
+$_['entry_length_class']                       = 'Length Class';
+$_['entry_length']                             = 'Length';
+$_['entry_width']                              = 'Width';
+$_['entry_height']                             = 'Height';
+$_['entry_dropoff_type']                       = 'Drop Off Type';
+$_['entry_packaging_type']                     = 'Packaging Type';
+$_['entry_rate_type']                          = 'Rate Type';
+$_['entry_display_time']                       = 'Debug Logs ( Orders Page )';
+$_['entry_front_end_logs']                     = 'Debug Logs ( Checkout Page )';
+$_['entry_display_weight']                     = 'Display Delivery Weight';
+$_['entry_weight_class']                       = 'Weight Class';
+$_['entry_tax_class']                          = 'Tax Class';
+$_['entry_geo_zone']                           = 'Geo Zone';
+$_['entry_status']                             = 'Status';
+$_['entry_sort_order']                         = 'Sort Order';
+
+// Help
+$_['help_length_class']                        = 'Set to inches or centimeters.';
+$_['help_display_time']                        = 'By Enabling this, you will get requst and reponse log in Orders Page';
+$_['help_display_weight']                      = 'Do you want to display the shipping weight? (e.g. Delivery Weight : 2.7674 kg)';
+$_['help_weight_class']                        = 'Set to kilograms or pounds.';
+
+// Error
+$_['error_permission']                         = 'Warning: You do not have permission to modify DHL Express shipping!';
+$_['error_key']                                = 'Key required!';
+$_['error_password']                           = 'Password required!';
+$_['error_account']                            = 'Account required!';
+$_['error_meter']                              = 'Meter required!';
+$_['error_postcode']                           = 'Post Code required!';
+$_['error_dimension']                          = 'Width &amp; Height required!';

@@ -1,0 +1,99 @@
+<div id="template-manager" class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">{{ heading_title }}</h4>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+          <div class="input-group">
+            <input type="text" name="search" value="" id="filter-search" placeholder="{{ entry_search }}" class="form-control">
+            <span class="input-group-btn">
+               <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span id="filter-provider" data-provider-code="*">{{ text_provider_all }}</span> <span class="caret"></span></button>
+               <ul class="dropdown-menu dropdown-menu-right">
+                 <li><a href="javascript:void(0);" class="filter-provider" data-filter=".sendgrid">{{ text_provider_sendgrid }}</a></li>
+                 <li><a href="javascript:void(0);" class="filter-provider" data-filter=".ocextensions">{{ text_provider_ocx }}</a></li>
+                 <li role="separator" class="divider"></li>
+                 <li><a href="javascript:void(0);" class="filter-provider" data-filter="*">{{ text_provider_all }}</a></li>
+               </ul>
+            </span>
+          </div>
+        </div>
+      </div>
+      <hr />
+      {% if templates %}
+      <div class="templates-list equal-height-columns">
+         <div class="row isotope-grid">
+           {% for template in templates %}
+           <div class="{{ template.provider }} col-md-3 col-sm-4 col-xs-6 text-center isotope-grid-item">
+              <div class="template-item equal-height-column">
+                <div class="thumbnail template-thumbnail" data-provider="{{ template.provider }}" data-template-id="{{ template.template_id }}">
+                   <a href="javascript:void(0);" class="template-preview"><i class="fa fa-search-plus"></i></a>
+                   <img class="lazy" src="{{ lazy }}" data-src="{{ template.image }}" alt="{{ template.name }}" title="{{ template.name }}" />
+                </div>
+                <div class="template-name isotope-template-name">{{ template.name }}</div>
+             </div>
+           </div>
+           {% endfor %}
+         </div>
+      </div>
+      {% endif %}
+    </div>
+    <div class="modal-footer hidden"></div>
+  </div>
+</div>
+<script type="text/javascript" src="view/javascript/isotope/isotope.pkgd.min.js"></script>
+<script type="text/javascript"><!--
+$(document).ready(function() {
+   SMInitLazyLoading();
+
+   var $isotope_grid = $('.isotope-grid').isotope({
+		// options
+		itemSelector: '.isotope-grid-item',
+		layoutMode: 'fitRows',
+		//stagger: 30,
+		transitionDuration: 500
+	});
+
+   // fix isotope item overlap
+   setTimeout(function () {
+      $isotope_grid.isotope('layout');
+   }, 50);
+
+	var filter_functions = {
+		isotope_search: function() {
+			var template_name = $(this).find('.template-name').text();
+			var search_term_reg_ex = new RegExp($('#template-manager #filter-search').val(), 'gi');
+
+			var providers = $(this).attr('class');
+			var selected_provider = $('#template-manager #filter-provider').attr('data-provider-code').replace(/\./g, '');
+
+         if (selected_provider == '*') {
+            selected_provider = '';
+         }
+
+			var search_provider_reg_ex = new RegExp(selected_provider, 'gi');
+
+			return template_name.match(search_term_reg_ex) && providers.match(search_provider_reg_ex);
+		}
+	};
+
+	$('#template-manager #filter-search').on('keyup', debounce( function() {
+			$isotope_grid.isotope({ filter: filter_functions['isotope_search'] });
+		}, 200)
+	);
+
+	$('.filter-provider').on('click', function() {
+		// set label value first to allow later to get it in search function
+		$('#filter-provider').attr('data-provider-code', $(this).attr('data-filter')).html($(this).html());
+
+		$isotope_grid.isotope({ filter: filter_functions['isotope_search'] });
+	});
+
+	// force lazy loading to update images after rearange
+	$isotope_grid.on('arrangeComplete', function( event, filteredItems ) {
+      SMInitLazyUpdate();
+	});
+});
+--></script>

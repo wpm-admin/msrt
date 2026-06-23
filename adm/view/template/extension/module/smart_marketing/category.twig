@@ -1,0 +1,77 @@
+<div id="category-fetch" class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+           <div class="category-search action-container">
+             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+             <input type="text" name="category" value="" placeholder="{{ entry_category }}" class="input-lg form-control" />
+           </div>
+        </div>
+      </div>
+    </div>
+    <div class="loading-mask-overlay">
+      <div class="loading-mask-loading fixed">
+         <div class='uil-ripple-css'><div></div><div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#modal-category input[name=\'category\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/module/smart_marketing/category/autocomplete&user_token={{ user_token }}&filter_search=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['category_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('#modal-category input[name=\'category\']').val(item['label']);
+
+      $.ajax({
+         type: 'POST',
+         url: 'index.php?route=extension/module/smart_marketing/category/import&user_token=' + getURLVar('user_token'),
+         data: 'categories_ids=' + item['value'],
+         dataType: 'json',
+         beforeSend: function() {
+            $('#modal-category .loading-mask-overlay').show();
+         },
+         complete: function() {
+            $('#modal-category .loading-mask-overlay').hide();
+         },
+         success: function(json) {
+            if (json['categories'][0]) {
+               var category_info = json['categories'][0];
+               var component_id = smc_grapesjs_editor.getSelected().getId();
+
+               // add an attribute "product-fetch-id" to help me identify in exp. code
+               smc_grapesjs_editor.getSelected().addAttributes({'category-fetch-id' : component_id });
+
+               var template = SMGetTemplateWithFetchedCategory(component_id, category_info);
+
+               // get current scroll position
+               scroll_position = $('.smc-editor .gjs-cv-canvas .gjs-frame').contents().scrollTop();
+
+               // set template back after product replace :(
+               smc_grapesjs_editor.DomComponents.getWrapper().set('content', '');
+               smc_grapesjs_editor.setComponents(template);
+
+               // scroll back to level used before replacing content
+               $('.smc-editor .gjs-cv-canvas .gjs-frame').contents().scrollTop(scroll_position);
+            }
+
+            $('#modal-category').modal('hide');
+            $('#modal-category').remove();
+         }
+      });
+	}
+});
+--></script>

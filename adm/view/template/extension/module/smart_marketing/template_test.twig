@@ -1,0 +1,57 @@
+<div id="template-test" class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">{{ heading_title }}</h4>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <input type="text" name="test_recipient" value="" placeholder="{{ entry_test_recipient }}" class="input-lg form-control" />
+            <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_test_recipient }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0);" id="btn-send-test" class="btn btn-success btn-block text-uppercase">{{ button_send_test }}</a>
+    </div>
+    <div class="loading-mask-overlay">
+      <div class="loading-mask-loading fixed">
+         <div class='uil-ripple-css'><div></div><div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#btn-send-test').on('click', function() {
+   var active_form = (getURLVar('route').match(/.*smart_marketing\/campaign/)) ? 'campaign' : 'template';
+
+   $.ajax({
+      type: 'POST',
+      url: 'index.php?route=extension/module/smart_marketing/template/sendTest&user_token=' + getURLVar('user_token'),
+      data: $('#form-' + active_form).serialize() + '&test_recipient=' + encodeURIComponent($('input[name=\'test_recipient\']').val()),
+      dataType: 'json',
+      beforeSend: function() {
+         $('#modal-send-test .loading-mask-overlay').show();
+      },
+      complete: function() {
+         $('#modal-send-test .loading-mask-overlay').hide();
+      },
+      success: function(json) {
+         $('#modal-send-test .alert').remove();
+
+         if (json['error']) {
+            $('#modal-send-test .modal-content .modal-body').prepend('<div class="alert alert-danger"><i class="fa fa-fw fa-exclamation-circle"></i> ' + json['error'] + ' <button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+         }
+
+         if (json['success']) {
+            $('#modal-send-test .modal-content .modal-body').prepend('<div class="alert alert-success"><i class="fa fa-fw fa-check-circle"></i> ' + json['success'] + '</div>');
+
+            setTimeout(function () {
+               $('#modal-send-test').modal('hide');
+            }, 2000);
+         }
+      }
+   });
+});
+--></script>

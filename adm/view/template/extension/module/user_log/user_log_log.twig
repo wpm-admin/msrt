@@ -1,0 +1,214 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+					<a class="btn btn-primary" title="" data-toggle="tooltip" href="{{ action_setting }}" data-original-title="{{ button_setting }}"><i class="fa fa-cog"></i></a>
+					<a class="btn btn-warning" title="" data-toggle="tooltip" href="{{ clear_action }}" data-original-title="{{ button_clear }}"><i class="fa fa-eraser"></i></a>
+					<button onclick="confirm('{{ text_confirm }}') ? $('#records').submit() : false;" class="btn btn-danger" title="" data-toggle="tooltip" type="button" data-original-title="{{ button_delete }}"><i class="fa fa-trash-o"></i></button>					
+      </div>
+      <h1>{{ heading_log }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+	{% if (error_warning) %} 
+	<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %} 
+	{% if (success) %} 
+	<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %} 
+  <nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="nav navbar-nav navbar-left">
+			{% for nav in navs %}
+			<a href="{{ nav['href'] }}" class="btn btn-default navbar-btn {{ nav['active'] }}">{{ nav['text'] }}</a>
+			{% endfor %}
+		</div>
+	</div>
+  </nav>  
+  
+	<div class="panel panel-body">
+		<div class="panel-heading">
+			<h3 class="panel-title"><i class="fa fa-list"></i> {{ heading_action_list }}</h3>
+		</div>  
+
+		<form action="{{ delete_action }}" method="post" id="records">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<div class="pull-right" style="margin-bottom:20px">
+								<a class="btn btn-info" id="clear_filters"><i class="fa fa-remove"></i> {{ text_clear_filtres }}</a>
+								<a class="btn btn-primary" id="apply_filters"><i class="fa fa-refresh"></i> {{ text_apply_filtres }}</a>
+							</div>
+							<thead>
+								<tr class="active">
+									<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+									<td class="left">{{ column_user }}</td>
+									<td class="left">{{ column_action }}</td>
+									<td class="left">{{ column_result }}</td>
+									<td class="left">{{ column_url }}</td>
+									<td class="left">Действие</td>
+									<td class="left">{{ column_ip }}</td>
+									<td class="left">{{ column_date }}</td>
+								</tr>
+								<tr class="info filter">
+									<td></td>
+									<td><select name="filter_user_id" class="form-control">
+											<option value=""></option>
+											{% for user in users %} 
+											<option value="{{ user['user_id'] }}"{{ filter_user_id == user['user_id']? ' selected="selected"':'' }}>{{ user['username'] }}</option>
+											{% endfor %} 
+                                    </select></td>
+									<td></td>
+									<td><select name="filter_action" class="form-control">
+										<option value=""></option>
+                                            <option value="1"{{ filter_action == '1'? ' selected="selected"':'' }}>Good</option>
+                                            <option value="0"{{ filter_action == '0'? ' selected="selected"':'' }}>Failed</option>
+                                    </select></td>
+									<td><input name="filter_url" class="form-control" value="{{ filter_url }}" /></td>
+									<td></td>
+									<td></td>
+									<td>
+                                        <div class="input-horizontal input-group date">
+											<input type="text" class="form-control" data-format="YYYY-MM-DD" placeholder="YYYY-MM-DD" name="filter_start" value="{{ filter_start }}">
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+											</span>
+										</div>
+                                        <div class="input-horizontal">
+											&nbsp;to&nbsp;
+										</div>
+										<div class="input-horizontal input-group date">
+											<input type="text" class="form-control" data-format="YYYY-MM-DD" placeholder="YYYY-MM-DD" name="filter_end" value="{{ filter_end }}">
+											<span class="input-group-btn">
+												<button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+											</span>
+										</div>
+									</td>
+								</tr>								
+							</thead>
+							{% if (records) %} 
+							<tbody>
+								{% for record in records %} 
+									{% set class = record['result']? '': 'class="failed"' %} 
+								<tr {{ class }}>
+									<td style="text-align: center;"><input type="checkbox" name="selected[]" value="{{ record['user_log_id'] }}" /></td>
+									<td class="left"><a href="{{ record['user'] }}" target="_blank">{{ record['user_name'] }}</a></td>
+									<td class="left">{{ record['action'] }}</td>
+									<td class="left">{{ record['result'] }}</td>
+									<td class="left">{{ record['url'] }}</td>
+									<td class="left">{{ record['action_descr'] }}
+									{% if record['action'] == 'modify' %}
+									
+									<button class="btn btn-link post-view" type="button" data-user_log_id="{{ record['user_log_id'] }}"><i class="fa fa-eye"></i></button>
+									{% endif %}
+
+									
+									</td>
+						            <td class="left">{{ record['ip'] }}</td>
+									<td class="left">{{ record['date']|date("Y-m-d H:i:s") }}</td>
+								</tr>
+								{% endfor %} 
+							{% else %} 
+								<tr>
+									<td class="center" colspan="7">{{ text_no_results }}</td>
+								</tr>
+							{% endif %} 
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="row">
+			<div class="col-sm-6 text-left">{{ pagination }}</div>
+			<div class="col-sm-6 text-right">{{ result }}</div>
+		</div>		
+	</div>
+  </div>
+</div>
+<div id="log-post" class="modal fade" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title"><i class="fa fa-bar-chart-o"></i> {{ heading_title_post_view }}</h4>
+			</div>
+			<div class="modal-body">
+			<pre id="body-post">
+			</pre>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">{{ button_close }}</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<script type="text/javascript"><!--
+function get_filters() {
+	var result = [];
+	if ($('select[name="filter_user_id"]').val() != "") {
+		result.push("filter_user_id=" + $('select[name="filter_user_id"]').val());
+	}
+	if ($('select[name="filter_action"]').val() != "") {
+		result.push("filter_action=" + $('select[name="filter_action"]').val());
+	}
+	if ($('input[name="filter_start"]').val() != "") {
+		result.push("filter_start=" + $('input[name="filter_start"]').val());
+	}
+
+	if ($('input[name="filter_url"]').val() != "") {
+		result.push("filter_url=" + $('input[name="filter_url"]').val());
+	}
+
+	if ($('input[name="filter_end"]').val() != "") {
+		result.push("filter_end=" + $('input[name="filter_end"]').val());
+	}
+	return result.length ? '&' + result.join('&') : '';
+}
+function clear_filters(callback){
+	$('.filter select, .filter input').val('');
+	location = '?route=extension/module/user_log/view_log&user_token={{ user_token }}'
+//	if (callback) callback();
+}
+$('#apply_filters').click(function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	var href = '?route=extension/module/user_log/view_log&user_token={{ user_token }}' + get_filters();
+	location = href;
+});
+$('#clear_filters').click(function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	clear_filters()
+});
+$('.post-view').click(function(e) {
+	$('#body-post').html('');
+	var url = '{{ post_view }}';
+	var user_log_id = $(this).attr('data-user_log_id');
+	if (user_log_id) {
+		url += '&user_log_id=' + user_log_id;
+		$('#body-post').load(url, function(){$('#log-post').modal().show()});
+	}
+});
+
+//--></script>
+			
+<script type="text/javascript"><!--
+$('.date').datetimepicker({
+	pickTime: false,
+	format: 'YYYY-MM-DD'
+});
+//--></script>
+{{ footer }}

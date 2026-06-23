@@ -1,0 +1,91 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+
+      <h1>{{ heading_title }}</h1>
+     
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">{% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+	<div class="container-fluid">
+    <div class="col-xs-6">
+      <h4>Vendor import/export</h4>
+      <ul>
+        <li>VendorId</li>
+        <li>Name</li>
+        <li>Email</li>
+        <li>Main Phone number</li>
+        <li>Fax</li>
+        <li>Prefix</li>
+        <li>AccountNumber</li>
+        <li>Mobile</li>
+        <li>Web</li>
+        <li>Work</li>
+        <li>Country</li>
+        <li>State</li>
+        <li>City</li>
+        <li>Zip</li>
+        <li>Address</li>
+      </ul>
+      <form action="{{ import }}" method="post" enctype="multipart/form-data" class="btn" style="width: 430px;border: 1px solid #ddd;margin-right: 20px;">
+        <input type="file" name="upload" style="float: left;margin-right: 30px;margin-top: 8px">
+        <input type="checkbox" name="action" checked value="1" title="Писать в базу" style="float: left;margin-right: 20px;margin-top: 10px;border: 1px solid #f00;">
+        <input type="submit" name="Import" value="Import Vendors" class="btn btn-primary" style="float: left;">
+      </form>
+      
+    
+      <br><br>
+      <a href="{{ export }}" data-toggle="tooltip" title="Export Vendors" class="btn btn-default"><i class="fa fa-reply"></i> Export Vendors</a>
+      <br><br>
+    </div>
+
+    <div class="col-xs-6">
+      <h4>Vendor products import</h4>
+      <ul>
+        <li>VendorId</li>
+        <li>VendorName</li>
+        <li>CodeManual</li>
+        <li>VendorCodeManual</li>
+        <li>VendorFishbowl N</li>
+        <li>Cost</li>
+        <li>ProductName</li>
+        <li>Quantity</li>
+        <li>Status</li>
+        <li>Comment</li>
+      </ul>
+
+      <form action="{{ import_products }}" method="post" enctype="multipart/form-data" class="btn" style="width: 430px;border: 1px solid #ddd;margin-right: 20px;">
+        <input type="file" name="upload" style="float: left;margin-right: 30px;margin-top: 8px">
+        <input type="checkbox" name="action" checked value="1" title="Писать в базу" style="float: left;margin-right: 20px;margin-top: 10px;border: 1px solid #f00;">
+        <input type="submit" name="Import" value="Import Vendor Products Links" class="btn btn-primary" style="float: left;">
+      </form>
+      
+      <br><br>
+      <a href="{{ export_products }}" data-toggle="tooltip" title="Export Vendors" class="btn btn-default"><i class="fa fa-reply"></i> Export Vendor Products</a>
+      <br><br>
+
+    </div>
+    
+  </div>
+ 
+ 
+  </div>
+   
+ 
+</div>
+{{ footer }} 

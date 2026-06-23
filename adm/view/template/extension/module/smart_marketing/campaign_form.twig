@@ -1,0 +1,1123 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" id="btn-save-campaign" form="form-campaign" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary loading-mask-trigger"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-campaign" class="form-horizontal">
+            <fieldset>
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+                  {% if error_name %}
+                  <div class="text-danger">{{ error_name }}</div>
+                  {% endif %}
+                  <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_name }}</div>
+                </div>
+              </div>
+
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                    <select name="status" class="form-control">
+                       {% if status %}
+                       <option value="0">{{ text_disabled }}</option>
+                       <option value="1" selected="selected">{{ text_enabled }}</option>
+                       {% else %}
+                       <option value="0" selected="selected">{{ text_disabled }}</option>
+                       <option value="1">{{ text_enabled }}</option>
+                       {% endif %}
+                    </select>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+               <legend class="small text-center text-uppercase">{{ legend_recipient }}</legend>
+
+               <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-segmentation-type">{{ entry_segmentation_type }}</label>
+                  <div class="col-sm-10">
+                     <select name="segmentation_type" class="form-control">
+                        {% if segmentation_type == 'subscriber' %}
+                        <option value="subscriber" selected="selected" data-segmentation-match-display="false">{{ text_subscriber }}</option>
+                        {% else %}
+                        <option value="subscriber" data-segmentation-match-display="false">{{ text_subscriber }}</option>
+                        {% endif %}
+
+                        {% if segmentation_type == 'customer' %}
+                        <option value="customer" selected="selected" data-segmentation-match-display="false">{{ text_customer }}</option>
+                        {% else %}
+                        <option value="customer" data-segmentation-match-display="false">{{ text_customer }}</option>
+                        {% endif %}
+
+                        {% if segmentation_type == 'customer_group' %}
+                        <option value="customer_group" selected="selected" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_group }}</option>
+                        {% else %}
+                        <option value="customer_group" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_group }}</option>
+                        {% endif %}
+
+                        {% if segmentation_type == 'customer_who_bought_product' %}
+                        <option value="customer_who_bought_product" selected="selected" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_who_bought_product }}</option>
+                        {% else %}
+                        <option value="customer_who_bought_product" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_who_bought_product }}</option>
+                        {% endif %}
+
+                        {% if segmentation_type == 'customer_total_spent' %}
+                        <option value="customer_total_spent" selected="selected" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_total_spent }}</option>
+                        {% else %}
+                        <option value="customer_total_spent" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_total_spent }}</option>
+                        {% endif %}
+
+                        {% if segmentation_type == 'customer_order_count' %}
+                        <option value="customer_order_count" selected="selected" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_order_count }}</option>
+                        {% else %}
+                        <option value="customer_order_count" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_order_count }}</option>
+                        {% endif %}
+
+                        {% if segmentation_type == 'customer_last_order' %}
+                        <option value="customer_last_order" selected="selected" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_last_order }}</option>
+                        {% else %}
+                        <option value="customer_last_order" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_last_order }}</option>
+                        {% endif %}
+
+                        {% if customer_activity_logged %}
+                           {% if segmentation_type == 'customer_last_login' %}
+                           <option value="customer_last_login" selected="selected" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_last_login }}</option>
+                           {% else %}
+                           <option value="customer_last_login" data-segmentation-match-display="false" data-segmentation-match-default="or">{{ text_customer_last_login }}</option>
+                           {% endif %}
+                        {% endif %}
+
+                        {% if segmentation_type == 'advanced_segment' %}
+                        <option value="advanced_segment" selected="selected" data-segmentation-match-display="true" data-segmentation-match-default="">{{ text_subscriber_segment }}</option>
+                        {% else %}
+                        <option value="advanced_segment" data-segmentation-match-display="true" data-segmentation-match-default="">{{ text_subscriber_segment }}</option>
+                        {% endif %}
+                     </select>
+
+                     {% if error_segmentation_type %}
+                     <div class="text-danger">{{ error_segmentation_type }}</div>
+                     {% endif %}
+                  </div>
+               </div>
+               <div class="form-group segmentation-match required">
+                 <div class="col-sm-10 col-sm-offset-2">
+                    <div class="input-group">
+                      <span class="input-group-addon input-group-addon-transparent">{{ text_segmentation_match }}</span>
+                      <select name="segmentation_match" class="form-control">
+                         <option value="">{{ text_select }}</option>
+
+                         {% if segmentation_match == 'or' %}
+                         <option value="or" selected="selected">{{ text_any_condition }}</option>
+                         {% else %}
+                         <option value="or">{{ text_any_condition }}</option>
+                         {% endif %}
+
+                         {% if segmentation_match == 'and' %}
+                         <option value="and" selected="selected">{{ text_all_condition }}</option>
+                         {% else %}
+                         <option value="and">{{ text_all_condition }}</option>
+                         {% endif %}
+
+                      </select>
+                      <span class="input-group-addon input-group-addon-transparent">{{ text_following_condition }}</span>
+                    </div>
+
+                    {% if error_segmentation_match %}
+                    <div class="text-danger">{{ error_segmentation_match }}</div>
+                    {% endif %}
+                 </div>
+               </div>
+
+               {% set sc_customer_group_row = 0 %}
+
+               <div class="form-group segmentation-case segmentation-customer-group required">
+                  <div class="col-sm-10 col-sm-offset-2">
+                     <div class="input-group">
+                        <span class="input-group-addon">{{ entry_customer_group }}</span>
+                        <input type="text" name="customer_group" value="" placeholder="{{ entry_customer_group }}" id="input-customer-group" class="form-control" />
+                     </div>
+                     <div id="segmentation-condition-customer-group" class="well well-sm" style="margin-top: 10px; height: 100px; overflow: auto;">
+                        {% if segmentation_condition['customer_group'] %}
+                        {% for segment_condition in segmentation_condition.customer_group %}
+                        {% for customer_group in customer_groups %}
+                        {% if segment_condition.value == customer_group.customer_group_id %}
+                        <div id="segmentation-condition-customer-group-{{ customer_group.customer_group_id }}"><i class="fa fa-minus-circle"></i> {{ customer_group.name }}
+                           <input type="hidden" name="segmentation_condition[customer_group][{{ sc_customer_group_row }}][key]" value="{{ segment_condition.key }}" />
+                           <input type="hidden" name="segmentation_condition[customer_group][{{ sc_customer_group_row }}][operator]" value="{{ segment_condition.operator }}" />
+                           <input type="hidden" name="segmentation_condition[customer_group][{{ sc_customer_group_row }}][value]" value="{{ segment_condition.value }}" />
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% set sc_customer_group_row = sc_customer_group_row + 1 %}
+                        {% endfor %}
+                        {% endif %}
+                     </div>
+
+                     {% if error_segmentation_condition['customer_group'] %}
+                     <div class="text-danger">{{ error_segmentation_condition.customer_group }}</div>
+                     {% endif %}
+                  </div>
+               </div>
+
+               {% set sc_bought_product_row = 2 %}
+
+               <div class="form-group segmentation-case segmentation-customer-who-bought-product required">
+                  <div class="col-sm-10 col-sm-offset-2">
+                     <div class="input-group">
+                        <span class="input-group-addon">{{ entry_product }}</span>
+                        <input type="text" name="product" value="" placeholder="{{ entry_product }}" id="input-product" class="form-control" />
+                     </div>
+                     <div id="segmentation-condition-customer-who-bought-product" class="well well-sm" style="margin-top: 10px; height: 100px; overflow: auto;">
+                        {% if segmentation_condition['customer_who_bought_product'] %}
+                        {% for segment_condition in segmentation_condition.customer_who_bought_product %}
+                        {% for product in products %}
+                        {% if segment_condition.key == 'product_id' and segment_condition.value == product.product_id %}
+                        <div id="segmentation-condition-customer-who-bought-product-{{ product.product_id }}"><i class="fa fa-minus-circle"></i> {{ product.name }}
+                           <input type="hidden" name="segmentation_condition[customer_who_bought_product][{{ sc_bought_product_row }}][key]" value="{{ segment_condition.key }}" />
+                           <input type="hidden" name="segmentation_condition[customer_who_bought_product][{{ sc_bought_product_row }}][operator]" value="{{ segment_condition.operator }}" />
+                           <input type="hidden" name="segmentation_condition[customer_who_bought_product][{{ sc_bought_product_row }}][value]" value="{{ segment_condition.value }}" />
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% set sc_bought_product_row = sc_bought_product_row + 1 %}
+                        {% endfor %}
+                        {% endif %}
+                     </div>
+
+                     {% if error_segmentation_condition['customer_who_bought_product'] %}
+                     <div class="text-danger extra-space">{{ error_segmentation_condition.customer_who_bought_product }}</div>
+                     {% endif %}
+
+                     <table class="table">
+                        <tr>
+                           <td class="text-left">
+                              <input type="hidden" name="segmentation_condition[customer_who_bought_product][0][key]" value="date_start" />
+                              <input type="hidden" name="segmentation_condition[customer_who_bought_product][0][operator]" value="is-after-or-equal" />
+
+                              <div class="input-group date">
+                                 <span class="input-group-addon">{{ entry_date_start }}</span>
+                                 <input type="text" name="segmentation_condition[customer_who_bought_product][0][value]" value="{{ segmentation_condition['customer_who_bought_product'][0].value ? segmentation_condition['customer_who_bought_product'][0].value : '' }}" placeholder="{{ entry_date_start }}" data-date-format="YYYY-MM-DD" class="form-control" />
+                                 <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                 </span>
+                              </div>
+                           </td>
+                           <td class="text-left">
+                              <input type="hidden" name="segmentation_condition[customer_who_bought_product][1][key]" value="date_end" />
+                              <input type="hidden" name="segmentation_condition[customer_who_bought_product][1][operator]" value="is-before-or-equal" />
+
+                              <div class="input-group date">
+                                 <span class="input-group-addon">{{ entry_date_end }}</span>
+                                 <input type="text" name="segmentation_condition[customer_who_bought_product][1][value]" value="{{ segmentation_condition['customer_who_bought_product'][1].value ? segmentation_condition['customer_who_bought_product'][1].value : '' }}" placeholder="{{ entry_date_end }}" data-date-format="YYYY-MM-DD" class="form-control" />
+                                 <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                                 </span>
+                              </div>
+                           </td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+
+               <div class="form-group segmentation-case segmentation-customer-total-spent required">
+                  <div class="col-sm-10 col-sm-offset-2">
+                     <table class="table">
+                        <tbody>
+                           <tr>
+                              <td class="left">
+                                 <select name="segmentation_condition[customer_total_spent][0][key]" class="form-control" readonly>
+                                    <option value="customer_total_spent" selected="selected">{{ entry_total_spent }}</option>
+                                 </select>
+                              </td>
+                              <td>
+                                 <select name="segmentation_condition[customer_total_spent][0][operator]" class="form-control">
+                                    <option value="">{{ text_select }}</option>
+                                    {% if segmentation_condition['customer_total_spent'][0].operator and segmentation_condition['customer_total_spent'][0].operator == 'equal' %}
+                                    <option value="equal" selected="selected">{{ text_operator_is }}</option>
+                                    {% else %}
+                                    <option value="equal">{{ text_operator_is }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_total_spent'][0].operator and segmentation_condition['customer_total_spent'][0].operator == 'not-equal' %}
+                                    <option value="not-equal" selected="selected">{{ text_operator_is_not }}</option>
+                                    {% else %}
+                                    <option value="not-equal">{{ text_operator_is_not }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_total_spent'][0].operator and segmentation_condition['customer_total_spent'][0].operator == 'greater' %}
+                                    <option value="greater" selected="selected">{{ text_operator_greater_than }}</option>
+                                    {% else %}
+                                    <option value="greater">{{ text_operator_greater_than }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_total_spent'][0].operator and segmentation_condition['customer_total_spent'][0].operator == 'less' %}
+                                    <option value="less" selected="selected">{{ text_operator_less_than }}</option>
+                                    {% else %}
+                                    <option value="less">{{ text_operator_less_than }}</option>
+                                    {% endif %}
+                                 </select>
+                              </td>
+                              <td>
+                                 <div class="input-group">
+                                    {% if currency_symbol_left %}
+                                    <span class="input-group-addon">{{ currency_symbol_left }}</span>
+                                    {% endif %}
+                                    <input type="text" name="segmentation_condition[customer_total_spent][0][value]" value="{{ segmentation_condition['customer_total_spent'][0].value ? segmentation_condition['customer_total_spent'][0].value : '' }}" class="form-control" />
+                                    {% if currency_symbol_right %}
+                                    <span class="input-group-addon">{{ currency_symbol_right }}</span>
+                                    {% endif %}
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+
+                     {% if error_segmentation_condition['customer_total_spent'] %}
+                     <div class="text-danger">{{ error_segmentation_condition.customer_total_spent }}</div>
+                     {% endif %}
+                  </div>
+               </div>
+
+               <div class="form-group segmentation-case segmentation-customer-order-count required">
+                  <div class="col-sm-10 col-sm-offset-2">
+                     <table class="table">
+                        <tbody>
+                           <tr>
+                              <td class="left">
+                                 <select name="segmentation_condition[customer_order_count][0][key]"  class="form-control" readonly>
+                                    <option value="customer_order_count" selected="selected">{{ entry_order_count }}</option>
+                                 </select>
+                              </td>
+                              <td class="left">
+                                 <select name="segmentation_condition[customer_order_count][0][operator]" class="form-control">
+                                    <option value="">{{ text_select }}</option>
+                                    {% if segmentation_condition['customer_order_count'][0].operator and segmentation_condition['customer_order_count'][0].operator == 'equal' %}
+                                    <option value="equal" selected="selected">{{ text_operator_is }}</option>
+                                    {% else %}
+                                    <option value="equal">{{ text_operator_is }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_order_count'][0].operator and segmentation_condition['customer_order_count'][0].operator == 'not-equal' %}
+                                    <option value="not-equal" selected="selected">{{ text_operator_is_not }}</option>
+                                    {% else %}
+                                    <option value="not-equal">{{ text_operator_is_not }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_order_count'][0].operator and segmentation_condition['customer_order_count'][0].operator == 'greater' %}
+                                    <option value="greater" selected="selected">{{ text_operator_greater_than }}</option>
+                                    {% else %}
+                                    <option value="greater">{{ text_operator_greater_than }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_order_count'][0].operator and segmentation_condition['customer_order_count'][0].operator == 'less' %}
+                                    <option value="less" selected="selected">{{ text_operator_less_than }}</option>
+                                    {% else %}
+                                    <option value="less">{{ text_operator_less_than }}</option>
+                                    {% endif %}
+                                 </select>
+                              </td>
+                              <td class="left">
+                                 <input type="text" name="segmentation_condition[customer_order_count][0][value]" value="{{ segmentation_condition['customer_order_count'][0].value ? segmentation_condition['customer_order_count'][0].value : '' }}" class="form-control" />
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+
+                     {% if error_segmentation_condition['customer_order_count'] %}
+                     <div class="text-danger">{{ error_segmentation_condition['customer_order_count'] }}</div>
+                     {% endif %}
+                  </div>
+               </div>
+
+               <div class="form-group segmentation-case segmentation-customer-last-order required">
+                  <div class="col-sm-10 col-sm-offset-2">
+                     <table class="table">
+                        <tbody>
+                           <tr>
+                              <td class="left">
+                                 <select name="segmentation_condition[customer_last_order][0][key]"  class="form-control" readonly>
+                                    <option value="customer_last_order" selected="selected">{{ entry_last_order }}</option>
+                                 </select>
+                              </td>
+                              <td class="left">
+                                 <select name="segmentation_condition[customer_last_order][0][operator]" class="form-control">
+                                    <option value="">{{ text_select }}</option>
+                                    {% if segmentation_condition['customer_last_order'][0].operator and segmentation_condition['customer_last_order'][0].operator == 'equal' %}
+                                    <option value="equal" selected="selected">{{ text_operator_is }}</option>
+                                    {% else %}
+                                    <option value="equal">{{ text_operator_is }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_last_order'][0].operator and segmentation_condition['customer_last_order'][0].operator == 'not-equal' %}
+                                    <option value="not-equal" selected="selected">{{ text_operator_is_not }}</option>
+                                    {% else %}
+                                    <option value="not-equal">{{ text_operator_is_not }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_last_order'][0].operator and segmentation_condition['customer_last_order'][0].operator == 'greater' %}
+                                    <option value="greater" selected="selected">{{ text_operator_greater_than }}</option>
+                                    {% else %}
+                                    <option value="greater">{{ text_operator_greater_than }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_last_order'][0].operator and segmentation_condition['customer_last_order'][0].operator == 'less' %}
+                                    <option value="less" selected="selected">{{ text_operator_less_than }}</option>
+                                    {% else %}
+                                    <option value="less">{{ text_operator_less_than }}</option>
+                                    {% endif %}
+                                 </select>
+                              </td>
+                              <td class="left">
+                                 <div class="input-group">
+                                    <input type="text" name="segmentation_condition[customer_last_order][0][value]" value="{{ segmentation_condition['customer_last_order'][0].value ? segmentation_condition['customer_last_order'][0].value : '' }}" class="form-control" />
+                                    <span class="input-group-addon">{{ text_day_ago }}</span>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+
+                     {% if error_segmentation_condition['customer_last_order'] %}
+                     <div class="text-danger">{{ error_segmentation_condition.customer_last_order }}</div>
+                     {% endif %}
+                  </div>
+               </div>
+
+               {% if customer_activity_logged %}
+               <div class="form-group segmentation-case segmentation-customer-last-login required">
+                  <div class="col-sm-10 col-sm-offset-2">
+                     <table class="table">
+                        <tbody>
+                           <tr>
+                              <td class="left">
+                                 <select name="segmentation_condition[customer_last_login][0][key]"  class="form-control" readonly>
+                                    <option value="customer_last_login" selected="selected">{{ entry_last_login }}</option>
+                                 </select>
+                              </td>
+                              <td class="left">
+                                 <select name="segmentation_condition[customer_last_login][0][operator]" class="form-control">
+                                    <option value="">{{ text_select }}</option>
+                                    {% if segmentation_condition['customer_last_login'][0].operator and segmentation_condition['customer_last_login'][0].operator == 'equal' %}
+                                    <option value="equal" selected="selected">{{ text_operator_is }}</option>
+                                    {% else %}
+                                    <option value="equal">{{ text_operator_is }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_last_login'][0].operator and segmentation_condition['customer_last_login'][0].operator == 'not-equal' %}
+                                    <option value="not-equal" selected="selected">{{ text_operator_is_not }}</option>
+                                    {% else %}
+                                    <option value="not-equal">{{ text_operator_is_not }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_last_login'][0].operator and segmentation_condition['customer_last_login'][0].operator == 'greater' %}
+                                    <option value="greater" selected="selected">{{ text_operator_greater_than }}</option>
+                                    {% else %}
+                                    <option value="greater">{{ text_operator_greater_than }}</option>
+                                    {% endif %}
+
+                                    {% if segmentation_condition['customer_last_login'][0].operator and segmentation_condition['customer_last_login'][0].operator == 'less' %}
+                                    <option value="less" selected="selected">{{ text_operator_less_than }}</option>
+                                    {% else %}
+                                    <option value="less">{{ text_operator_less_than }}</option>
+                                    {% endif %}
+                                 </select>
+                              </td>
+                              <td class="left">
+                                 <div class="input-group">
+                                    <input type="text" name="segmentation_condition[customer_last_login][0][value]" value="{{ segmentation_condition['customer_last_login'][0].value ? segmentation_condition['customer_last_login'][0].value : '' }}" class="form-control" />
+                                    <span class="input-group-addon">{{ text_day_ago }}</span>
+                                 </div>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+
+                     {% if error_segmentation_condition['customer_last_login'] %}
+                     <div class="text-danger">{{ error_segmentation_condition.customer_last_login }}</div>
+                     {% endif %}
+                  </div>
+               </div>
+               {% endif %}
+
+               <div class="form-group required segmentation-case segmentation-advanced-segment required">
+                  <div class="col-sm-10 col-sm-offset-2">
+                     <table class="table" id="advanced-segment-conditions">
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                           <tr>
+                              <td class="text-left" colspan="4"><a href="javascript:void(0);" class="" onclick="addAdvancedSegmentationCondition();"><i class="fa fa-plus-circle"></i> {{ button_add_condition }}</a></td>
+                           </tr>
+                        </tfoot>
+                     </table>
+
+                     {% if error_segmentation_condition['advanced_segment'] %}
+                     <div class="text-danger">{{ error_segmentation_condition.advanced_segment }}</div>
+                     {% endif %}
+                  </div>
+               </div>
+
+               <div class="form-group">
+                  <div class="col-sm-10 col-sm-offset-2">
+                     <div class="segmentation-count">
+                        <div class="info">
+                           {% if error_recipient_total %}
+                           <div class="text-danger"><i class="fa fa-fw fa-arrow-up"></i> {{ error_recipient_total }} <i class="fa fa-fw fa-arrow-up"></i></div>
+                           {% else %}
+                           {{ help_update_recipient_count }}
+                           {% endif %}
+                        </div>
+                        <div class="icon segmentation-count-update" data-toggle="tooltip" title="{{ button_update_recipient_count }}"><i class="fa fa-refresh"></i></div>
+                     </div>
+                  </div>
+               </div>
+
+            </fieldset>
+
+            <fieldset>
+               <legend class="small text-center text-uppercase">{{ legend_sender }}</legend>
+               <div class="form-group required">
+                 <label class="col-sm-2 control-label" for="input-sender-name">{{ entry_sender_name }}</label>
+                 <div class="col-sm-10">
+                   <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                      <input type="text" name="sender_name" value="{{ sender_name }}" placeholder="{{ entry_sender_name }}" id="input-sender-name" class="form-control" />
+                   </div>
+                   {% if error_sender_name %}
+                   <div class="text-danger">{{ error_sender_name }}</div>
+                   {% endif %}
+                   <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sender_name }}</div>
+                 </div>
+               </div>
+               <div class="form-group required">
+                 <label class="col-sm-2 control-label" for="input-sender-email">{{ entry_sender_email }}</label>
+                 <div class="col-sm-10">
+                     <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                        <input type="text" name="sender_email" value="{{ sender_email }}" placeholder="{{ entry_sender_email }}" id="input-sender-email" class="form-control" />
+                     </div>
+                     {% if error_sender_email %}
+                     <div class="text-danger">{{ error_sender_email }}</div>
+                     {% endif %}
+                     <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sender_email }}</div>
+                 </div>
+               </div>
+            </fieldset>
+
+            <fieldset>
+               <legend class="small text-center text-uppercase">{{ legend_subject }}</legend>
+               <div class="form-group required">
+                 <label class="col-sm-2 control-label" for="input-subject">{{ entry_subject }}</label>
+                 <div class="col-sm-10">
+                   <input type="text" name="subject" value="{{ subject }}" placeholder="{{ entry_subject }}" id="input-subject" class="form-control" />
+                   {% if error_subject %}
+                   <div class="text-danger">{{ error_subject }}</div>
+                   {% endif %}
+                   <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_subject }}</div>
+                 </div>
+               </div>
+            </fieldset>
+
+            <fieldset>
+               <legend class="small text-center text-uppercase">{{ legend_content }}</legend>
+
+               <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-html-content">{{ entry_html_content }}</label>
+                  <div class="col-sm-10">
+                     <div class="well design-editor">
+                        <div class="design-preview"></div>
+                        <a href="javascript:void(0);" id="btn-smc-editor">
+                           <i class="fa fa-edit"></i>
+                           <span class="text-uppercase">{{ button_edit_design }}</span>
+                        </a>
+
+                        <div class="btn-send-test" data-format="html" data-toggle="tooltip" title="{{ button_html_test_email }}"><i class="fa fa-send"></i></div>
+                     </div>
+
+                     <textarea name="html_content" id="input-html-content" rows="20" class="form-control hidden">{{ html_content }}</textarea>
+
+                     {% if error_html_content %}
+                     <div class="text-danger">{{ error_html_content }}</div>
+                     {% endif %}
+
+                     <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_html_content }}</div>
+                  </div>
+               </div>
+
+               <div class="form-group required">
+                   <label class="col-sm-2 control-label" for="input-plain-content">{{ entry_plain_content }}</label>
+                   <div class="col-sm-10">
+                     <div class="plain-content">
+                        <textarea name="plain_content" placeholder="{{ entry_plain_content }}" id="input-plain-content" rows="5" class="form-control">{{ plain_content }}</textarea>
+                        <div class="btn-send-test" data-format="plain" data-toggle="tooltip" title="{{ button_plain_text_test_email }}"><i class="fa fa-send"></i></div>
+                     </div>
+
+                     {% if error_plain_content %}
+                     <div class="text-danger">{{ error_plain_content }}</div>
+                     {% endif %}
+
+                     <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_plain_content }}</div>
+                   </div>
+               </div>
+
+               <div id="template-action-confirmation">
+                  <div class="form-group">
+                     <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well ask-confirmation">
+                           <label class="control-label" for="input-template-update">{{ entry_template_update }}</label>
+                           <input type="hidden" name="template_id" value="{{ template_id }}" class="form-control" />
+                           <select name="template_update" class="form-control">
+                              {% if template_update %}
+                              <option value="0">{{ text_template_new }}</option>
+                              <option value="1" selected="selected">{{ text_template_update }}</option>
+                              {% else %}
+                              <option value="0" selected="selected">{{ text_template_new }}</option>
+                              <option value="1">{{ text_template_update }}</option>
+                              {% endif %}
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </fieldset>
+
+            <fieldset>
+               <legend class="small text-center text-uppercase">{{ legend_scheduled }}</legend>
+
+               <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-scheduled">{{ entry_scheduled }}</label>
+                  <div class="col-sm-10">
+                     <select name="scheduled" class="form-control">
+                        {% if scheduled %}
+                        <option value="0">{{ text_no }}</option>
+                        <option value="1" selected="selected">{{ text_yes }}</option>
+                        {% else %}
+                        <option value="0" selected="selected">{{ text_no }}</option>
+                        <option value="1">{{ text_yes }}</option>
+                        {% endif %}
+                     </select>
+                     <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_scheduled }}</div>
+                  </div>
+               </div>
+               <div class="form-group schedule">
+                  <label class="col-sm-2 control-label" for="input-date-schedule">{{ entry_date_schedule }}</label>
+                  <div class="col-sm-10">
+                     <div class="input-group datetime">
+                        <input type="text" name="date_schedule" value="{{ date_schedule }}" placeholder="{{ entry_date_schedule }}" data-date-format="YYYY-MM-DD HH:mm:ss" id="input-date-schedule" class="form-control" readonly />
+                        <span class="input-group-btn">
+                           <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                     </div>
+                     {% if error_date_schedule %}
+                     <div class="text-danger">{{ error_date_schedule }}</div>
+                     {% endif %}
+                     <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_date_schedule }}</div>
+                  </div>
+               </div>
+               <div class="form-group required">
+                  <label class="col-sm-2 control-label" for="input-timezone-based">{{ entry_timezone_based }}</label>
+                  <div class="col-sm-10">
+                     <select name="timezone_based" class="form-control">
+                        {% if timezone_based %}
+                        <option value="0">{{ text_no }}</option>
+                        <option value="1" selected="selected">{{ text_yes }}</option>
+                        {% else %}
+                        <option value="0" selected="selected">{{ text_no }}</option>
+                        <option value="1">{{ text_yes }}</option>
+                        {% endif %}
+                     </select>
+                     <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_timezone_based }}</div>
+                  </div>
+               </div>
+               <div class="form-group timezone-based">
+                  <label class="col-sm-2 control-label" for="input-timezone-hour">{{ entry_timezone_hour }}</label>
+                  <div class="col-sm-10">
+                     <div class="input-group time">
+                        <input type="text" name="timezone_hour" value="{{ timezone_hour }}" placeholder="{{ entry_timezone_hour }}" data-date-format="HH:mm:ss" id="input-timezone-hour" class="form-control" readonly />
+                        <span class="input-group-btn">
+                           <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                     </div>
+                     {% if error_timezone_hour %}
+                     <div class="text-danger">{{ error_timezone_hour }}</div>
+                     {% endif %}
+                     <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_timezone_hour }}</div>
+                  </div>
+               </div>
+            </fieldset>
+
+            <input type="hidden" name="test_email_type" value="" />
+        </form>
+
+        <div class="smc-editor code-plus-preview">
+          <div id="smc-grapejs">{{ html_content }}</div>
+        </div>
+
+        <div class="loading-mask-overlay fixed-fix">
+           <div class="loading-mask-loading fixed">
+             <div class='uil-ripple-css'><div></div><div></div></div>
+           </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <link href="view/javascript/grapesjs/css/grapes.min.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/grapesjs/grapes.min.js"></script>
+  <script type="text/javascript" src="view/javascript/grapesjs/grapesjs-preset-newsletter-custom.min.js"></script>
+  <script type="text/javascript" src="view/javascript/grapesjs/smart-marketing.js"></script>
+
+<script type="text/javascript"><!--
+// for case save and return (error found) => load in preview (bg) saved design
+if ($('textarea[name=\'html_content\']').val() != '') {
+   SMSaveDesignEditorContent();
+}
+
+$('select[name=\'segmentation_type\']').on('change', function() {
+   var option = $(this).find(':selected');
+
+   var match_display = (typeof($(option).attr('data-segmentation-match-display')) != 'undefined') ? ($(option).attr('data-segmentation-match-display') === 'true') : false;
+   var match_default = (typeof($(option).attr('data-segmentation-match-default')) != 'undefined') ? $(option).attr('data-segmentation-match-default') : '';
+
+   //TODO: replace with short version
+   if (match_display) {
+      $('.segmentation-match').show();
+   } else {
+      $('.segmentation-match').hide();
+   }
+
+   if (match_default) {
+      $('select[name=\'segmentation_match\'] option[value=\'' + match_default + '\']').prop('selected', 'selected');
+   }
+
+   $('.segmentation-case').hide();
+   $('.segmentation-' + $(this).val().replace(/_/g, "-")).show();
+});
+
+$('select[name=\'segmentation_type\']').trigger('change');
+
+{% set sc_customer_group_row = sc_customer_group_row + 1 %}
+
+var sc_customer_group_row = {{ sc_customer_group_row }};
+
+// case recipient => customer_group
+$('input[name=\'customer_group\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/module/smart_marketing/customer_group/autocomplete&user_token={{ user_token }}&filter_search=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['customer_group_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'customer_group_id\']').val('');
+
+		$('#segmentation-condition-customer-group-' + item['value']).remove();
+
+      html  = '<div id="segmentation-condition-customer-group-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'];
+      html += '   <input type="hidden" name="segmentation_condition[customer_group][' + sc_customer_group_row +'][key]" value="customer_group_id" />';
+      html += '   <input type="hidden" name="segmentation_condition[customer_group][' + sc_customer_group_row +'][operator]" value="equal" />';
+      html += '   <input type="hidden" name="segmentation_condition[customer_group][' + sc_customer_group_row +'][value]" value="' + item['value'] + '" />';
+      html += '</div>';
+
+      $('#segmentation-condition-customer-group').append(html);
+
+      sc_customer_group_row++;
+	}
+});
+
+$('#segmentation-condition-customer-group').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+
+// product autocomplete in conditions
+{% set sc_bought_product_row = sc_bought_product_row + 1 %};
+
+var sc_bought_product_row = {{ sc_bought_product_row }};
+
+// case recipient => customer_group
+$('input[name=\'product\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/module/smart_marketing/product/autocomplete&user_token={{ user_token }}&filter_search=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'product\']').val('');
+
+		$('#segmentation-condition-customer-who-bought-product-' + item['value']).remove();
+
+      html  = '<div id="segmentation-condition-customer-who-bought-product-' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'];
+      html += '   <input type="hidden" name="segmentation_condition[customer_who_bought_product][' + sc_bought_product_row +'][key]" value="product_id" />';
+      html += '   <input type="hidden" name="segmentation_condition[customer_who_bought_product][' + sc_bought_product_row +'][operator]" value="equal" />';
+      html += '   <input type="hidden" name="segmentation_condition[customer_who_bought_product][' + sc_bought_product_row +'][value]" value="' + item['value'] + '" />';
+      html += '</div>';
+
+      $('#segmentation-condition-customer-who-bought-product').append(html);
+
+      sc_bought_product_row++;
+	}
+});
+
+$('#segmentation-condition-customer-who-bought-product').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+
+// Advanced conditions
+var sc_advanced_segment_row = 0;
+
+{% if segmentation_condition.advanced_segment %}
+{% for segmentation_condition in segmentation_condition.advanced_segment %}
+   addAdvancedSegmentationCondition('{{ segmentation_condition.key }}', '{{ segmentation_condition.operator }}', '{{ segmentation_condition.value }}');
+{% endfor %}
+{% endif %}
+
+
+$(document).delegate('.advanced-segment-key', 'change', function() {
+   getAdvancedSegmentationFieldsOnKeyChange($(this));
+});
+
+// update segmentation count
+$('.segmentation-count-update').on('click', function(){
+   $.ajax({
+      type: 'POST',
+      url: 'index.php?route=extension/module/smart_marketing/campaign/getTotalExpectedRecipients&user_token=' + getURLVar('user_token'),
+      data: $('#form-campaign').serialize(),
+      dataType: 'json',
+      beforeSend: function() {
+         $('.segmentation-count .info').html('..................................................');
+      },
+      success: function(json) {
+         if (json['error']) {
+            $('.segmentation-count .info').html('<i class="fa fa-fw fa-exclamation-triangle"></i> ' + json['error']);
+         }
+
+         if (json['success']) {
+            $('.segmentation-count .info').html(json['recipient_total']);
+         }
+      }
+   });
+});
+
+// Detect if imported template was changed to ask what to do with template
+$('#template-action-confirmation').hide();
+
+// html_content change check
+$('textarea[name=\'html_content\']').on('change', function() {
+   SMCheckTemplateAction();
+});
+
+// plain text change check
+$('textarea[name=\'plain_content\']').on('change', function() {
+   SMCheckTemplateAction();
+});
+
+$('select[name=\'scheduled\']').on('change', function() {
+   if ($(this).val() == 1) {
+      $('.schedule').show();
+   } else {
+      $('.schedule').hide();
+   }
+});
+
+$('select[name=\'scheduled\']').trigger('change');
+
+$('select[name=\'timezone_based\']').on('change', function() {
+   if ($(this).val() == 1) {
+      $('.timezone-based').show();
+   } else {
+      $('.timezone-based').hide();
+   }
+});
+
+$('select[name=\'timezone_based\']').trigger('change');
+
+$('#btn-save').on('click', function() {
+   $('#form-campaign').submit();
+});
+
+initDatePicker();
+initTimePicker();
+initDateTimePicker();
+
+// ===============================================================================
+function addAdvancedSegmentationCondition(key = '', operator = '', value = '') {
+   var html = '';
+
+   html += '<tr id="segmentation-condition-advanced-segment-' + sc_advanced_segment_row + '">';
+   html += '   <td class="text-left cell-segment-key">';
+   html += '      <select name="segmentation_condition[advanced_segment][' + sc_advanced_segment_row +'][key]" data-row-index="' + sc_advanced_segment_row + '" class="advanced-segment-key form-control">';
+   html += '         <option value="">{{ text_select|escape('js') }}</option>';
+   html += '         <option value="firstname" data-type="text" data-value-type="text">{{ text_field_firstname|escape('js') }}</option>';
+   html += '         <option value="lastname" data-type="text" data-value-type="text">{{ text_field_lastname|escape('js') }}</option>';
+   html += '         <option value="email" data-type="text" data-value-type="text">{{ text_field_email|escape('js') }}</option>';
+   html += '         <option value="customer_group_id" data-type="select" data-value-type="int" data-source="customer-group">{{ text_field_customer_group|escape('js') }}</option>';
+   html += '         <option value="country_id" data-type="select" data-value-type="int" data-source="country">{{ text_field_country|escape('js') }}</option>';
+   html += '         <option value="source" data-type="select" data-source="source" data-value-type="text">{{ text_field_source|escape('js') }}</option>';
+   html += '         <option value="rating" data-type="text" data-value-type="int">{{ text_field_rating|escape('js') }}</option>';
+   html += '         <option value="date_added" data-type="date" data-value-type="text">{{ text_field_date_added|escape('js') }}</option>';
+   //html += '         <option value="date_modified" data-type="date" data-value-type="text">{{ text_field_date_modified|escape('js') }}</option>';
+   html += '         <option value="total_spent" data-type="text" data-value-type="int" data-addon-text="{{ currency_symbol_left ? currency_symbol_left|escape('js') : currency_symbol_right|escape('js') }}">{{ text_field_total_spent|escape('js') }}</option>';
+   html += '         <option value="order_count" data-type="text" data-value-type="int">{{ text_field_order_count|escape('js') }}</option>';
+   html += '         <option value="last_order" data-type="text" data-value-type="int" data-addon-text="{{ text_day_ago }}">{{ text_field_last_order|escape('js') }}</option>';
+   html += '         <option value="last_login" data-type="text" data-value-type="int" data-addon-text="{{ text_day_ago }}">{{ text_field_last_login|escape('js') }}</option>';
+   html += '      </select>';
+   html += '   </td>';
+   html += '   <td class="text-left cell-segment-operator">';
+   html += '      <select name="segmentation_condition[advanced_segment][' + sc_advanced_segment_row +'][operator]" data-row-index="' + sc_advanced_segment_row + '" class="advanced-segment-operator form-control">';
+   html += '         <option value="">{{ text_select|escape('js') }}</option>';
+   html += '      </select>';
+   html += '   </td>';
+   html += '   <td class="text-left cell-segment-value">';
+   html += '      <input name="segmentation_condition[advanced_segment][' + sc_advanced_segment_row +'][value]" value="" data-row-index="' + sc_advanced_segment_row + '" class="advanced-segment-value form-control" />';
+   html += '   </td>';
+   html += '   <td class="text-right cell-segment-remove">';
+   html += '      <button type="button" onclick="deleteAdvancedSegmentationCondition(' + sc_advanced_segment_row + ')" data-toggle="tooltip" rel="tooltip" title="{{ button_remove_condition|escape('js') }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+   html += '   </td>';
+   html += '</tr>';
+
+   $('#advanced-segment-conditions tbody').append(html);
+
+   //select and add default or used values => case edit
+   if (key != '' || operator != '' || value != '') {
+      // key is always an select (html tag)
+      if (key != '') {
+         var object = $('select[name=\'segmentation_condition[advanced_segment][' + sc_advanced_segment_row + '][key]\']');
+
+         $(object).find('option[value=\'' + key + '\']').prop('selected', 'selected');
+
+         // trigger change to fill options
+         getAdvancedSegmentationFieldsOnKeyChange(object);
+      }
+
+      // operator is always an select (html tag)
+      if (operator != '') {
+         $('select[name=\'segmentation_condition[advanced_segment][' + sc_advanced_segment_row + '][operator]\'] option[value=\'' + operator + '\']').prop('selected', 'selected');
+      }
+
+      if (value != '') {
+         var object = $('*[name=\'segmentation_condition[advanced_segment][' + sc_advanced_segment_row + '][value]\']');
+
+         var tag_name = $(object).prop('tagName').toLowerCase();
+
+         if (tag_name == 'select') {
+            $(object).find('option[value=\'' + value + '\']').prop('selected', 'selected');
+         }
+
+         if (tag_name == 'input') {
+            $(object).val(value);
+         }
+      }
+   }
+
+   sc_advanced_segment_row++;
+}
+
+function getAdvancedSegmentationFieldsOnKeyChange(object) {
+   //console.log('change triggered');
+
+   var row_index = $(object).attr('data-row-index');
+
+   var option = $(object).find(':selected');
+
+   var tag_type = (typeof($(option).attr('data-type')) != 'undefined') ? $(option).attr('data-type') : '';
+   var value_type = (typeof($(option).attr('data-value-type')) != 'undefined') ? $(option).attr('data-value-type') : '';
+   var addon_text = (typeof($(option).attr('data-addon-text')) != 'undefined') ? $(option).attr('data-addon-text') : '';
+
+   var operator_options = getAdvancedSegmentationOperatorOptions(tag_type, value_type);
+
+   // delete previous options and add new options
+   $('.advanced-segment-operator[data-row-index="' + row_index + '"]').find('option').remove().end().append(operator_options);
+
+   // change segment value field => clear content to add new one
+   $('#segmentation-condition-advanced-segment-' + row_index + ' .cell-segment-value').empty();
+
+   // bind select source - when
+   var source = (typeof($(option).attr('data-source')) != 'undefined') ? $(option).attr('data-source') : '';
+
+   var value_field = getAdvancedSegmentationValueField(tag_type, row_index, source, addon_text);
+
+   // add value field base on selected type
+   $('#segmentation-condition-advanced-segment-' + row_index + ' .cell-segment-value').append(value_field);
+
+   // reinitDatePicker for dinamically added date fields
+   if (tag_type == 'date') {
+      initDatePicker();
+   }
+}
+
+function getAdvancedSegmentationOperatorOptions(tag_type, value_type) {
+   var html = '';
+
+   html += '<option value="">{{ text_select|escape('js') }}</option>';
+   html += '<option value="equal">{{ text_operator_is|escape('js') }}</option>';
+   html += '<option value="not-equal">{{ text_operator_is_not|escape('js') }}</option>';
+
+   if (tag_type == 'text' && value_type == 'text') {
+      html += '<option value="contain">{{ text_operator_contain|escape('js') }}</option>';
+      html += '<option value="not-contain">{{ text_operator_not_contain|escape('js') }}</option>';
+      html += '<option value="start-with">{{ text_operator_start_with|escape('js') }}</option>';
+      html += '<option value="end-with">{{ text_operator_end_with|escape('js') }}</option>';
+   }
+
+   if (tag_type == 'text' && value_type == 'int') {
+      html += '<option value="greater">{{ text_operator_greater_than|escape('js') }}</option>';
+      html += '<option value="less">{{ text_operator_less_than|escape('js') }}</option>';
+   }
+
+   if (tag_type == 'date') {
+      html += '<option value="is-after">{{ text_operator_is_after|escape('js') }}</option>';
+      html += '<option value="is-before">{{ text_operator_is_before|escape('js') }}</option>';
+   }
+
+   return html;
+}
+
+function getAdvancedSegmentationValueField(type, row_index, source = '', addon_text) {
+   var html = '';
+
+   if (type == 'text' || type == 'select') {
+      if (addon_text) {
+         html += '<div class="input-group">';
+      }
+
+      if (type == 'text') {
+         html += '<input name="segmentation_condition[advanced_segment][' + row_index +'][value]" value="" data-row-index="' + row_index + '" class="advanced-segment-value form-control" />';
+      }
+
+      if (type == 'select') {
+         html += '<select name="segmentation_condition[advanced_segment][' + row_index +'][value]" value="" data-row-index="' + row_index + '" class="advanced-segment-value form-control">';
+
+         if (source == 'customer-group') {
+            html += '<option value="">{{ text_select }}</option>';
+
+            {% for customer_group in customer_groups %}
+            html += '<option value="{{ customer_group.customer_group_id }}">{{ customer_group.name|escape('js') }}</option>';
+            {% endfor %}
+         }
+
+         if (source == 'country') {
+            html += '<option value="">{{ text_select }}</option>';
+
+            {% for country in countries %}
+            html += '<option value="{{ country.country_id }}">{{ country.name|escape('js') }}</option>';
+            {% endfor %}
+         }
+
+         if (source == 'source') {
+            html += '<option value="">{{ text_select|escape('js') }}</option>';
+
+            {% for source in sources %}
+            html += '<option value="{{ source.code }}">{{ source.name|escape('js') }}</option>';
+            {% endfor %}
+         }
+
+         if (source == 'yes-no') {
+         }
+
+         if (source == 'enabled-disabled') {
+         }
+
+         html += '</select>';
+      }
+
+      if (addon_text) {
+         html += '<span class="input-group-addon">' + addon_text + '</span>';
+         html += '</div>';
+      }
+   }
+
+   if (type == 'date') {
+      html += '<div class="input-group date">';
+      html += '   <input name="segmentation_condition[advanced_segment][' + row_index +'][value]" value="" data-row-index="' + row_index + '" data-date-format="YYYY-MM-DD" class="advanced-segment-value form-control" />';
+      html += '   <span class="input-group-btn"><button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button></span>';
+      html += '</div>';
+   }
+
+   return html;
+}
+
+function deleteAdvancedSegmentationCondition(row_index) {
+   $('#segmentation-condition-advanced-segment-' + row_index).remove();
+}
+
+function SMCheckTemplateAction() {
+   var template_id = $('input[name=\'template_id\']').val();
+
+   if (template_id) {
+      if ($('#template-action-confirmation').is(':hidden')) {
+         $('#template-action-confirmation').show();
+      }
+   }
+}
+
+function initDatePicker() {
+   $('.date').datetimepicker({
+   	pickTime: false
+   });
+}
+
+function initTimePicker() {
+   $('.time').datetimepicker({
+      pickDate: false,
+      pickTime: true,
+      sideBySide: true,
+      icons: {
+         up:   'fa fa-angle-up',
+         down: 'fa fa-angle-down',
+      }
+   });
+}
+
+function initDateTimePicker() {
+   $('.datetime').datetimepicker({
+      pickDate: true,
+      pickTime: true,
+      sideBySide: true,
+      icons: {
+         up:   'fa fa-angle-up',
+         down: 'fa fa-angle-down',
+      }
+   });
+}
+//--></script></div>
+{{ footer }}

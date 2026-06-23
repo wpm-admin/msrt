@@ -1,0 +1,35 @@
+{% if multilanguage %}
+<div id="sm-language-switch">
+    <div class="btn-group">
+     <button type="button" class="btn btn-default btn-xs">{{ text_language }} <span id="selected-language-name">{{ language_name }}</span></button>
+     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+       <span class="caret"></span>
+       <span class="sr-only">Toggle Dropdow</span>
+     </button>
+     <ul class="dropdown-menu dropdown-menu-right">
+       {% for language in languages %}
+       <li><a href="javascript:void(0);" class="language-item-switch" data-language-id="{{ language.language_id }}" data-language-name="{{ language.name }}">{{ language.name }}</a></li>
+       {% endfor %}
+     </ul>
+    </div>
+</div>
+
+<script type="text/javascript"><!--
+$('#sm-language-switch .language-item-switch').on('click', function () {
+   var language_id = $(this).data('language-id');
+   var language_name = $(this).data('language-name');
+
+   $.ajax({
+      type: 'POST',
+      url: 'index.php?route=extension/module/smart_marketing/language/switch&user_token=' + getURLVar('user_token'),
+      data: 'language_id=' + language_id,
+      dataType: 'json',
+      success: function(json) {
+         if (json['success']) {
+            $('#sm-language-switch #selected-language-name').text(language_name);
+         }
+      }
+   });
+});
+//--></script>
+{% endif %}

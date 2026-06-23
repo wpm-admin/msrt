@@ -1,0 +1,86 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+    </div>
+  </div>
+  <div class="container-fluid">
+      <div class="loading-mask-overlay">
+         <div class="loading-mask-loading fixed big stay-top sending">
+            <div class="uil-ripple-css big">
+               <div></div>
+               <div></div>
+            </div>
+            <div class="email-sending-animation"></div>
+            <div class="status-message">
+               <div class="status-icon"><i class="fa fa-send"></i></div>
+               <div class="status-info">
+                  <span class="status">{{ text_sending }}</span>
+                  <span class="guide text-uppercase">{{ text_do_not_close }}</span>
+                  <div class="counter"><span></span></div>
+                  <div class="total-progress">
+                     <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+  </div>
+
+<script type="text/javascript"><!--
+$(document).ready(function() {
+   $('.loading-mask-overlay').show();
+   $('#footer').hide();
+
+   // Call sendCampaign direct because setInterval will wait x seconds
+   sendCampaign();
+
+   var interval = {{ send_interval }} * 1000;
+   var interval_id = setInterval(sendCampaign, interval);
+
+   function sendCampaign() {
+      $.ajax({
+         type: 'POST',
+   		url: 'index.php?route=extension/module/smart_marketing/sender/send&user_token={{ user_token }}',
+         data: 'campaign_id={{ campaign_id }}',
+   		dataType: 'json',
+   		beforeSend: function() {
+            $('.loading-mask-overlay .loading-mask-loading').removeClass('pause').addClass('sending');
+            $('.loading-mask-overlay .loading-mask-loading .status-icon i').removeClass('fa-pause').addClass('fa-send');
+
+            $('.loading-mask-overlay .status-message .status').html('{{ text_sending|escape('js') }}');
+            $('.loading-mask-overlay .status-message .guide').html('{{ text_do_not_close|escape('js') }}');
+   		},
+   		success: function(json) {
+            $('.loading-mask-overlay .status-message .status').html(json['status_text']);
+            $('.loading-mask-overlay .status-message .guide').html(json['guide_text']);
+
+            if (json['continue']) {
+               $('.loading-mask-overlay .loading-mask-loading').removeClass('sending').addClass('pause');
+               $('.loading-mask-overlay .loading-mask-loading .status-icon i').removeClass('fa-send').addClass('fa-pause');
+            } else {
+               // stop all calls
+               clearInterval(interval_id);
+
+               $('.loading-mask-overlay .loading-mask-loading').removeClass('sending').removeClass('pause').addClass('complete');
+               $('.loading-mask-overlay .loading-mask-loading .status-icon i').removeClass('fa-send').removeClass('fa-pause').addClass('fa-check');
+            }
+
+            if (json['sent_percent']) {
+               $('.loading-mask-overlay .loading-mask-loading .total-progress .progress .progress-bar').css('width', json['sent_percent'] + '%').html(json['sent_percent']);
+               $('.loading-mask-overlay .loading-mask-loading .counter span').html(json['sent_total'] + ' / ' + json['recipient_total']);
+
+               if (json['sent_percent'] >= 100) {
+                  setTimeout(function(){
+                     location = 'index.php?route=extension/module/smart_marketing/campaign&user_token={{ user_token }}';
+                  }, 3000);
+               }
+            }
+   		}
+   	});
+   }
+});
+//--></script></div>
+{{ footer }}

@@ -1,0 +1,559 @@
+{{ header }} {{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-sm-settings" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+	  </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-fw fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+
+		<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-sm-settings" class="form-sm-settings form-horizontal">
+			<ul class="nav nav-tabs" id="tabs">
+				<li class="active"><a href="#tab-general" data-toggle="tab"><i class="fa fa-fw fa-cogs"></i> {{ tab_general }}</a></li>
+            <li><a href="#tab-social" data-toggle="tab"><i class="fa fa-fw fa-share-square-o"></i> {{ tab_social }}</a></li>
+            <li><a href="#tab-help" data-toggle="tab"><i class="fa fa-fw fa-question-circle"></i> {{ tab_help }}</a></li>
+			</ul>
+
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab-general">
+					<fieldset>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+							<div class="col-sm-10">
+								<select name="module_smart_marketing_status" id="input-status" class="form-control">
+									{% if module_smart_marketing_status %}
+									<option value="1" selected="selected">{{ text_enabled }}</option>
+									<option value="0">{{ text_disabled }}</option>
+									{% else %}
+									<option value="1">{{ text_enabled }}</option>
+									<option value="0" selected="selected">{{ text_disabled }}</option>
+									{% endif %}
+								</select>
+								<div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_status }}</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label" for="input-api-key">{{ entry_api_key }}</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-key"></i></span>
+									<input type="text" name="module_smart_marketing_api_key" value="{{ module_smart_marketing_api_key }}" class="form-control" />
+								</div>
+								{% if error_api_key %}
+								<div class="text-danger">{{ error_api_key }}</div>
+								{% endif %}
+								<div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_api_key }}</div>
+							</div>
+						</div>
+               </fieldset>
+
+               <fieldset class="hidden">
+                  <legend class="small text-center">{{ legend_service }}</legend>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label" for="input-service">{{ entry_service }}</label>
+                     <div class="col-sm-10">
+                        <select name="module_smart_marketing_service" id="input-service" class="form-control">
+                           {% if module_smart_marketing_service == 'sendgrid' %}
+                           <option value="sendgrid" selected="selected">{{ text_service_sendgrid }}</option>
+                           {% else %}
+                           <option value="sendgrid">{{ text_service_sendgrid }}</option>
+                           {% endif %}
+                        </select>
+                        <div class="help hidden"><i class="fa fa-fw fa-info-circle"></i> {{ help_service }}</div>
+                     </div>
+                  </div>
+               </fieldset>
+
+               <fieldset class="service service-sendgrid">
+                  <legend class="small text-center">{{ legend_sendgrid }}</legend>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-api-key">{{ entry_sendgrid_api_key }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                           <input type="text" name="module_smart_marketing_sendgrid_api_key" value="{{ module_smart_marketing_sendgrid_api_key }}" class="form-control" />
+                        </div>
+                        {% if error_sendgrid_api_key %}
+                        <div class="text-danger">{{ error_sendgrid_api_key }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_api_key }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-recipient-limit">{{ entry_sendgrid_recipient_limit }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <span class="input-group-addon">{{ text_send }}</span>
+                           <input type="text" name="module_smart_marketing_sendgrid_recipient_limit" value="{{ module_smart_marketing_sendgrid_recipient_limit }}" class="form-control" />
+                           <span class="input-group-addon">{{ text_request }}</span>
+                        </div>
+                        {% if error_sendgrid_recipient_limit %}
+                        <div class="text-danger">{{ error_sendgrid_recipient_limit }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_recipient_limit }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-send-interval">{{ entry_sendgrid_send_interval }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <span class="input-group-addon">{{ text_at_every }}</span>
+                           <input type="text" name="module_smart_marketing_sendgrid_send_interval" value="{{ module_smart_marketing_sendgrid_send_interval }}" class="form-control" />
+                           <span class="input-group-addon">{{ text_second }}</span>
+                        </div>
+                        {% if error_sendgrid_send_interval %}
+                        <div class="text-danger">{{ error_sendgrid_send_interval }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_send_interval }}</div>
+                     </div>
+                  </div>
+               </fieldset>
+
+               <fieldset class="hidden">
+                  <legend class="small text-center"></legend>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-event">{{ entry_sendgrid_event }}</label>
+                     <div class="col-sm-10">
+                        <div class="well well-sm" style="height: 150px; overflow: auto;">
+                           {% for sendgrid_event in sendgrid_events %}
+                           <div class="checkbox">
+                            <label>
+                              {% if sendgrid_event.code in module_smart_marketing_sendgrid_event %}
+                              <input type="checkbox" name="module_smart_marketing_sendgrid_event[]" value="{{ sendgrid_event.code }}" checked="checked" /> {{ sendgrid_event.name }}
+                              {% else %}
+                              <input type="checkbox" name="module_smart_marketing_sendgrid_event[]" value="{{ sendgrid_event.code }}" /> {{ sendgrid_event.name }}
+                              {% endif %}
+                            </label>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% if error_sendgrid_event %}
+                        <div class="text-danger">{{ error_sendgrid_event }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_event }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-task-event">{{ entry_sendgrid_task_event }}</label>
+                     <div class="col-sm-10">
+                        <div class="well well-sm" style="height: 150px; overflow: auto;">
+                           {% for sendgrid_event in sendgrid_events %}
+                           <div class="checkbox">
+                            <label>
+                              {% if sendgrid_event.code in module_smart_marketing_sendgrid_task_event %}
+                              <input type="checkbox" name="module_smart_marketing_sendgrid_task_event[]" value="{{ sendgrid_event.code }}" checked="checked" /> {{ sendgrid_event.name }}
+                              {% else %}
+                              <input type="checkbox" name="module_smart_marketing_sendgrid_task_event[]" value="{{ sendgrid_event.code }}" /> {{ sendgrid_event.name }}
+                              {% endif %}
+                            </label>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% if error_sendgrid_task_event %}
+                        <div class="text-danger">{{ error_sendgrid_task_event }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_task_event }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-rating-event">{{ entry_sendgrid_rating_event }}</label>
+                     <div class="col-sm-10">
+                        <div class="well well-sm" style="height: 150px; overflow: auto;">
+                           {% for sendgrid_event in sendgrid_events %}
+                           <div class="checkbox">
+                            <label>
+                              {% if sendgrid_event.code in module_smart_marketing_sendgrid_rating_event %}
+                              <input type="checkbox" name="module_smart_marketing_sendgrid_rating_event[]" value="{{ sendgrid_event.code }}" checked="checked" /> {{ sendgrid_event.name }}
+                              {% else %}
+                              <input type="checkbox" name="module_smart_marketing_sendgrid_rating_event[]" value="{{ sendgrid_event.code }}" /> {{ sendgrid_event.name }}
+                              {% endif %}
+                            </label>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% if error_sendgrid_rating_event %}
+                        <div class="text-danger">{{ error_sendgrid_rating_event }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_rating_event }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-rating-open">{{ entry_sendgrid_rating_open }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <input type="text" name="module_smart_marketing_sendgrid_rating_open" value="{{ module_smart_marketing_sendgrid_rating_open }}" class="form-control" />
+                           <span class="input-group-addon">{{ text_each_open }}</span>
+                        </div>
+                        {% if error_sendgrid_rating_open %}
+                        <div class="text-danger">{{ error_sendgrid_rating_open }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_rating_open }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-rating-click">{{ entry_sendgrid_rating_click }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <input type="text" name="module_smart_marketing_sendgrid_rating_click" value="{{ module_smart_marketing_sendgrid_rating_click }}" class="form-control" />
+                           <span class="input-group-addon">{{ text_each_click }}</span>
+                        </div>
+                        {% if error_sendgrid_rating_click %}
+                        <div class="text-danger">{{ error_sendgrid_rating_click }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_rating_click }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-dropped-event">{{ entry_sendgrid_dropped_event }}</label>
+                     <div class="col-sm-10">
+                        <select name="module_smart_marketing_sendgrid_dropped_event" class="form-control">
+                           {% for sendgrid_event in sendgrid_events %}
+                           {% if sendgrid_event.code == module_smart_marketing_sendgrid_dropped_event %}
+                           <option value="{{ sendgrid_event.code }}" selected="selected">{{ sendgrid_event.name }}</option>
+                           {% else %}
+                           <option value="{{ sendgrid_event.code }}">{{ sendgrid_event.name }}</option>
+                           {% endif %}
+                           {% endfor %}
+                        </select>
+                        {% if error_sendgrid_dropped_event %}
+                        <div class="text-danger">{{ error_sendgrid_dropped_event }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_dropped_event }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-unsubscribe-event">{{ entry_sendgrid_unsubscribe_event }}</label>
+                     <div class="col-sm-10">
+                        <div class="well well-sm" style="height: 150px; overflow: auto;">
+                           {% for sendgrid_event in sendgrid_events %}
+                           <div class="checkbox">
+                            <label>
+                              {% if sendgrid_event.code in module_smart_marketing_sendgrid_unsubscribe_event %}
+                              <input type="checkbox" name="module_smart_marketing_sendgrid_unsubscribe_event[]" value="{{ sendgrid_event.code }}" checked="checked" /> {{ sendgrid_event.name }}
+                              {% else %}
+                              <input type="checkbox" name="module_smart_marketing_sendgrid_unsubscribe_event[]" value="{{ sendgrid_event.code }}" /> {{ sendgrid_event.name }}
+                              {% endif %}
+                            </label>
+                           </div>
+                           {% endfor %}
+                        </div>
+                        {% if error_sendgrid_unsubscribe_event %}
+                        <div class="text-danger">{{ error_sendgrid_unsubscribe_event }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_unsubscribe_event }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-sendgrid-dropped-reason">{{ entry_sendgrid_dropped_reason }}</label>
+                     <div class="col-sm-10">
+                        <table class="table table-bordered">
+                           <tbody>
+                              {% for dropped_reason in module_smart_marketing_sendgrid_dropped_reason %}
+                              <tr>
+                                 <td class="text-left"><input type="text" name="module_smart_marketing_sendgrid_dropped_reason[]" value="{{ dropped_reason }}" class="form-control" /></td>
+                                 <td class="text-right"></td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+
+                        {% if error_sendgrid_dropped_reason %}
+                        <div class="text-danger">{{ error_sendgrid_dropped_reason }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sendgrid_dropped_reason }}</div>
+                     </div>
+                  </div>
+               </fieldset>
+
+               <fieldset>
+                  <legend class="small text-center">{{ legend_sender_info }}</legend>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label" for="input-sender-name">{{ entry_sender_name }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                           <input type="text" name="module_smart_marketing_sender_name" value="{{ module_smart_marketing_sender_name }}" class="form-control" />
+                        </div>
+                        {% if error_sender_name %}
+                        <div class="text-danger">{{ error_sender_name }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_sender_name }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label" for="input-sender-email">{{ entry_sender_email }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                           <input type="text" name="module_smart_marketing_sender_email" value="{{ module_smart_marketing_sender_email }}" class="form-control" />
+                        </div>
+                        {% if error_sender_email %}
+                        <div class="text-danger">{{ error_sender_email }}</div>
+                        {% endif %}
+                        <div class="bs-callout">{{ help_sender_email }}</div>
+                     </div>
+                  </div>
+               </fieldset>
+
+               <fieldset>
+                  <legend class="small text-center">{{ legend_image }}</legend>
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-product-image">{{ entry_product_image }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group margin-bottom-10">
+                           <span class="input-group-addon">{{ entry_image_width }}</span>
+                           <input type="text" name="module_smart_marketing_product_image_width" value="{{ module_smart_marketing_product_image_width }}" class="form-control" />
+                           <span class="input-group-addon">px</span>
+                        </div>
+
+                        {% if error_product_image_width %}
+                        <div class="text-danger">{{ error_product_image_width }}</div>
+                        {% endif %}
+
+                        <div class="input-group margin-bottom-10">
+                           <span class="input-group-addon">{{ entry_image_height }}</span>
+                           <input type="text" name="module_smart_marketing_product_image_height" value="{{ module_smart_marketing_product_image_height }}" class="form-control" />
+                           <span class="input-group-addon">px</span>
+                        </div>
+
+                        {% if error_product_image_height %}
+                        <div class="text-danger">{{ error_product_image_height }}</div>
+                        {% endif %}
+
+                        <div class="bs-callout">{{ help_product_image }}</div>
+                     </div>
+                  </div>
+
+                  <div class="form-group required">
+                     <label class="col-sm-2 control-label" for="input-category-image">{{ entry_category_image }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group margin-bottom-10">
+                           <span class="input-group-addon">{{ entry_image_width }}</span>
+                           <input type="text" name="module_smart_marketing_category_image_width" value="{{ module_smart_marketing_category_image_width }}" class="form-control" />
+                           <span class="input-group-addon">px</span>
+                        </div>
+
+                        {% if error_category_image_width %}
+                        <div class="text-danger">{{ error_category_image_width }}</div>
+                        {% endif %}
+
+                        <div class="input-group margin-bottom-10">
+                           <span class="input-group-addon">{{ entry_image_height }}</span>
+                           <input type="text" name="module_smart_marketing_category_image_height" value="{{ module_smart_marketing_category_image_height }}" class="form-control" />
+                           <span class="input-group-addon">px</span>
+                        </div>
+
+                        {% if error_category_image_height %}
+                        <div class="text-danger">{{ error_category_image_height }}</div>
+                        {% endif %}
+
+                        <div class="bs-callout">{{ help_category_image }}</div>
+                     </div>
+                  </div>
+               </fieldset>
+
+               <fieldset>
+                  <legend class="small text-center">{{ legend_timezone }}</legend>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label" for="input-timezone-difference">{{ entry_timezone_difference }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <input type="text" name="module_smart_marketing_timezone_difference" value="{{ module_smart_marketing_timezone_difference }}" class="form-control" />
+                           <span class="input-group-addon">{{ text_minute }}</span>
+                        </div>
+                        {% if error_timezone_difference %}
+                        <div class="text-danger">{{ error_timezone_difference }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_timezone_difference }}</div>
+
+                        <div class="bs-callout">{{ help_mysql_time }}</div>
+                     </div>
+                  </div>
+               </fieldset>
+               <fieldset>
+                  <legend class="small text-center">{{ legend_maintenance }}</legend>
+                  <div class="form-group">
+                     <label class="col-sm-2 control-label" for="input-maintenance-status">{{ entry_maintenance_status }}</label>
+                     <div class="col-sm-10">
+                        <select name="module_smart_marketing_maintenance_status" id="input-maintenance-status" class="form-control">
+                           {% if module_smart_marketing_maintenance_status %}
+                           <option value="1" selected="selected">{{ text_enabled }}</option>
+                           <option value="0">{{ text_disabled }}</option>
+                           {% else %}
+                           <option value="1">{{ text_enabled }}</option>
+                           <option value="0" selected="selected">{{ text_disabled }}</option>
+                           {% endif %}
+                        </select>
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_maintenance_status }}</div>
+                     </div>
+                  </div>
+                  <div class="form-group maintenance-interval">
+                     <label class="col-sm-2 control-label" for="input-maintenance-interval">{{ entry_maintenance_interval }}</label>
+                     <div class="col-sm-10">
+                        <div class="input-group">
+                           <input type="text" name="module_smart_marketing_maintenance_interval" value="{{ module_smart_marketing_maintenance_interval }}" class="form-control" />
+                           <span class="input-group-addon">{{ text_day }}</span>
+                        </div>
+                        {% if error_maintenance_interval %}
+                        <div class="text-danger">{{ error_maintenance_interval }}</div>
+                        {% endif %}
+                        <div class="help"><i class="fa fa-fw fa-info-circle"></i> {{ help_maintenance_interval }}</div>
+                     </div>
+                  </div>
+               </fieldset>
+				</div>
+
+            <div class="tab-pane" id="tab-social">
+               <div class="tab-content">
+                     <table class="table" id="social-channels">
+                        <tbody>
+                           {% set social_channel_row = 0 %}
+
+                           {% if module_smart_marketing_social_channel %}
+                           {% for social_channel in module_smart_marketing_social_channel %}
+                           <tr id="social-channel-{{ social_channel_row }}">
+                              <td class="text-left cell-social-channel-code">
+                                 <select name="module_smart_marketing_social_channel[{{ social_channel_row }}][code]" class="social-channel-code form-control" data-row-index="{{ social_channel_row }}">
+                                    <option value="">{{ text_select }}</value>
+                                    {% for social_network in social_networks %}
+                                    {% if social_channel.code|lower == social_network|lower %}
+                                    <option value="{{ social_network|lower }}" selected="selected">{{ social_network }}</option>
+                                    {% else %}
+                                    <option value="{{ social_network|lower }}">{{ social_network }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                 </select>
+                                 {% if error_social_channel[social_channel_row]['code'] %}
+                                 <div class="text-danger">{{ error_social_channel[social_channel_row]['code'] }}</div>
+                                 {% endif %}
+                              </td>
+                              <td class="text-left cell-social-channel-link">
+                                 <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-fw fa-external-link"></i></span>
+                                    <input name="module_smart_marketing_social_channel[{{ social_channel_row }}][link]" value="{{ social_channel.link }}" class="social-channel-link form-control" data-row-index="{{ social_channel_row }}" />
+                                 </div>
+                                 {% if error_social_channel[social_channel_row]['link'] %}
+                                 <div class="text-danger">{{ error_social_channel[social_channel_row]['link'] }}</div>
+                                 {% endif %}
+                              </td>
+                              <td class="text-right cell-social-channel-remove">
+                                 <button type="button" onclick="deleteSocialChannel({{ social_channel_row }})" data-toggle="tooltip" rel="tooltip" title="{{ button_remove_channel }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+                              </td>
+                           </tr>
+                           {% set social_channel_row = social_channel_row + 1 %}
+                           {% endfor %}
+                           {% endif %}
+                        </tbody>
+                        <tfoot>
+                           <tr>
+                              <td class="text-left" colspan="4"><a href="javascript:void(0);" class="" onclick="addSocialChannel();"><i class="fa fa-plus-circle fa-fw"></i> {{ button_add_channel }}</a></td>
+                           </tr>
+                        </tfoot>
+                     </table>
+               </div>
+            </div>
+
+				<div class="tab-pane" id="tab-help">
+					<div class="tab-content">
+						HELP Guide is available : <a href="http://www.oc-extensions.com/OpenCart-Smart-Marketing-Opencart-2.x-Help" target="blank">HERE</a><br /><br />
+						If you need support, email us at <strong>support@oc-extensions.com</strong>
+					</div>
+				</div>
+			</div>
+		</form>
+    </div>
+  </div>
+<script type="text/javascript"><!--
+$(document).ajaxComplete(function(event, request, settings) {
+	var license_activation_regex = /.*api\/license\/activate/;
+
+	if (settings.url.match(license_activation_regex)) {
+		if (request.responseJSON['license_key']) {
+			setTimeout(function(){
+				if (sessionStorage.getItem('ocx_module_smart_marketing')) {
+					$('input[name=\'module_smart_marketing_api_key\']').val(sessionStorage.getItem('ocx_module_smart_marketing').replace(/-/g, '').toLowerCase());
+				}
+            }, 500);
+		}
+	}
+});
+
+$('select[name=\'module_smart_marketing_service\']').on('change', function() {
+   $('.service').hide();
+   $('.service-' + $(this).val()).show();
+});
+
+$('select[name=\'module_smart_marketing_service\']').trigger('change');
+
+$('select[name=\'module_smart_marketing_maintenance_status\']').on('change', function() {
+   $('.maintenance-interval').hide();
+
+   if ($(this).val() == 1) {
+      $('.maintenance-interval').show();
+   }
+});
+
+$('select[name=\'module_smart_marketing_maintenance_status\']').trigger('change');
+
+var social_channel_row = {{ social_channel_row }};
+
+function addSocialChannel() {
+   var html = '';
+
+   html += '<tr id="social-channel-' + social_channel_row + '">';
+   html += '   <td class="text-left cell-social-channel-code">';
+   html += '      <select name="module_smart_marketing_social_channel[' + social_channel_row +'][code]" data-row-index="' + social_channel_row + '" class="social-channel-code form-control">';
+   html += '         <option value="">{{ text_select|escape('js') }}</option>';
+   html += '         <option value="facebook">Facebook</option>';
+   html += '         <option value="twitter">Twitter</option>';
+   html += '         <option value="instagram">Instagram</option>';
+   html += '         <option value="pinterest">Pinterest</option>';
+   html += '         <option value="youtube">Youtube</option>';
+   html += '         <option value="whatsapp">WhatsApp</option>';
+   html += '         <option value="snapchat">Snapchat</option>';
+   html += '         <option value="skype">Skype</option>';
+   html += '         <option value="messenger">Messenger</option>';
+   html += '      </select>';
+   html += '   </td>';
+   html += '   <td class="text-left cell-social-channel-link">';
+   html += '      <div class="input-group">';
+   html += '         <span class="input-group-addon"><i class="fa fa-external-link"></i></span>';
+   html += '         <input name="module_smart_marketing_social_channel[' + social_channel_row +'][link]" data-row-index="' + social_channel_row + '" class="social-channel-link form-control" />';
+   html += '      </div>';
+   html += '   </td>';
+   html += '   <td class="text-right cell-social-channel-remove">';
+   html += '      <button type="button" onclick="deleteSocialChannel(' + social_channel_row + ')" data-toggle="tooltip" rel="tooltip" title="{{ button_remove_channel }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+   html += '   </td>';
+   html += '</tr>';
+
+   $('#social-channels tbody').append(html);
+
+   social_channel_row++;
+}
+
+function deleteSocialChannel(row_index) {
+   $('#social-channel-' + row_index).remove();
+}
+//--></script>
+</div>
+{{ footer }}

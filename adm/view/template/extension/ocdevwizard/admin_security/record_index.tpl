@@ -1,0 +1,43 @@
+<?php
+##====================================================##
+## @author    : OCdevWizard                           ##
+## @contact   : ocdevwizard@gmail.com                 ##
+## @support   : http://help.ocdevwizard.com           ##
+## @copyright : (c) OCdevWizard. Admin Security, 2018 ##
+##====================================================##
+?>
+<div id="service-modal-body" class="mw500 service-modal-body">
+	<div class="modal-heading">
+		<?php echo $text_modal_heading; ?> <span class="modal-close" onclick="$.magnificPopup.close();"><i class="fa fa-times" aria-hidden="true"></i></span>
+	</div>
+	<div class="modal-body">
+		<div id="service-modal-data">
+			<div id="modal-record-content">
+				<div id="content" class="row pb-0">
+					<div class="panel-body pt-0 pb-0">
+						<form method="post" enctype="multipart/form-data" id="modal-form" class="form-horizontal">
+							<input type="hidden" style="display:none;" name="record_id" value="<?php echo $record_id; ?>"/>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="row">
+                    <?php if ($record_id) { ?>
+                      <label class="col-sm-12 control-label mb-0">ID</label>
+                      <div class="col-sm-12 mb-10 wbr-all"><?php echo $record_id; ?></div>
+                    <?php } ?>
+                    <?php if ($ip) { ?>
+                      <label class="col-sm-12 control-label mb-0"><?php echo $column_ip; ?></label>
+                      <div class="col-sm-12 mb-10 wbr-all"><?php echo $ip; ?></div>
+                    <?php } ?>
+                  </div>
+                </div>
+              </div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer" id="service-modal-footer">
+		<button class="btn btn-default" onclick="$.magnificPopup.close();"><span class="hidden-lg hidden-md hidden-sm"><i class="fa fa-times" aria-hidden="true"></i> </span><span class="hidden-xs"><?php echo $button_close; ?></span></button>
+	</div>
+</div>

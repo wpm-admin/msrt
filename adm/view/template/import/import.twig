@@ -1,0 +1,388 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-product" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid"> {% if error_warning %}
+      <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form11 action="{{ action }}" method="post" enctype="multipart/form-data" id="form-product" class="form-horizontal">
+          <ul class="nav nav-tabs">
+            <!--li><a href="#tab-general" data-toggle="tab">Импорт из базы</a></li-->
+            <li {% if tab == 'data' %}class="active"{% endif %}><a href="#tab-data" data-toggle="tab">Import excel products</a></li>
+            <li {% if tab == 'links' %}class="active"{% endif %}><a href="#tab-links" data-toggle="tab">Export excel products</a></li>
+            <li {% if tab == 'files' %}class="active"{% endif %}><a href="#tab-files" data-toggle="tab">Upload Files</a></li>
+            <li {% if tab == 'in_customer' %}class="active"{% endif %}><a href="#tab-in_customer" data-toggle="tab">Customers</a></li>
+            <li {% if tab == 'special' %}class="active"{% endif %}><a href="#tab-special" data-toggle="tab">Special Price</a></li>
+            </ul>
+          <div class="tab-content">
+            <div class="tab-pane" id="tab-general">
+				<div class="form-group">
+					<label class="col-sm-2 control-label" for="input-sku"><span data-toggle="tooltip">Импорт из дампа</span></label>
+					<div class="col-sm-10">
+					  <a href="{{ href_import_db2 }}" class="btn btn-default"/>Import excel</a>
+					</div>
+				</div>
+        </div>
+            <div class="tab-pane {% if tab == 'data' %}active{% endif %}" id="tab-data">
+              <form action="{{ href_import_excel }}" method="post" enctype="multipart/form-data" id="form-product" class="form-horizontal">
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Column names<br></label>
+                  <div class="col-sm-10">
+                    Column: <b>CodeManual</b> - necessarily!!!<br>
+                    The rest of the columns can be empty or absent.<br>
+                    In this case, the information in the goods from the missing columns will remain unchanged.<br>
+                    <b>The order of the columns is not important. But between them there should not be empty or hidden columns !!!</b><br><br>
+                    <h4>Column names</h4>
+                    
+                    <ul>
+                    {% for field_name in field_names %}
+                      <li>{{ field_name.name }}</li>
+                    {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-file">Upload File</label>
+                  <div class="col-sm-10">
+                    <input type="file" name="file" value="" placeholder="" id="input-file" class="form-control"/>
+                  </div>
+                </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Import</label>
+                  <div class="col-sm-10">
+                    <input type="submit" href="" class="btn btn-default"/>
+                  </div>
+                </div>
+                </form>
+            </div>
+            
+            <div class="tab-pane {% if tab == 'special' %}active{% endif %}" id="tab-special">
+              <form action="{{ href_import_special }}" method="post" enctype="multipart/form-data" id="form-special" class="form-horizontal">
+
+                <div class="form-group">
+                  <label class="col-sm-12 control-label">Import special prices for customer groups<br></label>
+               </div>
+                  
+               <div class="form-group">
+                  <label class="col-sm-12 control-label">Column A format <br>319030114-MEMBER: "319030114" $19.32<br>319030105-0Z-RESALE: "319030105-0Z". Markdown Product Price 10%.<br><br>
+                  model-cuctomer_group_name:any$special_price OR model-cuctomer_group_name: any int%</label>
+               </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-file">Upload File</label>
+                  <div class="col-sm-10">
+                    <input type="file" name="file" value="" placeholder="" id="input-file" class="form-control"/>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Import</label>
+                  <div class="col-sm-10">
+                    <input type="submit" href="" class="btn btn-default"/>
+                  </div>
+                </div>
+              </form>
+
+              
+              
+              
+            </div>            
+            
+            
+           <div class="tab-pane {% if tab == 'in_customer' %}active{% endif %}" id="tab-in_customer">
+              <div class="form-group">
+                  <label class="col-sm-2 control-label">Export<br></label>
+                  <div class="col-sm-10">
+                    <button type="button" OnClick="location = '{{ href_export_customer }}'" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Export"><i class="fa fa-save"></i> Export Customers</button>
+                  </div>
+              </div>
+            
+              <form action="{{ href_import_customer }}" method="post" enctype="multipart/form-data" id="form-in_customer" class="form-horizontal">
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Column names<br></label>
+                  <div class="col-sm-10">
+                    Column: <b>Email</b> or <b>Phone</b> - necessarily!!!<br>
+                    The rest of the columns can be empty or absent.<br>
+                    In this case, the information in the goods from the missing columns will remain unchanged.<br>
+                    <b>The order of the columns is not important. But between them there should not be empty or hidden columns !!!</b><br><br>
+                    <h4>Column names</h4>
+                    
+                    <ul>
+                    {% for field_name in customer_field_names %}
+                      <li>{{ field_name.name }}</li>
+                    {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-file">Upload File</label>
+                  <div class="col-sm-10">
+                    <input type="file" name="file" value="" placeholder="" id="input-file" class="form-control"/>
+                  </div>
+                </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Import</label>
+                  <div class="col-sm-10">
+                    <input type="submit" href="" class="btn btn-default"/>
+                  </div>
+                </div>
+                </form>
+              <hr>
+              <form action="{{ href_import_customer_group }}" method="post" enctype="multipart/form-data" id="form-in_customer" class="form-horizontal">
+
+                <div class="form-group">
+                  <label class="col-sm-12 control-label">Column change Group. File must have customer telephone in column A<br></label>
+               </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-file">Upload File</label>
+                  <div class="col-sm-10">
+                    <input type="file" name="file" value="" placeholder="" id="input-file" class="form-control"/>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-customer_group_id">Customer Group</label>
+                  <div class="col-sm-10">
+                    <select name="customer_group_id" id="input-customer_group_id" class="form-control">
+                      {% for customer_group in customer_groups %}
+                        <option value="{{ customer_group.customer_group_id }}">{{ customer_group.name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Import</label>
+                  <div class="col-sm-10">
+                    <input type="submit" href="" class="btn btn-default"/>
+                  </div>
+                </div>
+              </form>
+
+              
+              
+              
+            </div>
+            <div class="tab-pane {% if tab == 'files' %}active{% endif %}" id="tab-files">
+                {% if statistic %}
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Statistic<br></label>
+                  <div class="col-sm-10">
+                    <ul class="statistic">
+                    {% for stat in statistic %}
+                      <li>{{ stat }}</li>
+                    {% endfor %}
+                  </ul>
+                  </div>
+                </div>
+                {% endif %}
+              <form action="{{ href_import_files }}" method="post" enctype="multipart/form-data" id="form-product" class="form-horizontal">
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Information<br></label>
+                  <div class="col-sm-10">
+                    File name must be like: <b>Product_Number</b><br>
+                    Replace space simbol to _<br>
+                    Only low letter! It is better<br>
+                    <br>
+                    <b>If there are many files for one product - Use an increment after the name with a hyphen:</b><br>
+                    Product_Number.jpg<br>
+                    Product_Number-1.jpg<br>
+                    Product_Number-2.jpg<br>
+                    Product_Number-3.jpg<br>
+                  </div>
+                </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-replace">Replace files</label>
+                  <div class="col-sm-10">
+                    <input type="checkbox" name="replace" value="1" multiple placeholder="" id="input-replace" class="form-control"/>
+                  </div>
+                </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-file">Upload Files</label>
+                  <div class="col-sm-10">
+                    <input type="file" name="files[]" value="" multiple placeholder="" id="input-file" class="form-control"/>
+                  </div>
+                </div>
+                  
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Import</label>
+                  <div class="col-sm-10">
+                    <input type="submit" href="" class="btn btn-default"/>
+                  </div>
+                </div>
+                </form>
+            </div>
+            <div class="tab-pane {% if tab == 'links' %}active{% endif %}" id="tab-links">
+              
+              <div class="tab-content">
+                  <form action="{{ href_export_excel }}" method="post" enctype="multipart/form-data" id="import" class="form-horizontal">
+            
+                  <div class="form-group">
+                    <div class="col-sm-12">
+                      <h2>Экспорт</h2>
+                    </div>
+                  </div>
+            
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-category">Columns</label>
+                    <div class="col-sm-10">
+                    <div class="well well-sm" style="min-height: 150px;max-height: 300px;overflow: auto;">
+                      <table class="table table-striped">
+                      {% for field_name in field_names %}
+                      <tr>
+                      <td class="checkbox">
+                        <label>
+                        <input type="checkbox" checked="checked" name="column[{{ field_name['id'] }}]" value="{{ field_name['id'] }}" />
+                        {{ field_name.name }}
+                        </label>
+                      </td>
+                      </tr>
+                      {% endfor %}
+                      </table>
+                    </div>
+                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">Select all</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">Unselect</a></div>
+                  </div>            
+            
+                 <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-vendor">Vendors</label>
+                    <div class="col-sm-10">
+                    <div class="well well-sm" style="min-height: 150px;max-height: 300px;overflow: auto;">
+                      <table class="table table-striped">
+                      {% for vendor in vendors %}
+                      <tr>
+                      <td class="checkbox">
+                        <label>
+                        <input type="checkbox" checked="checked" name="vendor[{{ vendor['vendor_id'] }}]" value="{{ vendor['vendor_id'] }}" />
+                        {{ vendor.name }}
+                        </label>
+                      </td>
+                      </tr>
+                      {% endfor %}
+                      </table>
+                    </div>
+                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">Select all</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">Unselect</a></div>
+                  </div>            
+            
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-category">Categories</label>
+                    <div class="col-sm-10">
+                    <div class="well well-sm" style="min-height: 150px;max-height: 300px;overflow: auto;">
+                      <table class="table table-striped">
+                      {% for category in categories %}
+                      <tr>
+                      <td class="checkbox">
+                        <label>
+                        <input type="checkbox" name="category[]" value="{{ category['category_id'] }}" />
+                        {{ category['name'] }}
+                        </label>
+                      </td>
+                      </tr>
+                      {% endfor %}
+                      </table>
+                    </div>
+                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">Select all</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">Unselect</a></div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-category">Manufacturer</label>
+                    <div class="col-sm-10">
+                    <div class="well well-sm" style="min-height: 150px;max-height: 300px;overflow: auto;">
+                      <table class="table table-striped">
+                      {% for manufacturer in manufacturers %}
+                      <tr>
+                      <td class="checkbox">
+                        <label>
+                        <input type="checkbox" name="manufacturer[]" value="{{ manufacturer['manufacturer_id'] }}" />
+                        {{ manufacturer['name'] }}
+                        </label>
+                      </td>
+                      </tr>
+                      {% endfor %}
+                      </table>
+                    </div>
+                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">Select all</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">Unselect</a></div>
+                  </div>
+          
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-category">Product search</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="name" value="" placeholder="" id="input-name" class="form-control"/>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-category">Product picture only</label>
+                    <div class="col-sm-10">
+                      <input type="checkbox" name="picture_only" value="1" placeholder=""  class="form-control"/>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-category">Download</label>
+                    <div class="col-sm-10">
+                    <input type="submit" class="btn btn-primary" value="Download">
+                    </div>
+                  </div>
+                </form>
+                </div>
+              
+              
+            </div>
+            
+           
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet"/>
+  <link href="view/javascript/codemirror/theme/monokai.css" rel="stylesheet"/>
+  <script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script>
+  <script type="text/javascript" src="view/javascript/codemirror/lib/xml.js"></script>
+  <script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script>
+  <script type="text/javascript" src="view/javascript/summernote/summernote.min.js"></script>
+  <link href="view/javascript/summernote/summernote.min.css" rel="stylesheet"/>
+  <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+  <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+ 
+</div>
+<style>
+  #tab-files .statistic li{
+    list-style-type: none;
+  }
+  #tab-files .statistic li .success{
+    background-color: #ccf3c8;
+  }
+  #tab-files .statistic li .error{
+    background-color: #f3c8ce;
+  }
+</style>
+{{ footer }} 

@@ -1,0 +1,85 @@
+<table class="table table-hover">
+   <thead>
+      <tr>
+         <td></td>
+         <td class="text-left">{{ column_name }}</td>
+         <td class="text-right">{{ column_quantity }}</td>
+         <td class="text-right">{{ column_price }}</td>
+         <td></td>
+      </tr>
+   </thead>
+   <tbody>
+   {% if products %}
+   {% for product in products %}
+   <tr class="result-item product-item" id="result-item-{{ product.product_id }}" data-product-id="{{ product.product_id }}">
+      <td width="1"><i class="fa fa-minus-circle remove-item"></i></td>
+      <td class="text-left">
+         <span class="name">{{ product.name }}</span>
+         {% if product.model %}
+         <span class="model">{{ product.model }}</span>
+         {% endif %}
+      </td>
+      <td class="text-right">{{ product.quantity }}</td>
+      <td class="text-right">
+         {% if product.special %}
+         <span class="old-price">{{ product.price }}</span>
+         <span class="new-price">{{ product.special }}</span>
+         {% else %}
+         <span class="price">{{ product.price }}</span>
+         {% endif %}
+      </td>
+      <td><i class="fa fa-arrow-circle-right move-item"></i></td>
+   </tr>
+   {% endfor %}
+   {% endif %}
+   </tbody>
+</table>
+
+<script type="text/javascript"><!--
+$('#modal-search #search-results #results-list').delegate('.result-item.product-item .remove-item', 'click', function() {
+   $(this).parent().parent().addClass('hidden');
+});
+
+// move in selected products list
+$('#modal-search #search-results #results-list').delegate('.result-item.product-item .move-item', 'click', function() {
+   var item = $(this).parent().parent();
+
+   // hide it from search list
+   item.addClass('hidden');
+
+   var product_id = item.data('product-id');
+   var name = item.find('.name').text();
+
+   // remove it from selected products if is already available
+   $('#modal-search #selected-products #selected-products-list #selected-product-' + product_id).remove();
+
+   // add in selected list
+   $('#modal-search #selected-products #selected-products-list').append('<div id="selected-product-' + product_id + '" class="selected-item product-item" data-product-id="' + product_id + '"><i class="fa fa-minus-circle"></i> <span class="name">' + name + '</span></div>');
+});
+
+// move all from search results in selected products
+$('#modal-search #search-results').delegate('#btn-move-all', 'click', function() {
+   $('#modal-search #search-results #results-list .result-item.product-item .move-item').trigger('click');
+});
+
+$('#modal-search #selected-products #selected-products-list').delegate('.product-item i.fa-minus-circle', 'click', function(){
+   var item = $(this).parent();
+
+   var product_id = item.data('product-id');
+
+   // remove from selected products list
+   item.remove();
+
+   // add back in search results IF is from there
+   $('#modal-search #search-results #results-list #result-item-' + product_id).removeClass('hidden');
+});
+
+// remove all from selected products
+$('#modal-search #selected-products').delegate('#btn-clear-selected', 'click', function() {
+   $('#modal-search #selected-products #selected-products-list .product-item i.fa-minus-circle').trigger('click');
+
+   $('#modal-search .modal-header .window-button.maximize').trigger('click');
+});
+
+
+//--></script>

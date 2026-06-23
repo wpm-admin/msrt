@@ -1,0 +1,16 @@
+/*
+##====================================================##
+## @author    : OCdevWizard                           ##
+## @contact   : ocdevwizard@gmail.com                 ##
+## @support   : http://help.ocdevwizard.com           ##
+## @copyright : (c) OCdevWizard. Admin Security, 2018 ##
+##====================================================##
+*/
+body{font-family:'Open Sans',sans-serif}
+#main{display:flex;align-items:center;justify-content:center;flex-direction:column;width:100%;height:100vh}
+#main .inner{width:100%;max-width:max-content;box-shadow:0 2.8px 2.2px rgba(0,0,0,0.034),0 6.7px 5.3px rgba(0,0,0,0.048),0 12.5px 10px rgba(0,0,0,0.06),0 22.3px 17.9px rgba(0,0,0,0.072),0 41.8px 33.4px rgba(0,0,0,0.086),0 100px 80px rgba(0,0,0,0.12);border-radius:15px}
+#main h1{padding:40px 0 0;color:#fff;font-size:20px;line-height:1.4;text-align:center;text-transform:uppercase;font-weight:400;margin:0;width:100%}
+#pattern-block{display:flex;margin:0 auto;align-items:center}
+#pattern-block.patt-holder{background:transparent}
+.additional-information{font-size:14px;color:#fff;text-align:center;padding:0 10px 40px;max-width:320px}
+.error-text{font-size:14px;display:block;padding:15px 10px 0;text-align:center;max-width:320px}

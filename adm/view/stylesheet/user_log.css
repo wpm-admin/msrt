@@ -1,0 +1,8 @@
+tr.failed,
+tr.failed td {
+  background: #ff0000 none repeat scroll 0 0 !important;
+  color:#fff;
+}
+tr.failed td  a{
+  color:#fff;
+}	

@@ -1,6 +1,7 @@
 php.ini
+.gitignore
 config.php
-/adm
+/app
 /landing
 /catalog/.idea
 /catalog-old
@@ -12,10 +13,10 @@ temp_old_section.txt
 .idea/vcs.xml
 CATEGORY_SECTION_GUIDE.md
 HOMEPAGE-NOTES.md
-.gitignore
 .idea/php.xml
 .idea/
 plan-green.md
 donor.css
 donor.js
+TODO.md
 # OpenCart working state backup

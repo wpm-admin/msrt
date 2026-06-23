@@ -1,0 +1,180 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-auction" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">{% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-auction" class="form-horizontal">
+   	        
+			<div class="form-group">
+                <label class="col-sm-2 control-label" for="input-lot_id">Lot</label>
+                <div class="col-sm-10">
+                  <input type="text" name="lot_id" value="{{ lot_id }}" placeholder="lot" id="input-lot_id" class="form-control" />
+                </div>
+            </div>   
+	        
+			<div class="form-group">
+                <label class="col-sm-2 control-label" for="input-parent">Product</label>
+                <div class="col-sm-10">
+                  <input type="text" name="product" value="{{ product_info.name }}" placeholder="Product" id="input-product" class="form-control" />
+                  <input type="hidden" name="product_id" value="{{ product_id }}" />
+                </div>
+            </div>
+            
+	        <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-customer">Salesman</label>
+                <div class="col-sm-10">
+                  <input type="text" name="customer" value="{{ customer_info.firstname }} {{ customer_info.lastname }}" placeholder="Salesman" id="input-customer" class="form-control" />
+                  <input type="hidden" name="customer_id" value="{{ customer_id }}" />
+                </div>
+            </div>
+            
+	        <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-price_start">Price Start</label>
+                <div class="col-sm-1">
+                  <input type="text" name="price_start" value="{{ price_start }}" placeholder="0.00" id="input-price_start" class="form-control" />
+                </div>
+			
+	              <label class="col-sm-2 control-label" for="input-reserv_price">Reserv Start</label>
+                <div class="col-sm-1">
+                  <input type="text" name="reserv_price" value="{{ reserv_price }}" placeholder="0.00" id="input-reserv_price" class="form-control" />
+                </div>
+        
+                <label class="col-sm-2 control-label" for="input-price_end">Price End</label>
+                <div class="col-sm-1">
+                  <input type="text" name="price_end" value="{{ price_end }}" placeholder="0.00" id="input-price_end" class="form-control" />
+                </div>
+            
+                <label class="col-sm-2 control-label" for="input-price_step">Price Step</label>
+                <div class="col-sm-1">
+                  <input type="text" name="price_step" value="{{ price_step }}" placeholder="0.00" id="input-price_step" class="form-control" />
+                </div>
+          </div>
+            
+	        <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-key">Key</label>
+                <div class="col-sm-10">
+                  <input type="text" name="key" value="{{ key }}" placeholder="Description" id="input-key" class="form-control" />
+                </div>
+            </div>
+            
+	        <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-date_start">Date Start</label>
+                <div class="col-sm-2">
+                  <div class="input-group datetime">
+                    <input type="text" name="date_start" value="{{ date_start }}" data-date-format="YYYY-MM-DD HH:mm" id="input-date_start" class="form-control"/> <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                    </span></div>
+                </div>
+       
+	            <label class="col-sm-2 control-label" for="input-date_end">Date End</label>
+                <div class="col-sm-2">
+                  <div class="input-group datetime">
+                    <input type="text" name="date_end" value="{{ date_end }}" data-date-format="YYYY-MM-DD HH:mm" id="input-date_end" class="form-control"/> <span class="input-group-btn">
+                    <button class="btn btn-default" type="button"><i class="fa fa-calendar"></i></button>
+                    </span></div>
+                </div>
+        
+	            <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-2">
+                  <select name="status" id="input-status" class="form-control">
+                    {% if status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('input[name=\'product\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				//console.log(json);
+				
+				json.unshift({
+					product_id: 0,
+					name: '{{ text_none }}'
+				});
+
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'product\']').val(item['label']);
+		$('input[name=\'product_id\']').val(item['value']);
+	}
+});
+//--></script>
+<script type="text/javascript"><!--
+$('input[name=\'customer\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=customer/customer/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				//console.log(json);
+				
+				json.unshift({
+					customer_id: 0,
+					name: '{{ text_none }}'
+				});
+
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['customer_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'customer\']').val(item['label']);
+		$('input[name=\'customer_id\']').val(item['value']);
+	}
+});
+//--></script>
+<script>
+	$('.datetime').datetimepicker({
+		language: '{{ datepicker }}',
+		pickDate: true,
+		pickTime: true
+	});
+</script>
+{{ footer }}

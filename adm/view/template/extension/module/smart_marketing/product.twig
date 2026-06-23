@@ -1,0 +1,84 @@
+<div id="product-fetch" class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="product-search action-container">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<input type="text" name="product" value="" placeholder="{{ entry_product }}" class="input-lg form-control" />
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="loading-mask-overlay">
+      <div class="loading-mask-loading fixed">
+         <div class='uil-ripple-css'><div></div><div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$('#modal-product input[name=\'product\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/module/smart_marketing/product/autocomplete&user_token={{ user_token }}&filter_search=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('#modal-product input[name=\'product\']').val(item['label']);
+
+      $.ajax({
+         type: 'POST',
+         url: 'index.php?route=extension/module/smart_marketing/product/import&user_token=' + getURLVar('user_token'),
+         data: 'products_ids=' + item['value'],
+         dataType: 'json',
+         beforeSend: function() {
+            $('#modal-product .loading-mask-overlay').show();
+         },
+         complete: function() {
+            $('#modal-product .loading-mask-overlay').hide();
+         },
+         success: function(json) {
+		   if (json['products'][0]) {
+			  var product_info = json['products'][0];
+			  var component_id = smc_grapesjs_editor.getSelected().getId();
+
+			  // add an attribute "product-fetch-id" to help me identify in exp. code
+			  smc_grapesjs_editor.getSelected().addAttributes({
+				 'product-fetch-id': component_id
+			  });
+
+			  var template = SMGetTemplateWithFetchedProduct(component_id, product_info);
+
+			  // search solutionto update only component
+			  //smc_grapesjs_editor.getSelected().components(template);
+
+			  // (FIX) replacing all content make canvas to scroll to top - not ok if product was at bottom
+
+			  // get current scroll position
+			  scroll_position = $('.smc-editor .gjs-cv-canvas .gjs-frame').contents().scrollTop();
+
+			  // set template back after product replace :(
+			  smc_grapesjs_editor.DomComponents.getWrapper().set('content', '');
+			  smc_grapesjs_editor.setComponents(template);
+
+			  // scroll back to level used before replacing content
+			  $('.smc-editor .gjs-cv-canvas .gjs-frame').contents().scrollTop(scroll_position);
+		   }
+
+		   $('#modal-product').modal('hide');
+		   $('#modal-product').remove();
+         }
+      });
+	}
+});
+--></script>

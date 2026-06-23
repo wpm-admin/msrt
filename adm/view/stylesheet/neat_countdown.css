@@ -1,0 +1,23 @@
+.ntcd {
+    /* Prevent the module area to be too wide.
+       The value is 1366px w/o fold left panel and assuming no scrollbar. */
+    max-width: 1316px;
+}
+.ntcd--alert-btns {
+    margin-top: 6px;
+}
+.ntcd .alert a {
+    text-decoration: underline;
+}
+.ntcd--icon-help {
+    text-align: right;
+}
+
+@media (max-width: 767px) {
+    #column-left.active + .ntcd, #column-left.active + .ntcd + #footer {
+        width: calc(100% - 235px);
+    }
+    .ntcd #ntcd--form .pull-right {
+        float: none !important;
+    }
+}

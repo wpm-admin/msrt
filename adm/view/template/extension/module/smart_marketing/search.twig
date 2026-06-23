@@ -1,0 +1,779 @@
+<div class="modal-dialog modal-lg" role="document">
+ <div class="modal-content">
+   <div class="modal-header">
+     <button type="button" class="close" data-dismiss="modal" aria-label=""><span aria-hidden="true">&times;</span></button>
+     <button type="button" class="window-button minimize" data-action="minimize"><span><i class="fa fa-minus-square-o"></i></span></button>
+     <button type="button" class="window-button maximize" data-action="maximize"><span><i class="fa fa-square-o"></i></span></button>
+     <h4 class="modal-title text-uppercase">{{ heading_title }}</h4>
+     {{ language_switcher }}
+   </div>
+   <div class="modal-body">
+      <div id="section-search-filters">
+         <form enctype="multipart/form-data" id="form-search-filters" class="form-horizontal">
+            <div class="form-group required import-options">
+               <label class="col-sm-2 control-label" for="input-product">{{ entry_import }}</label>
+               <div class="col-sm-10">
+                  <select name="import_source" class="form-control">
+                     <option value="hand-pick" selected="selected">{{ text_hand_pick }}</option>
+                     <option value="latest">{{ text_latest }}</option>
+                     <option value="special">{{ text_special }}</option>
+                     <option value="top-sales">{{ text_top_sales }}</option>
+                     <option value="related">{{ text_related }}</option>
+                     <option value="also-bought">{{ text_also_bought }}</option>
+                     <option value="advanced-search">{{ text_advanced_search }}</option>
+                  </select>
+               </div>
+            </div>
+
+            <div id="import-option-hand-pick" class="form-group import-option">
+               <label class="col-sm-2 control-label" for="input-hand-pick-product">{{ entry_product }}</label>
+               <div class="col-sm-10">
+                  <input type="text" name="hand_pick_product_name" value="" placeholder="{{ entry_product }}" id="input-hand-pick-product" class="product-autocomplete form-control" data-autocomplete-target="hand-pick-product" />
+                  <div id="hand-pick-product" class="well well-sm product-autocomplete-list sortable" style="height: 100px; margin-top: 5px; margin-bottom:0px; overflow: auto;">
+                  </div>
+               </div>
+            </div>
+
+            <div id="import-option-latest" class="form-group import-option">
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-latest-date-start">{{ entry_date_start }}</label>
+                  <div class="col-sm-10">
+                     <div class="input-group date">
+                        <input type="text" name="latest_date_start" value="" placeholder="{{ entry_date_start }}" data-date-format="YYYY-MM-DD" id="input-latest-date-start" class="form-control" />
+                        <span class="input-group-btn">
+                           <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                        </span>
+                     </div>
+                     <div class="help">{{ help_latest_date_start }}</div>
+                  </div>
+               </div>
+
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-latest-category">{{ entry_category }}</label>
+                  <div class="col-sm-10">
+                     <input type="text" name="latest_category_name" value="" placeholder="{{ entry_category }}" id="input-latest-category" class="category-autocomplete form-control" data-autocomplete-target="latest-category" />
+                     <div id="latest-category" class="well well-sm category-autocomplete-list sortable" style="height: 100px; margin-top: 5px; margin-bottom:0px; overflow: auto;">
+                     </div>
+                     <div class="help">{{ help_category }}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-latest-sub-category">{{ entry_sub_category }}</label>
+                  <div class="col-sm-10">
+                     <select name="latest_sub_category" class="form-control">
+                        <option value="0">{{ text_no }}</option>
+                        <option value="1">{{ text_yes }}</option>
+                     </select>
+                     <div class="help">{{ help_sub_category }}</div>
+                  </div>
+               </div>
+            </div>
+
+            <div id="import-option-special" class="form-group import-option">
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-special-category">{{ entry_category }}</label>
+                  <div class="col-sm-10">
+                     <input type="text" name="special_category_name" value="" placeholder="{{ entry_category }}" id="input-special-category" class="category-autocomplete form-control" data-autocomplete-target="special-category" />
+                     <div id="special-category" class="well well-sm category-autocomplete-list sortable" style="height: 100px; margin-top: 5px; margin-bottom:0px; overflow: auto;">
+                     </div>
+                     <div class="help">{{ help_category }}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-special-sub-category">{{ entry_sub_category }}</label>
+                  <div class="col-sm-10">
+                     <select name="special_sub_category" class="form-control">
+                        <option value="0">{{ text_no }}</option>
+                        <option value="1">{{ text_yes }}</option>
+                     </select>
+                     <div class="help">{{ help_sub_category }}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-special-discount-min">{{ entry_discount_min }}</label>
+                  <div class="col-sm-10">
+                     <div class="input-group">
+                        <input type="text" name="special_discount_min" value="" placeholder="{{ entry_discount_min }}" id="input-special-discount-min" class="form-control" />
+                        <span class="input-group-addon">%</span>
+                     </div>
+                     <div class="help">{{ help_discount_min }}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-special-discount-max">{{ entry_discount_max }}</label>
+                  <div class="col-sm-10">
+                     <div class="input-group">
+                        <input type="text" name="special_discount_max" value="" placeholder="{{ entry_discount_max }}" id="input-special-discount-max" class="form-control" />
+                        <span class="input-group-addon">%</span>
+                     </div>
+                     <div class="help">{{ help_discount_max }}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-special-sort-order">{{ entry_sort }}</label>
+                  <div class="col-sm-10">
+                     <select name="special_sort_order" class="form-control">
+                        <option value="p.product_id|desc">{{ text_date_added_desc }}</option>
+                        <option value="p.product_id|asc">{{ text_date_added_asc }}</option>
+                        <option value="discount_percent|asc">{{ text_discount_asc }}</option>
+                        <option value="discount_percent|desc">{{ text_discount_desc }}</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+
+            <div id="import-option-top-sales" class="form-group import-option">
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-top-sales-type">{{ entry_top_type }}</label>
+                  <div class="col-sm-10">
+                     <select name="top_sales_type" class="form-control">
+                        <option value="quantity">{{ text_top_quantity }}</option>
+                        <option value="total">{{ text_top_total }}</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-top-sales-date-start">{{ entry_date_start }}</label>
+                  <div class="col-sm-10">
+                     <div class="input-group date">
+                        <input type="text" name="top_sales_date_start" value="" placeholder="{{ entry_date_start }}" data-date-format="YYYY-MM-DD" id="input-top-sales-date-start" class="form-control" />
+                        <span class="input-group-btn">
+                           <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                        </span>
+                     </div>
+                     <div class="help">{{ help_top_sales_date_start }}</div>
+                  </div>
+               </div>
+
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-top-sales-date-end">{{ entry_date_end }}</label>
+                  <div class="col-sm-10">
+                     <div class="input-group date">
+                        <input type="text" name="top_sales_date_end" value="" placeholder="{{ entry_date_end }}" data-date-format="YYYY-MM-DD" id="input-top-sales-date-end" class="form-control" />
+                        <span class="input-group-btn">
+                           <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+                        </span>
+                     </div>
+                     <div class="help">{{ help_top_sales_date_end }}</div>
+                  </div>
+               </div>
+
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-top-sales-category">{{ entry_category }}</label>
+                  <div class="col-sm-10">
+                     <input type="text" name="top_sales_category_name" value="" placeholder="{{ entry_category }}" id="input-top-sales-category" class="category-autocomplete form-control" data-autocomplete-target="top-sales-category" />
+                     <div id="top-sales-category" class="well well-sm category-autocomplete-list sortable" style="height: 100px; margin-top: 5px; margin-bottom:0px; overflow: auto;">
+                     </div>
+                     <div class="help">{{ help_category }}</div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-top-sales-sub-category">{{ entry_sub_category }}</label>
+                  <div class="col-sm-10">
+                     <select name="top_sales_sub_category" class="form-control">
+                        <option value="0">{{ text_no }}</option>
+                        <option value="1">{{ text_yes }}</option>
+                     </select>
+                     <div class="help">{{ help_sub_category }}</div>
+                  </div>
+               </div>
+            </div>
+
+            <div id="import-option-related" class="form-group import-option">
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-related-product">{{ entry_product }}</label>
+                  <div class="col-sm-10">
+                     <input type="text" name="related_product_name" value="" placeholder="{{ entry_product }}" id="input-related-product" class="product-autocomplete form-control" data-autocomplete-target="related-product" />
+                     <div id="related-product" class="well well-sm product-autocomplete-list sortable" style="height: 100px; margin-top: 5px; margin-bottom:0px; overflow: auto;">
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <div id="import-option-also-bought" class="form-group import-option">
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-also-bought-product">{{ entry_product }}</label>
+                  <div class="col-sm-10">
+                     <input type="text" name="also_bought_product_name" value="" placeholder="{{ entry_product }}" id="input-also-bought-product" class="product-autocomplete form-control" data-autocomplete-target="also-bought-product" />
+                     <div id="also-bought-product" class="well well-sm product-autocomplete-list sortable" style="height: 100px; margin-top: 5px; margin-bottom:0px; overflow: auto;">
+                     </div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-also-bought-sort-order">{{ entry_sort }}</label>
+                  <div class="col-sm-10">
+                     <select name="also_bought_sort_order" class="form-control">
+                        <option value="p.product_id|desc">{{ text_date_added_desc }}</option>
+                        <option value="p.product_id|asc">{{ text_date_added_asc }}</option>
+                        <option value="sold_quantity|asc">{{ text_sold_quantity_asc }}</option>
+                        <option value="sold_quantity|desc">{{ text_sold_quantity_desc }}</option>
+                        <option value="amount_paid|asc">{{ text_amount_paid_asc }}</option>
+                        <option value="amount_paid|desc">{{ text_amount_paid_desc }}</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+
+            <div id="import-option-advanced-search" class="form-group import-option">
+               <div class="form-group">
+                  <div class="col-sm-12">
+                     <div class="input-group">
+                       <span class="input-group-addon input-group-addon-transparent">{{ text_search_match }}</span>
+                       <select name="search_match" class="form-control">
+                          <option value="">{{ text_select }}</option>
+                          <option value="or">{{ text_any_condition }}</option>
+                          <option value="and" selected="selected">{{ text_all_condition }}</option>
+                       </select>
+                       <span class="input-group-addon input-group-addon-transparent">{{ text_following_condition }}</span>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="form-group">
+                  <div class="col-sm-12">
+                     <table class="table" id="advanced-search-conditions">
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                           <tr>
+                              <td class="text-left" colspan="4"><a href="javascript:void(0);" class="" onclick="addAdvancedSearchCondition();"><i class="fa fa-plus-circle"></i> {{ button_add_condition }}</a></td>
+                           </tr>
+                        </tfoot>
+                     </table>
+                  </div>
+               </div>
+
+               <div class="form-group">
+                  <label class="col-sm-2 control-label" for="input-special-sort-order">{{ entry_sort }}</label>
+                  <div class="col-sm-10">
+                     <select name="search_sort_order" class="form-control">
+                        <option value="pd.name|asc">{{ text_name_asc }}</option>
+                        <option value="pd.name|desc">{{ text_name_desc }}</option>
+                        <option value="p.product_id|desc">{{ text_date_added_desc }}</option>
+                        <option value="p.product_id|asc">{{ text_date_added_asc }}</option>
+                        <option value="discount_percent|asc">{{ text_discount_asc }}</option>
+                        <option value="discount_percent|desc">{{ text_discount_desc }}</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+
+            <div id="import-limit" class="form-group on-search-visible">
+               <label class="col-sm-2 control-label" for="input-limit">{{ entry_limit }}</label>
+               <div class="col-sm-10">
+                  <div class="input-group">
+                     <input type="text" name="limit" value="" placeholder="{{ entry_limit }}" id="input-limit" class="form-control" />
+                     <span class="input-group-addon">{{ text_product }}</span>
+                  </div>
+                  <div class="bs-callout bs-callout-small">{{ help_limit }}</div>
+               </div>
+            </div>
+
+            <div id="section-search-action" class="on-search-visible"><a id="btn-search-product" class="btn btn-success btn-block no-border-radius text-uppercase" href="javascript:void(0);">{{ button_search_product }}</a></div>
+         </form>
+      </div>
+      <div id="section-result-select" class="after-search-visible">
+         <div class="row">
+            <div class="col-sm-6">
+               <div id="search-results">
+                  <div class="section-title">
+                     <span>{{ text_search_result }}</span>
+                     <a href="javascript:void(0);" id="btn-move-all" class="btn btn-default btn-default-small">{{ button_select_all }}</a>
+                  </div>
+                  <div id="results-list" class="well well-sm" style="height: 150px; overflow: auto;"></div>
+               </div>
+            </div>
+            <div class="col-sm-6">
+               <div id="selected-products">
+                  <div class="section-title">
+                     <span>{{ text_selected_product }}</span>
+                     <a href="javascript:void(0);" id="btn-window-minimize" class="btn btn-default btn-default-small"><i class="fa fa-caret-down"></i></a>
+                     <a href="javascript:void(0);" id="btn-clear-selected" class="btn btn-default btn-default-small">{{ button_remove_all }}</a>
+                  </div>
+                  <div id="selected-products-list" class="well well-sm selected-products-list sortable" style="height: 150px; overflow: auto;"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div id="section-template-limit" class="hand-pick-visible after-search-visible">{{ help_import_limit }}</div>
+      <div id="section-import-action" class="hand-pick-visible after-search-visible"><a id="btn-import-product" class="btn btn-success btn-block no-border-radius text-uppercase" href="javascript:void(0);">{{ button_import }}</a></div>
+   </div>
+   <div class="loading-mask-overlay">
+     <div class="loading-mask-loading fixed">
+        <div class='uil-ripple-css'><div></div><div></div></div>
+     </div>
+   </div>
+ </div>
+</div>
+
+
+<script type="text/javascript"><!--
+$('#modal-search .window-button').on('click', function () {
+   var action = $(this).data('action');
+
+   if (action == 'minimize') {
+      $('#modal-search, .modal-backdrop').addClass('minimized');
+   } else {
+      $('#modal-search, .modal-backdrop').removeClass('minimized');
+   }
+
+   checkItemsCounterStatus(action);
+});
+
+$('#modal-search #btn-window-minimize').on('click', function () {
+   $('#modal-search .modal-header .window-button.minimize').trigger('click');
+});
+
+$('#modal-search #section-search-filters select[name=\'import_source\']').on('change', function() {
+   $('#modal-search #section-search-filters .import-option').hide();
+   $('#modal-search #section-search-filters #import-option-' + $(this).val()).show();
+
+   if ($(this).val() == 'hand-pick') {
+      $('#modal-search .after-search-visible').hide();
+      $('#modal-search .on-search-visible').hide();
+      $('#modal-search .hand-pick-visible').show();
+   } else {
+      $('#modal-search #btn-search-product').removeClass('only-border');
+      $('#modal-search .hand-pick-visible').hide();
+      $('#modal-search .on-search-visible').show();
+   }
+});
+
+$('#modal-search #section-search-filters select[name=\'import_source\']').trigger('change');
+
+$('#modal-search .product-autocomplete').autocomplete({
+	source: function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/module/smart_marketing/product/autocomplete&user_token=' + getURLVar('user_token') + '&filter_search=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	select: function(item) {
+      var target = $(this).data('autocomplete-target');
+
+		$(this).val('');
+
+		$('#' + target + '-' + item['value']).remove();
+
+		$('#' + target).append('<div id="' + target + '-' + item['value'] + '" class="' + target + '-item product-autocomplete-list-item" data-product-id="' + item['value'] + '"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="' + target.replace(/-/g, '_') + '[]" value="' + item['value'] + '" /></div>');
+	}
+});
+
+$('#modal-search .product-autocomplete-list').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+
+$('#modal-search .category-autocomplete').autocomplete({
+	source: function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/module/smart_marketing/category/autocomplete&user_token=' + getURLVar('user_token') + '&filter_search=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['category_id']
+					}
+				}));
+			}
+		});
+	},
+	select: function(item) {
+      var target = $(this).data('autocomplete-target');
+
+		$(this).val('');
+
+		$('#' + target + '-' + item['value']).remove();
+
+		$('#' + target).append('<div id="' + target + '-' + item['value'] + '" class="' + target + '-item category-autocomplete-list-item"><i class="fa fa-minus-circle"></i> ' + item['label'] + '<input type="hidden" name="' + target.replace(/-/g, '_') + '[]" value="' + item['value'] + '" /></div>');
+	}
+});
+
+$('#modal-search .category-autocomplete-list').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+
+$(document).delegate('.search-condition-key', 'change', function() {
+   getAdvancedSearchFieldsOnKeyChange($(this));
+});
+
+$(document).delegate('.search-condition-value.select-multiple-options', 'change', function() {
+   handleSelectMultipleOptions($(this));
+});
+
+$('#modal-search #btn-search-product').on('click', function() {
+   $('#modal-search .after-search-visible').show();
+   $('#modal-search #btn-search-product').addClass('only-border');
+
+   $.ajax({
+      type: 'POST',
+      url: 'index.php?route=extension/module/smart_marketing/search/search&user_token=' + getURLVar('user_token'),
+      data: $('#modal-search #form-search-filters').serialize(),
+      dataType: 'json',
+      beforeSend: function() {
+         $('#modal-search .modal-body .alert, #modal-search .modal-body .form-group .text-danger').remove();
+         $('#modal-search .modal-body .form-group').removeClass('has-error');
+         $('#modal-search #search-results #results-list').html('<div class="loading-mask-overlay"><div class="loading-mask-loading"><div class="uil-ripple-css"><div></div><div></div></div></div></div>');
+         $('#modal-search #search-results #results-list .loading-mask-overlay').show();
+      },
+      complete: function() {
+         $('#modal-search #search-results #results-list .loading-mask-overlay').hide();
+      },
+      success: function(json) {
+         if (json['error']) {
+            if (json['error']['warning']) {
+               $('#modal-search .modal-body').prepend('<div class="alert alert-danger">' + json['error']['warning'] + '</div>');
+            } else {
+               for (i in json['error']) {
+                  var element = '#modal-search #input-' + i.replace(/_/g, '-');
+
+                  $(element).closest('.form-group').addClass('has-error');
+
+                  if ($(element).parent().hasClass('input-group')) {
+                     $(element).parent().after('<div class="text-danger">' + json['error'][i] + '</div>');
+                  } else {
+                     $(element).after('<div class="text-danger">' + json['error'][i] + '</div>');
+                  }
+               }
+            }
+         }
+
+         if (json['output']) {
+            $('#modal-search #search-results #results-list').html(json['output']);
+         }
+      }
+   });
+});
+
+$('#modal-search #btn-import-product').on('click', function () {
+   var import_source = getImportSource();
+   var products_list_selector = '#modal-search #selected-products #selected-products-list .product-item';
+
+   var products_ids = [];
+
+   if (import_source == 'hand-pick') {
+      var products_list_selector = '#modal-search #import-option-hand-pick #hand-pick-product .hand-pick-product-item';
+   }
+
+   $(products_list_selector).each(function(){
+      products_ids.push($(this).data('product-id'));
+   });
+
+   if (products_ids) {
+      $.ajax({
+         type: 'POST',
+         url: 'index.php?route=extension/module/smart_marketing/product/import&user_token=' + getURLVar('user_token'),
+         data: 'products_ids=' + products_ids.join('-'),
+         dataType: 'json',
+         beforeSend: function() {
+            $('#modal-search .loading-mask-overlay').show();
+         },
+         complete: function() {
+            $('#modal-search .loading-mask-overlay').hide();
+         },
+         success: function(json) {
+            if (json['products']) {
+               var template = SMGetTemplateWithFetchedProducts(json['products']);
+
+               // get current scroll position
+               scroll_position = $('.smc-editor .gjs-cv-canvas .gjs-frame').contents().scrollTop();
+
+               // set template back after product replace :(
+               smc_grapesjs_editor.DomComponents.getWrapper().set('content', '');
+               smc_grapesjs_editor.setComponents(template);
+
+               // scroll back to level used before replacing content
+               $('.smc-editor .gjs-cv-canvas .gjs-frame').contents().scrollTop(scroll_position);
+            }
+
+            $('#modal-search').modal('hide');
+            $('#modal-search').remove();
+         }
+      });
+   }
+})
+
+$('#modal-search').on('hidden.bs.modal', function () {
+   checkItemsCounterStatus('close');
+})
+
+// ------------------------------------
+$(document).ready(function(){
+   setSearchProductLimitTemplate();
+   initSortable();
+   initDatePicker();
+});
+
+function getImportSource() {
+   return $('#modal-search #section-search-filters select[name=\'import_source\']').val();
+}
+
+function setSearchProductLimitTemplate() {
+   var limit = $(smc_grapesjs_editor.getHtml()).find('.product-item').length;
+
+   if (limit) {
+      $('#modal-search #section-search-filters input[name=\'limit\']').val(limit);
+      $('#modal-search .template-max-products').html(limit);
+   }
+}
+
+// ------------------------------------
+var search_condition_row = 0;
+
+function addAdvancedSearchCondition() {
+   var html = '';
+
+   html += '<tr id="advanced-search-condition-' + search_condition_row + '">';
+   html += '   <td class="text-left cell-search-key">';
+   html += '      <select name="search_condition[' + search_condition_row +'][key]" data-row-index="' + search_condition_row + '" class="search-condition-key form-control">';
+   html += '         <option value="">{{ text_select|escape('js') }}</option>';
+   html += '         <option value="pd.name" data-type="text" data-value-type="text">{{ text_field_name|escape('js') }}</option>';
+   html += '         <option value="p.model" data-type="text" data-value-type="text">{{ text_field_model|escape('js') }}</option>';
+   html += '         <option value="stock" data-type="select" data-value-type="int" data-source="stock" data-compute="true">{{ text_field_stock|escape('js') }}</option>';
+   html += '         <option value="p.quantity" data-type="text" data-value-type="int">{{ text_field_quantity|escape('js') }}</option>';
+   html += '         <option value="p.price" data-type="text" data-value-type="int" data-addon-text="{{ currency_symbol_left ? currency_symbol_left : currency_symbol_right }}">{{ text_field_price|escape('js') }}</option>';
+   html += '         <option value="discount_status" data-type="select" data-value-type="int" data-source="enabled-disabled" data-compute="true">{{ text_field_special|escape('js') }}</option>';
+   html += '         <option value="discount_percent" data-type="text" data-value-type="int" data-addon-text="%" data-compute="true">{{ text_field_discount_percent|escape('js') }}</option>';
+   html += '         <option value="discount_amount" data-type="text" data-value-type="int" data-addon-text="{{ currency_symbol_left ? currency_symbol_left : currency_symbol_right }}" data-compute="true">{{ text_field_discount_amount|escape('js') }}</option>';
+   //html += '         <option value="discount_date_start" data-type="date" data-value-type="text">{{ text_field_discount_date_start|escape('js') }}</option>';
+   //html += '         <option value="discount_date_end" data-type="date" data-value-type="text">{{ text_field_discount_date_end|escape('js') }}</option>';
+   html += '         <option value="p.points" data-type="text" data-value-type="int">{{ text_field_points|escape('js') }}</option>';
+   html += '         <option value="p.viewed" data-type="text" data-value-type="int">{{ text_field_viewed|escape('js') }}</option>';
+   html += '         <option value="p.shipping" data-type="select" data-value-type="int" data-source="yes-no">{{ text_field_shipping|escape('js') }}</option>';
+   html += '         <option value="p.date_added" data-type="date" data-value-type="text">{{ text_field_date_added|escape('js') }}</option>';
+   html += '         <option value="p.date_modified" data-type="date" data-value-type="text">{{ text_field_date_modified|escape('js') }}</option>';
+   html += '         <option value="p.manufacturer_id" data-type="select" data-value-type="int" data-source="manufacturer" data-multiple="4">{{ text_field_manufacturer|escape('js') }}</option>';
+   html += '         <option value="p2c.category_id" data-type="select" data-value-type="int" data-source="category" data-multiple="4">{{ text_field_category|escape('js') }}</option>';
+   html += '      </select>';
+   html += '   </td>';
+   html += '   <td class="text-left cell-search-operator">';
+   html += '      <select name="search_condition[' + search_condition_row +'][operator]" data-row-index="' + search_condition_row + '" class="search-condition-operator form-control">';
+   html += '         <option value="">{{ text_select }}</option>';
+   html += '      </select>';
+   html += '   </td>';
+   html += '   <td class="text-left cell-search-value">';
+   html += '      <input name="search_condition[' + search_condition_row +'][value]" value="" data-row-index="' + search_condition_row + '" class="search-condition-value form-control" />';
+   html += '   </td>';
+   html += '   <td class="text-left cell-search-compute hidden">';
+   html += '      <input name="search_condition[' + search_condition_row +'][compute]" value="" data-row-index="' + search_condition_row + '" class="search-condition-compute form-control" />';
+   html += '   </td>';
+   html += '   <td class="text-right cell-search-remove">';
+   html += '      <button type="button" onclick="deleteAdvancedSearchCondition(' + search_condition_row + ')" data-toggle="tooltip" rel="tooltip" title="{{ button_remove_condition }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+   html += '   </td>';
+   html += '</tr>';
+
+   $('#advanced-search-conditions tbody').append(html);
+
+   search_condition_row++;
+}
+
+function getAdvancedSearchFieldsOnKeyChange(object) {
+   //console.log('change triggered');
+
+   var row_index = $(object).attr('data-row-index');
+
+   var option = $(object).find(':selected');
+
+   var tag_type = (typeof($(option).attr('data-type')) != 'undefined') ? $(option).attr('data-type') : '';
+   var value_type = (typeof($(option).attr('data-value-type')) != 'undefined') ? $(option).attr('data-value-type') : '';
+   var addon_text = (typeof($(option).attr('data-addon-text')) != 'undefined') ? $(option).attr('data-addon-text') : '';
+   var multiple = (typeof($(option).attr('data-multiple')) != 'undefined') ? $(option).attr('data-multiple') : 0;
+   var compute = (typeof($(option).attr('data-compute')) != 'undefined') ? ($(option).attr('data-compute') ? 1 : 0) : 0;
+
+   var operator_options = getAdvancedSearchOperatorOptions(tag_type, value_type, multiple);
+
+   // delete previous options and add new options
+   $('.search-condition-operator[data-row-index="' + row_index + '"]').find('option').remove().end().append(operator_options);
+
+   // change segment value field => clear content to add new one
+   $('#advanced-search-condition-' + row_index + ' .cell-search-value').empty();
+
+   // bind select source - when
+   var source = (typeof($(option).attr('data-source')) != 'undefined') ? $(option).attr('data-source') : '';
+
+   var value_field = getAdvancedSearchValueField(tag_type, multiple, row_index, source, addon_text);
+
+   // add value field base on selected type
+   $('#advanced-search-condition-' + row_index + ' .cell-search-value').append(value_field);
+
+   // set as computed or not
+   $('.search-condition-compute[data-row-index="' + row_index + '"]').val(compute);
+
+   // reinitDatePicker for dinamically added date fields
+   if (tag_type == 'date') {
+      initDatePicker();
+   }
+}
+
+function getAdvancedSearchOperatorOptions(tag_type, value_type, multiple) {
+   var html = '';
+
+   html += '<option value="">{{ text_select|escape('js') }}</option>';
+
+   if (tag_type == 'select' && multiple) {
+      html += '<option value="is-in">{{ text_operator_is_in|escape('js') }}</option>';
+      html += '<option value="is-not-in">{{ text_operator_is_not_in|escape('js') }}</option>';
+   } else {
+      html += '<option value="equal">{{ text_operator_is|escape('js') }}</option>';
+      html += '<option value="not-equal">{{ text_operator_is_not|escape('js') }}</option>';
+   }
+
+   if (tag_type == 'text' && value_type == 'text') {
+      html += '<option value="contain">{{ text_operator_contain|escape('js') }}</option>';
+      html += '<option value="not-contain">{{ text_operator_not_contain|escape('js') }}</option>';
+      html += '<option value="start-with">{{ text_operator_start_with|escape('js') }}</option>';
+      html += '<option value="end-with">{{ text_operator_end_with|escape('js') }}</option>';
+   }
+
+   if (tag_type == 'text' && value_type == 'int') {
+      html += '<option value="greater">{{ text_operator_greater_than|escape('js') }}</option>';
+      html += '<option value="less">{{ text_operator_less_than|escape('js') }}</option>';
+   }
+
+   if (tag_type == 'date') {
+      html += '<option value="is-after">{{ text_operator_is_after|escape('js') }}</option>';
+      html += '<option value="is-before">{{ text_operator_is_before|escape('js') }}</option>';
+   }
+
+   return html;
+}
+
+function getAdvancedSearchValueField(type, multiple, row_index, source = '', addon_text) {
+   var html = '';
+
+   if (type == 'text' || type == 'select') {
+      if (addon_text) {
+         html += '<div class="input-group">';
+      }
+
+      if (type == 'text') {
+         html += '<input name="search_condition[' + row_index +'][value]" value="" data-row-index="' + row_index + '" class="search-condition-value form-control" />';
+      }
+
+      if (type == 'select') {
+
+         if (!multiple) {
+            html += '<select name="search_condition[' + row_index +'][value]" data-row-index="' + row_index + '" class="search-condition-value form-control">';
+         } else {
+            html += '<select name="search_condition[' + row_index +'][multiple]" data-row-index="' + row_index + '" multiple="multiple" size="' + multiple + '"' + 'class="search-condition-value select-multiple-options form-control">';
+         }
+
+         if (source == 'manufacturer') {
+            if (!multiple) {
+               html += '<option value="">{{ text_select }}</option>';
+            }
+
+            {% for manufacturer in manufacturers %}
+            html += '<option value="{{ manufacturer.manufacturer_id }}">{{ manufacturer.name|escape('js') }}</option>';
+            {% endfor %}
+         }
+
+         if (source == 'category') {
+            if (!multiple) {
+               html += '<option value="">{{ text_select }}</option>';
+            }
+
+            {% for category in categories %}
+            html += '<option value="{{ category.category_id }}">{{ category.name|escape('js') }}</option>';
+            {% endfor %}
+         }
+
+         if (source == 'yes-no') {
+            html += '<option value="1">{{ text_yes|escape('js') }}</option>';
+            html += '<option value="0">{{ text_no|escape('js') }}</option>';
+         }
+
+         if (source == 'enabled-disabled') {
+            html += '<option value="1">{{ text_enabled|escape('js') }}</option>';
+            html += '<option value="0">{{ text_disabled|escape('js') }}</option>';
+         }
+
+         if (source == 'stock') {
+            html += '<option value="1">{{ text_in_stock|escape('js') }}</option>';
+            html += '<option value="0">{{ text_out_stock|escape('js') }}</option>';
+         }
+
+         html += '</select>';
+
+         if (multiple) {
+            html += '<input type="hidden" name="search_condition[' + row_index +'][value]" data-row-index="' + row_index + '" value="" class="search-condition-value-select-multiple" />';
+            html += '<div class="help help-advanced-search">{{ help_select_multiple|escape('js') }}</div>';
+         }
+      }
+
+      if (addon_text) {
+         html += '<span class="input-group-addon">' + addon_text + '</span>';
+         html += '</div>';
+      }
+   }
+
+   if (type == 'date') {
+      html += '<div class="input-group date">';
+      html += '   <input name="search_condition[' + row_index +'][value]" value="" data-row-index="' + row_index + '" data-date-format="YYYY-MM-DD" class="search-condition-value form-control" />';
+      html += '   <span class="input-group-btn"><button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button></span>';
+      html += '</div>';
+   }
+
+   return html;
+}
+
+function handleSelectMultipleOptions(object) {
+   var row_index = $(object).attr('data-row-index');
+   var options = $(object).val();
+   var selected_options = '';
+
+   if (options.length) {
+      selected_options = options.join(',');
+   }
+
+   $('.search-condition-value-select-multiple[data-row-index="' + row_index + '"]').val(selected_options);
+}
+
+function deleteAdvancedSearchCondition(row_index) {
+   $('#advanced-search-condition-' + row_index).remove();
+}
+
+// --------------------------------------------------------
+
+function initDatePicker() {
+   $('.date').datetimepicker({
+   	pickTime: false
+   });
+}
+
+function initTimePicker() {
+   $('.time').datetimepicker({
+      pickDate: false,
+      pickTime: true,
+      sideBySide: true,
+      icons: {
+         up:   'fa fa-angle-up',
+         down: 'fa fa-angle-down',
+      }
+   });
+}
+
+function initDateTimePicker() {
+   $('.datetime').datetimepicker({
+      pickDate: true,
+      pickTime: true,
+      sideBySide: true,
+      icons: {
+         up:   'fa fa-angle-up',
+         down: 'fa fa-angle-down',
+      }
+   });
+}
+
+function initSortable() {
+	$(".sortable" ).sortable();
+}
+//--></script>

@@ -1,0 +1,22 @@
+.ocx-counter-enabled {
+	counter-reset: line-number;
+}
+
+.ocx-counter-enabled .product-item {
+	position: relative;
+	counter-increment: line-number;
+}
+
+.ocx-counter-enabled .product-item:after {
+	position: absolute;
+	background: #f2f2f2;
+	top: 0;
+	left: 50%;
+	padding: 1px 5px;
+	border: 1px solid #ddd;
+	border-radius: 50%;
+	font-size: 12px;
+	color: #000;
+	content: counter(line-number);
+	transform: translateX(-50%);
+}

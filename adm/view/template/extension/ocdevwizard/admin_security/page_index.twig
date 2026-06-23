@@ -1,0 +1,70 @@
+{#
+##====================================================##
+## @author    : OCdevWizard                           ##
+## @contact   : ocdevwizard@gmail.com                 ##
+## @support   : http://help.ocdevwizard.com           ##
+## @copyright : (c) OCdevWizard. Admin Security, 2018 ##
+##====================================================##
+#}
+<!DOCTYPE html>
+<html dir="{{ direction }}" lang="{{ lang }}">
+<head>
+<meta charset="UTF-8" />
+<meta name="robots" content="noindex, nofollow">
+<title>{{ title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<script type="text/javascript" src="view/javascript/jquery/jquery-2.1.1.min.js"></script>
+{% for style in styles %}
+<link type="text/css" href="{{ style['href'] }}" rel="{{ style['rel'] }}" media="{{ style['media'] }}" />
+{% endfor %}
+{% for script in scripts %}
+<script type="text/javascript" src="{{ script }}"></script>
+{% endfor %}
+</head>
+<body>
+<div id="main">
+  <div class="inner">
+    <h1>{{ heading_title }}</h1>
+    {% if (access_type == 1) %}
+    {% if (error_pattern_code) %}
+    <div class="error-text">{{ error_pattern_code }}</div>
+    {% endif %}
+    {% if (error_pattern_attempts) %}
+    <div class="error-text">{{ error_pattern_attempts }}</div>
+    {% endif %}
+    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form">
+      <input type="hidden" name="pattern" value="{{ pattern }}"/>
+      {% if (redirect) %}
+      <input type="hidden" name="redirect" value="{{ redirect }}"/>
+      {% endif %}
+    </form>
+    <div id="pattern-block"></div>
+    {% if (description and show_description) %}
+    <div class="additional-information">{{ description }}</div>
+    {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% if (access_type == 1) %}
+<script>
+  $(function() {
+    var lock = new PatternLock("#pattern-block", {
+      matrix: [{{ pattern_size }},{{ pattern_size }}],
+      margin: 10,
+      radius: 20,
+      delimiter: ',',
+      onDraw:function(pattern) {
+        $("input[name='pattern']").val(pattern);
+        $("#form").submit();
+      }
+    });
+  });
+</script>
+{% endif %}
+<style>
+body { {% if (page_background_type == 1) %}background: url("{{ config_store_url }}image/catalog/ocdevwizard/{{ _name }}/background/{{ style_background }}"){% elseif (page_background_type == 2) %}background: {{ style_color }}{% endif %} }
+#main .inner{background:{{ panel_style_color }} }
+#main .inner .error-text{color:{{ panel_style_error_text_color }} }
+</style>
+</body>
+</html>

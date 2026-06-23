@@ -1,0 +1,73 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+		 <a class="btn btn-primary" title="" data-toggle="tooltip" href="{{ action_settings }}" data-original-title="{{ button_settings }}"><i class="fa fa-cog"></i></a>
+		 <a onclick="confirm('{{ text_confirm }}') ? $('#records').submit() : false;" class="btn btn-warning" title="{{ button_ban_clear }}" data-toggle="tooltip" href="{{ clear_action }}"><i class="fa fa-eraser"></i></a>
+		 <button onclick="confirm('{{ text_confirm }}') ? $('#records').submit() : false;" class="btn btn-danger" title="{{ button_ban_delete }}" data-toggle="tooltip" type="button" ><i class="fa fa-trash-o"></i></button>					
+      </div>
+      <h1>{{ heading_ban }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+	{% if (error_warning) %} 
+	<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %} 
+	{% if (success is defined) %} 
+	<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }} 
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %} 
+  <nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="nav navbar-nav navbar-left">
+			{% for nav in navs %} 
+			<a href="{{ nav['href'] }}" class="btn btn-default navbar-btn {{ nav['active'] }}">{{ nav['text'] }}</a>
+			{% endfor %} 
+		</div>
+	</div>
+  </nav>  
+  
+	<div class="panel panel-body">
+		<form action="{{ delete_action }}" method="post" id="records">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-sx-12">
+					<div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<thead>
+								<tr class="active">
+									<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
+									<td class="left">{{ column_ban_ip }}</td>
+								</tr>
+							</thead>
+							{% if (records) %} 
+							<tbody>
+								{% for record in records %} 
+								<tr>
+									<td style="text-align: center;"><input type="checkbox" name="selected[]" value="{{ record['log_ban_id'] }}" /></td>
+									<td class="left">{{ record['ip'] }}</td>
+								</tr>
+								{% endfor %} 
+							{% else %} 
+								<tr>
+									<td class="center" colspan="2">{{ text_no_results }}</td>
+								</tr>
+							{% endif %} 
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+  </div>
+</div>
+{{ footer }}
