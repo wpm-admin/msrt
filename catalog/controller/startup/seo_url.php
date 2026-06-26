@@ -199,6 +199,108 @@ class ControllerStartupSeoUrl extends Controller {
 
 	}
 
+	/**
+	 * Generate clean SEO URL bypassing session contamination.
+	 * 
+	 * Стандартный $this->url->link() читает $_SESSION['mark_id'] и
+	 * $_SESSION['model_id'] (строки 220-240 в rewrite()) и подмешивает
+	 * их в URL. Этот метод собирает URL напрямую из БД (oc_seo_url),
+	 * игнорируя сессию.
+	 * 
+	 * Использование:
+	 *   $seo = new ControllerStartupSeoUrl($this->registry);
+	 *   $href = $seo->cleanLink('product/category', 'path=234&mark_id=1');
+	 *   // → https://site.com/maserati/auctions
+	 * 
+	 * @param string $route  Маршрут (напр. 'product/category')
+	 * @param string $args   Параметры (напр. 'path=234&mark_id=1')
+	 * @return string        Чистый SEO URL без сессионного мусора
+	 */
+	public function cleanLink($route, $args = '') {
+		$base = ($this->request->server['HTTPS']) ? HTTPS_SERVER : HTTP_SERVER;
+
+		$lang = '';
+		$this->load->model('localisation/language');
+		$language = $this->model_localisation_language->getLanguage($this->config->get('config_language_id'));
+		if ($language['url'] != '') {
+			$lang = '/' . $language['url'];
+		}
+
+		parse_str(str_replace('&amp;', '&', $args), $data);
+		$data['route'] = $route;
+
+		$mark_path = '';
+		$cat_path  = '';
+		$extra     = '';
+		$remaining = array();
+
+		foreach ($data as $key => $value) {
+			if ($key == 'route') continue;
+
+			if ($key == 'path') {
+				$categories = explode('_', $value);
+				$category_id = (int)array_pop($categories);
+				$r = $this->db->query("SELECT * FROM " . DB_PREFIX . "category_path cp
+					LEFT JOIN " . DB_PREFIX . "seo_url ua ON ua.query = CONCAT('category_id=', cp.path_id)
+					WHERE cp.category_id='" . (int)$category_id . "' 
+					AND ua.language_id = '" . (int)$this->config->get('config_language_id') . "'
+					ORDER BY cp.level");
+				if ($r->num_rows) {
+					foreach ($r->rows as $row) {
+						$cat_path .= '/' . $row['keyword'];
+					}
+				}
+			} elseif (in_array($key, array('mark_id', 'model_id'))) {
+				$mark_id = (int)$value;
+				$r = $this->db->query("SELECT * FROM " . DB_PREFIX . "mark_path cp
+					LEFT JOIN " . DB_PREFIX . "seo_url ua ON ua.query = CONCAT('mark_id=', cp.path_id)
+					WHERE cp.mark_id='" . (int)$mark_id . "' 
+					AND ua.language_id = '" . (int)$this->config->get('config_language_id') . "'
+					ORDER BY cp.level");
+				if ($r->num_rows) {
+					foreach ($r->rows as $row) {
+						$mark_path .= '/' . $row['keyword'];
+					}
+				}
+			} elseif ($key == 'product_id') {
+				$q = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url 
+					WHERE `query` = 'product_id=" . (int)$value . "' 
+					AND store_id = '" . (int)$this->config->get('config_store_id') . "' 
+					AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				if ($q->num_rows && $q->row['keyword']) {
+					$extra = '/' . $q->row['keyword'];
+				}
+			} else {
+				$q = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url 
+					WHERE `query` = '" . $this->db->escape($key . '=' . $value) . "' 
+					AND store_id = '" . (int)$this->config->get('config_store_id') . "' 
+					AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				if ($q->num_rows && $q->row['keyword']) {
+					$extra = '/' . $q->row['keyword'];
+				} else {
+					$remaining[$key] = $value;
+				}
+			}
+		}
+
+		$seo_path = $mark_path . $cat_path . $extra;
+
+		if (!$seo_path) {
+			return $this->url->link($route, $args);
+		}
+
+		$query = '';
+		if ($remaining) {
+			$parts = array();
+			foreach ($remaining as $k => $v) {
+				$parts[] = rawurlencode((string)$k) . '=' . rawurlencode((string)$v);
+			}
+			$query = '?' . implode('&amp;', $parts);
+		}
+
+		return rtrim($base, '/') . $lang . $seo_path . $query;
+	}
+
 	public function rewrite($link) {
 		
 		$url_info = parse_url(str_replace('&amp;', '&', $link));
