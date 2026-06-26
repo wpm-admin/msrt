@@ -173,7 +173,7 @@ class ControllerCommonHome extends Controller {
 		// === 7. Auction products ===
 		$this->load->model('catalog/product');
 		$data['auction_products'] = array();
-		$auction_results = $this->model_catalog_product->getAuctionProducts(6);
+		$auction_results = $this->model_catalog_product->getAuctionProducts(3);
 		foreach ($auction_results as $result) {
 			if ($result['image']) {
 				$image = $this->model_tool_image->resize($result['image'], 373, 226);
