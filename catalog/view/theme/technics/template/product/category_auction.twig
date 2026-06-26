@@ -1,54 +1,33 @@
  {{ header }} {% set col = column_left ? 9 : 12 %} {% set col = column_right ? col - 3 : col %}
       <!-- Main :: Start-->
       <main class="main category_store">
-        <!-- Breadcrumbs :: Start-->
+        <!-- Auction Filter :: Start-->
 
-<div class="breadcrumbs">
+<div class="auction-filter">
           <div class="container-fluid">
             <div class="filter_wrapper">
               <select name="filter_mark" id="filter_mark" class="filter_row">
-                {% for row in breadcrumbs['1']['breadList'] %}
-                  {% if breadcrumbs['1']['href'] == row['href'] %}
-                    <option value="{{ row['href'] }}" selected>{{ row['name'] }}</option>
-                  {% else %}	
-                    <option value="{{ row['href'] }}">{{ row['name'] }}</option>
+                <option value="{{ all_brands_href }}">{{ text_all_brands }}</option>
+                {% for mark in marks %}
+                  {% if mark.mark_id == selected_mark_id %}
+                    <option value="{{ mark.href }}" selected>{{ mark.name }}</option>
+                  {% else %}
+                    <option value="{{ mark.href }}">{{ mark.name }}</option>
                   {% endif %}
                 {% endfor %}
               </select>
-               
-              <select name="filter_model" id="filter_model" class="filter_row">
-                {% for row in breadcrumbs['2']['breadList'] %}
-                  {% if breadcrumbs['2']['href'] == row['href'] %}
-                    <option value="{{ row['href'] }}" selected>{{ row['name'] }}</option>
-                  {% else %}	
-                    <option value="{{ row['href'] }}">{{ row['name'] }}</option>
-                  {% endif %}
-                {% endfor %}
-              </select>
-               
-               {% if breadcrumbs['3']['breadList'] %}
-              <select name="filter_category" id="filter_category" class="filter_row">
-                {% for row in breadcrumbs['3']['breadList'] %}
-                  {% if breadcrumbs['3']['href'] == row['href'] %}
-                    <option value="{{ row['href'] }}" selected>{{ row['name'] }}</option>
-                  {% else %}	
-                    <option value="{{ row['href'] }}">{{ row['name'] }}</option>
-                  {% endif %}
-                {% endfor %}
-              </select>
-             {% endif %}
               <script>
                 $(document).on('change', '.filter_row', function(){
                   if($(this).val()){
                     location.href = $(this).val();
                   }
-                });	
+                });
               </script>
             </div>
           </div>
         </div>
 
-        <!-- Breadcrumbs :: End-->
+        <!-- Auction Filter :: End-->
 		{{ content_top }}
        <!-- Catalog :: Start-->
         <div class="catalog">

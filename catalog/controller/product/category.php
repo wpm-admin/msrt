@@ -376,6 +376,27 @@ class ControllerProductCategory extends Controller {
 			if($category_id == 234){
 				$results = $this->model_catalog_product->getAuctionProducts(1000);
 				$product_total = count($results);
+				
+				$this->load->model('catalog/mark');
+				
+				$seo = new ControllerStartupSeoUrl($this->registry);
+				
+				$data['all_brands_href'] = $seo->cleanLink('product/category', 'path=234');
+				$data['text_all_brands'] = 'All Brands';
+				$data['selected_mark_id'] = isset($this->request->get['mark_id']) ? (int)$this->request->get['mark_id'] : 0;
+				$data['selected_model_id'] = isset($this->request->get['model_id']) ? (int)$this->request->get['model_id'] : 0;
+				
+				$data['marks'] = array();
+				$marks_raw = $this->model_catalog_mark->getMarks(0);
+				foreach ($marks_raw as $mark) {
+					$data['marks'][] = array(
+						'mark_id' => $mark['mark_id'],
+						'name' => $mark['name'],
+						'href' => $seo->cleanLink('product/category', 'path=234&mark_id=' . $mark['mark_id'])
+					);
+				}
+				
+
 			}elseif($category_id == CONSIGNMENT_CATEGORY_ID OR $parent_id == CONSIGNMENT_CATEGORY_ID){
 				
 				//Если выбрано несколько категорий то обьединяем запросы по ним

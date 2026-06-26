@@ -30,22 +30,6 @@
 						{% endif %}
 					{% endfor %}
 				</select>
-				 
-				<!--select name="filter_category" id="filter_category" class="filter_row">
-					{% for row in breadcrumbs['3']['breadList'] %}
-						{% if breadcrumbs['3']['href'] == row['href'] %}
-							<option value="{{ row['href'] }}" selected>{{ row['name'] }}</option>
-						{% else %}	
-							<option value="{{ row['href'] }}">{{ row['name'] }}</option>
-						{% endif %}
-					{% endfor %}
-				</select-->
-		
-	 				<!--select name="filter_diagramm" class="filter___row filter_diagramm">
-						<option value="show_as_diagram" {% if show_as_diagram %}selected{% endif %}>{{ text_show_as_diagram }}</option>
-						<option value="unshow_as_diagram" {% if not show_as_diagram %}selected{% endif %}>{{ text_unshow_as_diagram }}</option>
-					</select-->
-            		 
 				<select name="filter_diagram" id="filter_diagram" class="filter_row">
 					{% for row in product_shema_list %}
 						{% if row['active'] %}

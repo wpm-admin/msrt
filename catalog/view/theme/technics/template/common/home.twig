@@ -34,7 +34,7 @@
 		<div
 			class="site-container">
 
-			<!-- Header -->
+{#			Header #}
 			<header class="header">
 				<div class="container container__header">
 					<div class="logo header__logo">
@@ -281,7 +281,7 @@
 			<main
 				class="main">
 
-				<!-- Hero -->
+{#				 Hero #}
 				<section class="hero" data-reveal-container>
 					{{ content_top  }}
 {##}
@@ -314,7 +314,7 @@
 					<div class="swiper-pagination hero-pagination"></div>
 				</section>
 
-				<!-- Categories -->
+{#				 Categories#}
 				<section class="categories" data-reveal-container>
 					<div class="container">
 						<div class="categories__top">
@@ -421,7 +421,7 @@
 					<a id="categories-view-all" href="{{ all_categories_href }}" class="btn btn-reset btn-view">{{ text_all_categories }}</a>
 				</section>
 
-				<!-- Banner Promo -->
+{#				Banner Promo #}
 				<section class="section banner ">
 					<div class="container banner__container">
 						<div class="banner__image">
@@ -439,7 +439,7 @@
 					</div>
 				</section>
 
-				<!-- Club -->
+{#				 Club #}
 				<section class="section club">
 					<div class="container">
 						<h2 class="section-title">
@@ -471,19 +471,19 @@
 					</div>
 				</section>
 
-				<!-- Auctions -->
+{#				 Auctions #}
 				<section class="section bg-grey auctions">
 					<div class="container">
 						<h2 class="section-title" data-reveal="txt">{{ text_auctions_title }}</h2>
 						<div class="swiper auctions__slider">
 							<div class="swiper-wrapper auctions__list grid">
 								{% for product in auction_products %}
-									<div class="swiper-slide article" data-reveal="elem">
+									<div class="swiper-slide article" data-reveal="elem"  style="transition-delay: 0.{{ loop.index }}5s;">
 										<a href="{{ product.href }}">
 											<div class="article-image">
 												<img src="{{ product.thumb }}" class="image" alt="{{ product.name }}">
 											</div>
-											<div class="article-content" data-reveal="txt" style="transition-delay: 0.25s;">
+											<div class="article-content">
 												<h4 class="article-title">{{ product.name }}</h4>
 												<div class="article-bottom">
 													{% if product.price %}
@@ -491,88 +491,29 @@
 													{% endif %}
 													<span class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></span>
 												</div>
-												<script>// var icon = $('.mobi_menu_togle');
-// $(".mobi_menu_togle, .mobi_menu_togle_close").click(function () {
-// if ($(".mobi_menu_box").hasClass("open")) {
-// $(".mobi_menu_box").removeClass("open");
-// } else {
-// $(".mobi_menu_box").addClass("open");
-// }
-// });
-											</script>
-										</div>
-									</a>
-								</div>
-							{% else %}
-								<div class="swiper-slide article" data-reveal="elem">
-									<div class="article-image">
-										<picture>
-											<source srcset="{{ lm_theme_assets }}img/auction/1.webp" type="image/webp">
-											<img src="{{ lm_theme_assets }}img/auction/1.jpg" class="image" width="" height="" alt="">
-										</picture>
 
+											</div>
+										</a>
 									</div>
-									<div class="article-content">
-										<h4 class="article-title">
-											A6 GCS/53 Berlinetta (s/n 2060)
-										</h4>
-										<div class="article-bottom">
-											<p class="price">
-												15 000 $
-											</p>
-											<a href="#" class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></a>
-										</div>
-
-									</div>
-								</div>
-								<div class="swiper-slide article" data-reveal="elem">
-									<div class="article-image">
-										<picture>
-											<source srcset="{{ lm_theme_assets }}img/auction/2.webp" type="image/webp">
-											<img src="{{ lm_theme_assets }}img/auction/2.jpg" class="image" width="" height="" alt="">
-										</picture>
-
-									</div>
-									<div class="article-content">
-										<h4 class="article-title">
-											Ferrari Is Ending Its Engine Supply Deal With Maserati
-										</h4>
-										<div class="article-bottom">
-											<p class="price">
-												7 000 $
-											</p>
-											<a href="#" class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></a>
-										</div>
-
-									</div>
-								</div>
-								<div class="swiper-slide article" data-reveal="elem">
-									<div class="article-image">
-										<img src="{{ lm_theme_assets }}img/auction/3.jpg" alt="">
-									</div>
-									<div class="article-content">
-										<h4 class="article-title">
-											Steering wheel / dashboard to Maserati Boomerang 1971
-										</h4>
-										<div class="article-bottom">
-											<p class="price">
-												1000 $
-											</p>
-											<a href="#" class="article-link"><img src="{{ lm_theme_assets }}img/svg/article-link.svg" alt=""></a>
-										</div>
-
-									</div>
-								</div>
-
-							{% endfor %}
+								{% endfor %}
+							</div>
 						</div>
+						<a href="{#{{ auction_href }}#}{{ base }}auctions" class="btn btn-reset btn-view">
+							{{ text_all_auctions }}
+						</a>
 					</div>
-					<a href="{{ auction_href }}" class="btn btn-reset btn-view">{{ text_all_auctions }}</a>
-				</div>
-			</div>
-		</section>
-
-		<!-- Banner Maserati -->
+				</section>
+				<script>
+					// var icon = $('.mobi_menu_togle');
+					// $(".mobi_menu_togle, .mobi_menu_togle_close").click(function () {
+					// if ($(".mobi_menu_box").hasClass("open")) {
+					// $(".mobi_menu_box").removeClass("open");
+					// } else {
+					// $(".mobi_menu_box").addClass("open");
+					// }
+					// });
+				</script>
+{#		 Banner Maserati #}
 		<section class="section banner banner-maserati ">
 			<div class="container banner__container">
 				<div class="banner__image">
@@ -585,7 +526,7 @@
 			</div>
 		</section>
 
-		<!-- News -->
+{#		 News #}
 		<section class="section news ">
 			<div class="container news-container">
 				<div class="swiper news__slider">
@@ -603,7 +544,7 @@
 			</div>
 		</section>
 
-		<!-- About -->
+{#		 About #}
 		<section class="section bg-grey about" data-reveal="elem">
 			<div class="container grid about-container">
 				<h2 class="section-title about-title">
@@ -629,7 +570,7 @@
 			</div>
 		</section>
 
-		<!-- SEO -->
+{#		SEO #}
 		<section class="section seo ">
 			<div class="container">
 				<div class="seo__content">
@@ -653,7 +594,7 @@
 
 	</main>
 
-	<!-- Footer -->
+{#	 Footer #}
 	<footer class="section footer" data-reveal-container>
 		<div class="container">
 			<div class="footer__top grid">
@@ -770,141 +711,149 @@
 			</div>
 		</div>
 	</footer>
-</body></html></div>{% for script in lm_scripts %}<script {{ script }}></script>{% endfor %}<script>$(function () {
-var search_href = '{{ search_href }}';
-var autocomplete_href = '{{ autocomplete_href }}';
+</div>
+		{% for script in lm_scripts %}
+			<script {{ script }}></script>
+		{% endfor %}
+		<script>
+			$(function () {
+				var search_href = '{{ search_href }}';
+				var autocomplete_href = '{{ autocomplete_href }}';
 
-var $searchInput = $('#search input[name="search"]');
-var $liveSearch = $('.live-search');
+				var $searchInput = $('#search input[name="search"]');
+				var $liveSearch = $('.live-search');
 
-// --- LiveSearchJs autocomplete (adapted from search.twig) ---
-var LiveSearchJs = function () {
-var init = function (options) {
-var live_search = {
-selector: "#search input[name='search']",
-text_no_matches: options.text_empty,
-height: '50px'
-}
+				// --- LiveSearchJs autocomplete (adapted from search.twig) ---
+				var LiveSearchJs = function () {
+				var init = function (options) {
+				var live_search = {
+				selector: "#search input[name='search']",
+				text_no_matches: options.text_empty,
+				height: '50px'
+				}
 
-$(live_search.selector).autocomplete({
-'source': function (request, response) {
-var filter_name = $(live_search.selector).val();
-var cat_id = 0;
-var live_search_min_length = options.module_live_search_min_length;
+				$(live_search.selector).autocomplete({
+				'source': function (request, response) {
+				var filter_name = $(live_search.selector).val();
+				var cat_id = 0;
+				var live_search_min_length = options.module_live_search_min_length;
 
-if (filter_name.length < live_search_min_length) {
-$liveSearch.removeClass('search-show');
-} else {
-var url = options.autocomplete_href + '?filter_name=' + encodeURIComponent(filter_name);
-var all_search_href = options.search_href + '?search=' + encodeURIComponent(filter_name);
+				if (filter_name.length < live_search_min_length) {
+				$liveSearch.removeClass('search-show');
+				} else {
+				var url = options.autocomplete_href + '?filter_name=' + encodeURIComponent(filter_name);
+				var all_search_href = options.search_href + '?search=' + encodeURIComponent(filter_name);
 
-$liveSearch.find('ul').html('<li style="text-align: center;height:10px;"><img class="loading" src="catalog/view/javascript/live_search/loading.gif" /></li>');
-$liveSearch.addClass('search-show');
+				$liveSearch.find('ul').html('<li style="text-align: center;height:10px;"><img class="loading" src="catalog/view/javascript/live_search/loading.gif" /></li>');
+				$liveSearch.addClass('search-show');
 
-$.ajax({
-url: url,
-dataType: 'json',
-success: function (result) {
-var products = result.products;
-$liveSearch.find('ul li').remove();
-$liveSearch.find('.result-text').html('');
-if (!$.isEmptyObject(products)) {
-var show_image = options.module_live_search_show_image;
-var show_price = options.module_live_search_show_price;
-var show_description = options.module_live_search_show_description;
-var show_add_button = options.module_live_search_show_add_button;
+				$.ajax({
+				url: url,
+				dataType: 'json',
+				success: function (result) {
+				var products = result.products;
+				$liveSearch.find('ul li').remove();
+				$liveSearch.find('.result-text').html('');
+				if (!$.isEmptyObject(products)) {
+				var show_image = options.module_live_search_show_image;
+				var show_price = options.module_live_search_show_price;
+				var show_description = options.module_live_search_show_description;
+				var show_add_button = options.module_live_search_show_add_button;
 
-$liveSearch.find('.result-text').html('<a href="' + all_search_href + '" class="btn btn-primary btn-block btn-xs live_all_result">' + options.text_view_all_results + '</a>');
+				$liveSearch.find('.result-text').html('<a href="' + all_search_href + '" class="btn btn-primary btn-block btn-xs live_all_result">' + options.text_view_all_results + '</a>');
 
-$.each(products, function (index, product) {
-var html = '<li>';
-if (show_add_button == "1") {
-if (product.minimum == 0) 
-product.minimum = 1;
+				$.each(products, function (index, product) {
+				var html = '<li>';
+				if (show_add_button == "1") {
+				if (product.minimum == 0)
+				product.minimum = 1;
 
 
 
-html += '<div class="product-add-cart"><a href="javascript:;" onclick="cart.add(' + product.product_id + ', ' + product.minimum + ');" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></a></div>';
-}
-html += '<a href="' + product.url + '" class="live_search_model" title="' + product.model + '">';
-if (product.image && show_image == "1") {
-html += '<div class="product-image"><img alt="' + product.name + '" src="' + product.image + '"></div>';
-}
-html += '<div class="product-name"><span>' + product.model + '</span><br>' + product.name;
-if (show_description == "1") {
-html += '<p>' + product.extra_info + '</p>';
-}
-html += '</div>';
-if (show_price == "1") {
-if (product.special) {
-html += '<div class="product-price"><span class="special">' + product.price + '</span><span class="price">' + product.special + '</span></div>';
-} else {
-html += '<div class="product-price"><span class="price">' + product.price + '</span></div>';
-}
-}
-html += '</a>';
-html += '</li>';
-$liveSearch.find('ul').append(html);
-});
-} else {
-$liveSearch.find('ul').html('<li style="text-align: center;height:10px;">' + live_search.text_no_matches + '</li>');
-} $liveSearch.addClass('search-show');
-return false;
-}
-});
-}
-},
-'select': function (product) {
-$(live_search.selector).val(product.name);
-}
-});
+				html += '<div class="product-add-cart"><a href="javascript:;" onclick="cart.add(' + product.product_id + ', ' + product.minimum + ');" class="btn btn-primary"><i class="fa fa-shopping-cart"></i></a></div>';
+				}
+				html += '<a href="' + product.url + '" class="live_search_model" title="' + product.model + '">';
+				if (product.image && show_image == "1") {
+				html += '<div class="product-image"><img alt="' + product.name + '" src="' + product.image + '"></div>';
+				}
+				html += '<div class="product-name"><span>' + product.model + '</span><br>' + product.name;
+				if (show_description == "1") {
+				html += '<p>' + product.extra_info + '</p>';
+				}
+				html += '</div>';
+				if (show_price == "1") {
+				if (product.special) {
+				html += '<div class="product-price"><span class="special">' + product.price + '</span><span class="price">' + product.special + '</span></div>';
+				} else {
+				html += '<div class="product-price"><span class="price">' + product.price + '</span></div>';
+				}
+				}
+				html += '</a>';
+				html += '</li>';
+				$liveSearch.find('ul').append(html);
+				});
+				} else {
+				$liveSearch.find('ul').html('<li style="text-align: center;height:10px;">' + live_search.text_no_matches + '</li>');
+				} $liveSearch.addClass('search-show');
+				return false;
+				}
+				});
+				}
+				},
+				'select': function (product) {
+				$(live_search.selector).val(product.name);
+				}
+				});
 
-$(document).bind("mouseup touchend", function (e) {
-if (! $liveSearch.is(e.target) && $liveSearch.has(e.target).length === 0) {
-$liveSearch.removeClass('search-show');
-}
-});
-}
+				$(document).bind("mouseup touchend", function (e) {
+				if (! $liveSearch.is(e.target) && $liveSearch.has(e.target).length === 0) {
+				$liveSearch.removeClass('search-show');
+				}
+				});
+				}
 
-return {
-init: function (options) {
-init(options);
-}
-};
-}();
+				return {
+				init: function (options) {
+				init(options);
+				}
+				};
+				}();
 
-// Initialize live search
-var options = {{ live_search_options|json_encode|raw }};
-LiveSearchJs.init(options);
+				// Initialize live search
+				var options = {{ live_search_options|json_encode|raw }};
+				LiveSearchJs.init(options);
 
-// --- Button handlers ---
-function doSearch() {
-var query = $searchInput.val().trim();
-if (query) {
-location.href = search_href + '?search=' + encodeURIComponent(query);
-}
-}
+				// --- Button handlers ---
+				function doSearch() {
+				var query = $searchInput.val().trim();
+				if (query) {
+				location.href = search_href + '?search=' + encodeURIComponent(query);
+				}
+				}
 
-$('.search__btn-icon').on('click', function (e) {
-e.preventDefault();
-doSearch();
-});
+				$('.search__btn-icon').on('click', function (e) {
+				e.preventDefault();
+				doSearch();
+				});
 
-$('.search__btn-text').on('click', function (e) {
-e.preventDefault();
-doSearch();
-});
+				$('.search__btn-text').on('click', function (e) {
+				e.preventDefault();
+				doSearch();
+				});
 
-$searchInput.on('keydown', function (e) {
-if (e.keyCode == 13) {
-e.preventDefault();
-doSearch();
-}
-});
+				$searchInput.on('keydown', function (e) {
+				if (e.keyCode == 13) {
+				e.preventDefault();
+				doSearch();
+				}
+				});
 
-$('.search__list-close').on('click', function (e) {
-e.preventDefault();
-$searchInput.val('');
-$liveSearch.removeClass('search-show');
-});
-});</script></body></html>
+				$('.search__list-close').on('click', function (e) {
+				e.preventDefault();
+				$searchInput.val('');
+				$liveSearch.removeClass('search-show');
+				});
+				});
+		</script>
+	</body>
+</html>

@@ -267,6 +267,12 @@ class ControllerProductProduct extends Controller {
 
 		if ($product_info) {
 			
+			// Check if product has active auction
+			$this->load->model('catalog/product');
+			$auction_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "auction WHERE product_id = '" . (int)$product_id . "' AND status = '1' AND date_start <= NOW() AND date_end >= NOW() LIMIT 1");
+			if ($auction_query->num_rows > 0) {
+				$product_info['auction'] = $auction_query->row;
+			}
 			
 			//Вычислим стоимость по весу товара и ИП клиента
 			$this->load->model('extension/shipping/flat1');

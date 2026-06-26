@@ -16,7 +16,11 @@ HOMEPAGE-NOTES.md
 .idea/php.xml
 .idea/
 plan-green.md
+auction-actions.md
+temp_category.txt
 donor.css
 donor.js
 TODO.md
+tasks-fix-done.md
+*.DS_Store
 # OpenCart working state backup
