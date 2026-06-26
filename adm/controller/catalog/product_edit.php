@@ -164,6 +164,10 @@ class ControllerCatalogProductEdit extends Controller {
 			
 				$html .= '<div class="input-group" style="min-width:100px;">';
 				$html .= '<select name="product['.$field.']" class="form-control modal_edit">';
+					if($field == 'manufacturer_id'){
+						$sel = ($data['product_info'][$field] == 0) ? ' selected' : '';
+						$html .= '<option value="0"'.$sel.'>--- None ---</option>';
+					}
 					foreach($list as $row){
 					$html .= '<option value="'.$row[$field].'"';
 					if($row[$field] == $data['product_info'][$field]) $html .= ' selected';
@@ -174,10 +178,8 @@ class ControllerCatalogProductEdit extends Controller {
 			
 			if($field == 'uom'){
 				$html .= '<div class="input-group" style="min-width:100px;">';
-				$html .= '<select name="product[uom]" class="form-control modal_edit">';
-				$html .= '<option value="ea"'.($data['product_info']['uom'] == 'ea' ? ' selected' : '').'>ea</option>';
-				$html .= '<option value="set"'.($data['product_info']['uom'] == 'set' ? ' selected' : '').'>set</option>';
-				$html .= '</select></div>';
+				$html .= '<input type="text" name="product[uom]" value="' . htmlspecialchars($data['product_info']['uom'], ENT_QUOTES) . '" class="form-control modal_edit"/>';
+				$html .= '</div>';
 			}			
 			$html .= '<div class="input-group" style="min-width:100px;">';
 		}
