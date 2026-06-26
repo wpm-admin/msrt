@@ -40,7 +40,11 @@ class ControllerStartupSeoUrl extends Controller {
 			
 			foreach ($parts as $part) {
 				
-				$sql = "SELECT * FROM " . DB_PREFIX . "seo_url WHERE keyword = '" . $this->db->escape($part) . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "' LIMIT 1";
+					// Приоритет при дублировании SEO-ключей: mark_id > model_id > category_id > manufacturer_id > information_id > product_id
+				// Если ключ (например "maserati") есть и для mark_id=1 и для product_id=XXX, берётся mark_id
+				// Иначе на /maserati/auctions будет редирект на товар вместо фильтра по бренду
+				//$sql = "SELECT * FROM " . DB_PREFIX . "seo_url WHERE keyword = '" . $this->db->escape($part) . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "' LIMIT 1";
+				$sql = "SELECT * FROM " . DB_PREFIX . "seo_url WHERE keyword = '" . $this->db->escape($part) . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY FIELD(SUBSTRING_INDEX(query, '=', 1), 'mark_id', 'model_id', 'category_id', 'manufacturer_id', 'information_id', 'product_id') LIMIT 1";
 				
 				$query = $this->db->query($sql);
 
@@ -201,11 +205,7 @@ class ControllerStartupSeoUrl extends Controller {
 
 	/**
 	 * Generate clean SEO URL bypassing session contamination.
-	 * 
-	 * Стандартный $this->url->link() читает $_SESSION['mark_id'] и
-	 * $_SESSION['model_id'] (строки 220-240 в rewrite()) и подмешивает
-	 * их в URL. Этот метод собирает URL напрямую из БД (oc_seo_url),
-	 * игнорируя сессию.
+     *    метод собирает URL напрямую из БД (oc_seo_url), игнорируя сессию.
 	 * 
 	 * Использование:
 	 *   $seo = new ControllerStartupSeoUrl($this->registry);
