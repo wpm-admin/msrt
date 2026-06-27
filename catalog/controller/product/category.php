@@ -395,7 +395,16 @@ class ControllerProductCategory extends Controller {
 						'href' => $seo->cleanLink('product/category', 'path=234&mark_id=' . $mark['mark_id'])
 					);
 				}
-				
+
+				//Clean heading — brand из URL, без сессии/модели
+				$heading_preff = '';
+				if(isset($this->request->get['mark_id'])){
+					$mark = $this->model_catalog_mark->getMark((int)$this->request->get['mark_id']);
+					if($mark && (int)$mark['parent_id'] == 0){
+						$heading_preff = $mark['name'] . ' — ';
+					}
+				}
+				$data['heading_title'] = $heading_preff . $category_info['name'];
 
 			}elseif($category_id == CONSIGNMENT_CATEGORY_ID OR $parent_id == CONSIGNMENT_CATEGORY_ID){
 				
@@ -426,8 +435,8 @@ class ControllerProductCategory extends Controller {
 			$this->load->model('account/wishlist');
 		
 			//Если в категории всего один продукт - переходим сразу в него (Если только это не обьявление)
-			if(count($results) == 1 AND !$this_consigment){
-				$link = $this->url->link('product/product', 'product_id=' . $result['product_id'] . $url);
+			if(count($results) === 1 && !$this_consigment && !isset($this->request->get['mark_id']) && $category_id != 234){
+				$link = $this->url->link('product/product', 'product_id=' . $results[0]['product_id'] . $url);
 				header("HTTP/1.1 301 Moved Permanently");
 				header("Location: " . $link);
 				exit();

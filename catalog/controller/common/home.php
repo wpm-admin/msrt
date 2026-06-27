@@ -75,7 +75,7 @@ class ControllerCommonHome extends Controller {
 				$data['lm_first_models'][] = array(
 					'model_id' => $m['mark_id'],
 					'name'     => $m['name'],
-					'image'    => $m['image'] ? $this->model_tool_image->resize($m['image'], 50, 50) : '',
+					'image'    => $m['image'] ? $this->model_tool_image->resize($m['image'], 100, 50) : '',
 					'href'     => $this->url->link('product/mark', 'mark_id=' . $m['mark_id'])
 				);
 			}
@@ -252,19 +252,23 @@ class ControllerCommonHome extends Controller {
 		$data['lm_news'] = array(
 			array(
 				'title' => 'Viale Ciro Menotti (VCM)',
-				'thumb' => $theme_assets . 'img/slider-bottom/1.jpg'
+				'thumb' => $theme_assets . 'img/slider-bottom/1.jpg',
+                'link' => '/viale-ciro-menotti-historic-publications'
 			),
 			array(
 				'title' => 'MIE FACILITIES',
-				'thumb' => $theme_assets . 'img/slider-bottom/2.jpg'
+				'thumb' => $theme_assets . 'img/slider-bottom/2.jpg',
+                'link' => '/mie-facilities'
 			),
 			array(
 				'title' => 'Ebay store',
-				'thumb' => $theme_assets . 'img/slider-bottom/3.jpg'
+				'thumb' => $theme_assets . 'img/slider-bottom/3.jpg',
+                'link' => '/maserati-stores'
 			),
 			array(
 				'title' => 'MASERATI CLASSIFIEDS',
-				'thumb' => $theme_assets . 'img/slider-bottom/4.jpg'
+				'thumb' => $theme_assets . 'img/slider-bottom/4.jpg',
+                'link' => '/classified-ads'
 			)
 		);
 

@@ -287,7 +287,7 @@
 {##}
 					<div class="hero__content">
 						<h1 class="page-title">{{ text_home_title }}</h1>
-						<div class="box_home_search">
+						<div class="box_home_search" data-reveal="img">
 							<nav class="nav hero-nav js-sticky">
 								<div id="search" class="search js-search">
 									<div class="search__wrapper">
@@ -401,7 +401,7 @@
 							<div class="swiper categories__bottom">
 								<div class="swiper-wrapper categories__list grid">
 									{% for item in lm_category_bottom %}
-										<div class="swiper-slide categories__list-item" data-reveal="txt" style="transition-delay: 0.15s;">
+										<div class="swiper-slide categories__list-item" data-reveal="txt" style="transition-delay: 0.{{ loop.index }}5s;">
 											<a href="{{ item.href }}" class="category_link">
 
 												<div class="category-image">
@@ -449,7 +449,7 @@
 						<div class="swiper club__slider">
 							<div class="swiper-wrapper club__list grid">
 								{% for article in blog_products %}
-									<div class="swiper-slide article" data-reveal="elem">
+									<div class="swiper-slide article" data-reveal="elem" style="transition-delay: 0.{{ loop.index }}5s;">
 										<div class="article-image">
 											<img src="{{ article.thumb }}" class="image" alt="{{ article.name }}">
 										</div>
@@ -479,7 +479,7 @@
 							<div class="swiper-wrapper auctions__list grid">
 								{% for product in auction_products %}
 									<div class="swiper-slide article" data-reveal="elem"  style="transition-delay: 0.{{ loop.index }}5s;">
-										<a href="{{ product.href }}">
+										<a href="{{ product.href }}" class="auction__link">
 											<div class="article-image">
 												<img src="{{ product.thumb }}" class="image" alt="{{ product.name }}">
 											</div>
@@ -532,11 +532,13 @@
 				<div class="swiper news__slider">
 					<div class="swiper-wrapper grid">
 						{% for item in lm_news %}
-							<div class="swiper-slide news-item" data-reveal="elem">
-								<h3 class="news-title">{{ item.title }}</h3>
-								<div class="news-image">
-									<img src="{{ item.thumb }}" class="image" alt="{{ item.title }}">
-								</div>
+							<div class="swiper-slide news-item" data-reveal="elem" style="transition-delay: 0.{{ loop.index }}5s;">
+								<a href="{{ item.link }}" class="news-item-link">
+									<h3 class="news-title">{{ item.title }}</h3>
+									<div class="news-image">
+										<img src="{{ item.thumb }}" class="image" alt="{{ item.title }}">
+									</div>
+								</a>
 							</div>
 						{% endfor %}
 					</div>
@@ -598,7 +600,7 @@
 	<footer class="section footer" data-reveal-container>
 		<div class="container">
 			<div class="footer__top grid">
-				<div class="footer__col footer__col-left">
+				<div class="footer__col footer__col-left" data-reveal="img">
 					<div class="footer-logo">
 						<img src="{{ lm_theme_assets }}img/svg/logo-footer.svg" alt="{{ name }}">
 					</div>
