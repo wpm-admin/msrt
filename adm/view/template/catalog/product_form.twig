@@ -190,10 +190,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="input-uom">{{ entry_uom }}</label>
                 <div class="col-sm-10">
-                  <select name="uom" id="input-uom" class="form-control">
-                    <option value="ea" {% if uom == 'ea' %}selected="selected"{% endif %}>ea</option>
-                    <option value="set" {% if uom == 'set' %}selected="selected"{% endif %}>set</option>
-                  </select>
+                   <input type="text" name="uom" value="{{ uom }}" placeholder="{{ entry_uom }}" id="input-uom" class="form-control"/>
                 </div>
               </div>
               <div class="form-group">

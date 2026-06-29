@@ -1,5 +1,6 @@
 php.ini
 .gitignore
+gitignore
 config.php
 /app
 /landing
@@ -22,5 +23,6 @@ donor.css
 donor.js
 TODO.md
 tasks-fix-done.md
+interim-result.md
 *.DS_Store
 # OpenCart working state backup
