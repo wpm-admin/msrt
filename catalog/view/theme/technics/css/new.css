@@ -1575,9 +1575,7 @@ color: #000000;
       .swiper-slide {
         text-align: center;
         font-size: 18px;
- 
- 
-        display: block;
+         display: block;
         -webkit-box-pack: center;
         -ms-flex-pack: center;
         -webkit-justify-content: center;
@@ -1586,8 +1584,12 @@ color: #000000;
         -ms-flex-align: center;
         -webkit-align-items: center;
         align-items: center;
-      }
 
+      }
+.box_swiper_mark     .swiper-slide {
+	max-width: fit-content;
+
+}
 .box_swiper_mark     .swiper-slide img {
         display: block;
         width: 100%;

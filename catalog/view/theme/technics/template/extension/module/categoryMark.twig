@@ -82,6 +82,9 @@
  .all_models_popup .model_col{
   float: left;
  }
+ /*.box_swiper_mark .swiper-slide img {*/
+ /*    max-width: 100%;*/
+ /*}*/
 </style>
 <script>
  //Открываем попап со всеми моделями
@@ -160,7 +163,7 @@
               href = element.context.children[0].href;
               
               
-              console.log(href); // индекс слайда, какой
+              // console.log(href); // индекс слайда, какой
               
               if(!main_page){
                window.history.pushState(null, null, element.context.children[0].href);
@@ -168,7 +171,7 @@
                $('.bttn_home_more').prop('href', element.context.children[0].href);
               }
               
-              console.log(href);
+              // console.log(href);
               
               $.ajax({
                url: href,
