@@ -129,7 +129,8 @@
       var mobile_def = 1;
      {% endif %}
 
-     var main_page = 0;
+      var _ready = false;
+      var main_page = 0;
      {% if(main_page) %}
       var main_page = 1;
      {% endif %}
@@ -137,6 +138,7 @@
       var swiper = new Swiper(".mySwiper", {
         slidesPerView: 3,
         spaceBetween: 30,
+        centeredSlides: true,
         slidesPerGroup:1,
         loop: true,
         loopFillGroupWithBlank: true,
@@ -148,11 +150,12 @@
           prevEl: ".swiper-button-prev",
         },
         on: {
-         slideChange: function (e) {// Событие карусели
-              //console.log (this.activeIndex); // индекс слайда, какой
-              //console.log (this.realIndex); // индекс слайда, какой
+          slideChange: function (e) {// Событие карусели
+               if (!_ready) return;
+               //console.log (this.activeIndex); // индекс слайда, какой
+               //console.log (this.realIndex); // индекс слайда, какой
               
-              var element = $(this.slides[this.activeIndex + mobile]);
+               var element = $(this.slides[this.activeIndex]);
               
               href = element.context.children[0].href;
               
@@ -179,7 +182,7 @@
                  $data = $(data);
                  $('#mainContainer').html($data.find('.box_categorywall'));
                  $('.breadcrumbs').html($data.find('.breadcrumbs'));
-                 $('.seo_block').html($data.find('.seo_block'));
+               $('.seo_block').html($data.find('.seo_block').children());
                  $('.box_bestsellers').html($data.find('.box_bestsellers'));
                  
                  $('.products_mod_slides').slick({
@@ -260,9 +263,14 @@
        
        //console.log('{{ active_index }} - ' + mobile_def);
        
-       swiper.slideTo({{ active_index }} - mobile_def);
-       swiper.update();
-      }, 100);
+ 
+      }, 200);
+
+      $(window).on('load', function() {
+        swiper.slideTo({{ active_index }});
+        swiper.update();
+        _ready = true;
+        });
     </script>	
 	
 	

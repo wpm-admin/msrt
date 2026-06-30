@@ -85,15 +85,7 @@ class ControllerProductMark extends Controller {
 			$data['model_id'] = $this->session->data['model_id'];
 		}else{
 			$children = $this->model_catalog_mark->getMarks($data['mark_id'], false, true);
-			if($data['is_mobile']){
-				$data['model_id'] = $children[0]['mark_id'];
-			}else{
-				if(isset($children[1])){
-					$data['model_id'] = $children[1]['mark_id'];
-				}else{
-					$data['model_id'] = $children[0]['mark_id'];
-				}
-			}
+			$data['model_id'] = $children[0]['mark_id'];
 
 			
 			$this->response->redirect($this->url->link('product/mark', 'mark_id=' .  $data['model_id'] ));

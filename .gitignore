@@ -1,6 +1,7 @@
 php.ini
 .gitignore
 gitignore
+readme.md
 config.php
 /app
 /landing
