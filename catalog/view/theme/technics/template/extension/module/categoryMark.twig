@@ -1,4 +1,5 @@
- <link rel="stylesheet" href="catalog/view/theme/technics/css/swiper-bundle.min.css">
+<script>console.log('11111111111');</script>
+<link rel="stylesheet" href="catalog/view/theme/technics/css/swiper-bundle.min.css">
 <div class="slider_model_title">{{ text_model_title }}</div>
 <div class="swiper box_swiper_mark mySwiper">
       <div class="swiper-wrapper">
@@ -54,6 +55,7 @@
 
 
 <script src="catalog/view/javascript/swiper-bundle.min.js"></script>
+ <script>console.log('[categoryMark] Creating Swiper, active_index={{ active_index }}');</script>
 <style>
  .all_models_popup_back{
   position: fixed;
@@ -82,66 +84,63 @@
  .all_models_popup .model_col{
   float: left;
  }
- /*.box_swiper_mark .swiper-slide img {*/
- /*    max-width: 100%;*/
- /*}*/
 </style>
 <script>
- //Открываем попап со всеми моделями
- 
+
+
  $(document).on('click', '.child', function(e){
-   
+
   e.preventDefault();
-  
+
   $('.all_models_popup').show();
   $('.all_models_popup_back').show();
    return false;
  });
- 
- 
+
+
          //Закроем все попапы
         $(document).on('click', '.popup_back, .button_close_form', function(){
-                 
+
          $('.all_models_popup').hide();
          $('.all_models_popup_back').hide();
-          
+
         });
-		
+
  $(document).on('click', '.all_models_popup_back', function(e){
-   
+
   $('.all_models_popup').hide();
   $('.all_models_popup_back').hide();
  });
-</script>		 
-    <!-- Initialize Swiper -->
+</script>
+
     <script>
      $(document).on('mouseenter', '.model_list_link', function(){
       var link = $(this).prop('href');
-      //history.pushState(null, null, link);
-     });
-     
-     $(document).on('mouseleave', '.model_list_link', function(){
-      //history.pushState(null, null, '{{ href }}');
-     });
-     
-     {% if is_mobile %}
-      var mobile = 0;
-      var mobile_def = 2;
-     {% else %}
-      var mobile = 1;
-      var mobile_def = 1;
-     {% endif %}
 
+     });
+
+     $(document).on('mouseleave', '.model_list_link', function(){
+
+     });
+     
       var _ready = false;
       var main_page = 0;
+      // mobile/mobile_def — для header_5.twig (глобальная переменная)
+      {% if is_mobile %}
+      var mobile = 1;
+      var mobile_def = 1;
+      {% else %}
+      var mobile = 0;
+      var mobile_def = 0;
+      {% endif %}
      {% if(main_page) %}
       var main_page = 1;
      {% endif %}
      
-      var swiper = new Swiper(".mySwiper", {
+       console.log('[categoryMark] Creating Swiper, active_index={{ active_index }}, _ready=' + _ready);
+       var swiperMark = new Swiper(".mySwiper", {
         slidesPerView: 3,
         spaceBetween: 30,
-        centeredSlides: true,
         slidesPerGroup:1,
         loop: true,
         loopFillGroupWithBlank: true,
@@ -154,26 +153,25 @@
         },
         on: {
           slideChange: function (e) {// Событие карусели
+               console.log('[categoryMark] slideChange: activeIndex=' + this.activeIndex + ', realIndex=' + this.realIndex + ', _ready=' + _ready);
                if (!_ready) return;
-               //console.log (this.activeIndex); // индекс слайда, какой
-               //console.log (this.realIndex); // индекс слайда, какой
+               
+               var activeSlide = this.el.querySelector('.swiper-slide[data-swiper-slide-index="' + this.realIndex + '"]:not(.swiper-slide-duplicate)');
+               var element = $(activeSlide);
               
-               var element = $(this.slides[this.activeIndex]);
-              
-              href = element.context.children[0].href;
-              
-              
-              // console.log(href); // индекс слайда, какой
-              
-              if(!main_page){
-               window.history.pushState(null, null, element.context.children[0].href);
-              }else{
-               $('.bttn_home_more').prop('href', element.context.children[0].href);
-              }
-              
-              // console.log(href);
-              
-              $.ajax({
+               href = element.context.children[0].href;
+               
+               console.log('[categoryMark] Loading href=' + href);
+               
+               if(!main_page){
+                window.history.pushState(null, null, href);
+               }else{
+                $('.bttn_home_more').prop('href', href);
+               }
+               
+               console.log('[categoryMark] AJAX → ' + href);
+               
+               $.ajax({
                url: href,
                type: 'post',
                data: $('#product input'),
@@ -185,7 +183,7 @@
                  $data = $(data);
                  $('#mainContainer').html($data.find('.box_categorywall'));
                  $('.breadcrumbs').html($data.find('.breadcrumbs'));
-               $('.seo_block').html($data.find('.seo_block').children());
+                 $('.seo_block').html($data.find('.seo_block'));
                  $('.box_bestsellers').html($data.find('.box_bestsellers'));
                  
                  $('.products_mod_slides').slick({
@@ -262,23 +260,20 @@
 	
       });
       
-      setTimeout(function(){
-       
-       //console.log('{{ active_index }} - ' + mobile_def);
-       
- 
-      }, 200);
+       console.log('[categoryMark] Will slideTo(' + ({{ active_index }}) + ', 0)');
 
-      $(window).on('load', function() {
-        swiper.slideTo({{ active_index }});
-        swiper.update();
+       setTimeout(function(){
+        console.log('[categoryMark] Executing slideTo(' + ({{ active_index }}) + ', 0)');
+        swiperMark.slideTo({{ active_index }}, 0);
+        swiperMark.update();
         _ready = true;
-        });
-    </script>	
-	
-	
-	
- 
+        console.log('[categoryMark] _ready=true, Swiper ready');
+       }, 100);
+    </script>
+
+	<h1>Hi world</h1>
+
+
 {% if home_page %}
 <a href="{{ href }}" class="bttn_home_more home_mark_href">
 {{ text_shop_bttn }}

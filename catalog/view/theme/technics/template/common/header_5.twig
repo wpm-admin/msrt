@@ -136,6 +136,7 @@
                    ],		
 });
                  
+		console.log('[header_5] Creating Swiper');
 		var swiper = new Swiper(".mySwiper", {
         slidesPerView: 3,
         spaceBetween: 30,
@@ -147,9 +148,7 @@
         },
         on: {
           slideChange: function () {
-      
-              //console.log (this.activeIndex); // индекс слайда, какой
-              //console.log (this.realIndex); // индекс слайда, какой
+              console.log('[header_5] slideChange: activeIndex=' + this.activeIndex + ', realIndex=' + this.realIndex);
               
               var element = $(this.slides[this.activeIndex + mobile]);
               

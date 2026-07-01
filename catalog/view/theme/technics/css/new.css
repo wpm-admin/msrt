@@ -1567,40 +1567,36 @@ color: #000000;
     vertical-align: top;
 }
 
-      .swiper {
-        width: 100%;
-        height: 100%;
-      }
-
-      .swiper-slide {
-        text-align: center;
-        font-size: 18px;
-         display: block;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        -webkit-align-items: center;
-        align-items: center;
-
-      }
-.box_swiper_mark     .swiper-slide {
-	max-width: fit-content;
-
+.swiper {
+	width: 100%;
+	height: 100%;
 }
-.box_swiper_mark     .swiper-slide img {
+
+.swiper-slide {
+	text-align: center;
+	font-size: 18px;
+	display: block;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+.box_swiper_mark  .swiper-slide img {
         display: block;
         width: 100%;
         height: 100%;
         object-fit: cover;
-    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
 }
 
-.box_swiper_mark  .swiper-slide-active img{
-    -webkit-filter: grayscale(0); /* Safari 6.0 - 9.0 */
+.box_swiper_mark  .swiper-slide-next img{
+    -webkit-filter: grayscale(0);
     filter: grayscale(0);
 
 }
@@ -1640,18 +1636,18 @@ text-align: center;
     position: relative;   
     line-height: 0;
 }
-/*.swiper-slide-active .img_child:after {*/
-/*    content: "";*/
-/*    display: block;   */
-/*    width: 100%;*/
-/*    height: 100%;   */
-/*    position: absolute;*/
-/*    top: 0;     */
-/*    left: 0;  */
-/*    background: transparent;*/
-/*    background-image: linear-gradient(to left, transparent, #f5f5f5);*/
-/*    opacity: 1.8;*/
-/*}*/
+.swiper-slide-active .img_child:after {
+    content: "";
+    display: block;   
+    width: 100%;
+    height: 100%;   
+    position: absolute;
+    top: 0;     
+    left: 0;  
+    background: transparent;
+    background-image: linear-gradient(to left, transparent, #f5f5f5);
+    opacity: 1.8;
+}
 
 
 .swiper-slide-next + div .img_child{

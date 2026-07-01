@@ -1568,7 +1568,7 @@ function getURLVar(key) {
     // ------
 
     if($selector == undefined || $selector == '.js-slick-recomended'){
-      $('.js-slick-recomended').slick({
+      $('.js-slick-recomended').not('.slick-initialized').slick({
         slidesToShow: 2,
         slidesToScroll: 1,
         infinite: false,
