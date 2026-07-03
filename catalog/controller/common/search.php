@@ -58,8 +58,9 @@ class ControllerCommonSearch extends Controller {
 		return $this->load->view('common/search', $data);
 	}
 	
-	public function isMobile() { 
-		
-		return IS_MOBILE;
-	}
+	public function isMobile() {
+
+        return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
+
+    }
 }

@@ -112,4 +112,9 @@ class ControllerToolTool extends Controller {
 		unset($this->session->data['is_soglashenie']);
 		setcookie('is_soglashenie', $code, time() - 1000, '/', $this->request->server['HTTP_HOST']);
 	}
+    public function isMobile() {
+
+        return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
+
+    }
 }

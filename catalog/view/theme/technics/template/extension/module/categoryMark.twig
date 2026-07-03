@@ -1,4 +1,4 @@
-<script>console.log('11111111111');</script>
+<script>console.log('111');</script>
 <link rel="stylesheet" href="catalog/view/theme/technics/css/swiper-bundle.min.css">
 <div class="slider_model_title">{{ text_model_title }}</div>
 <div class="swiper box_swiper_mark mySwiper">
@@ -55,7 +55,7 @@
 
 
 <script src="catalog/view/javascript/swiper-bundle.min.js"></script>
- <script>console.log('[categoryMark] Creating Swiper, active_index={{ active_index }}');</script>
+
 <style>
  .all_models_popup_back{
   position: fixed;
@@ -137,7 +137,7 @@
       var main_page = 1;
      {% endif %}
      
-       console.log('[categoryMark] Creating Swiper, active_index={{ active_index }}, _ready=' + _ready);
+
        var swiperMark = new Swiper(".mySwiper", {
         slidesPerView: 3,
         spaceBetween: 30,
@@ -153,24 +153,20 @@
         },
         on: {
           slideChange: function (e) {// Событие карусели
-               console.log('[categoryMark] slideChange: activeIndex=' + this.activeIndex + ', realIndex=' + this.realIndex + ', _ready=' + _ready);
+
                if (!_ready) return;
                
                var activeSlide = this.el.querySelector('.swiper-slide[data-swiper-slide-index="' + this.realIndex + '"]:not(.swiper-slide-duplicate)');
                var element = $(activeSlide);
               
                href = element.context.children[0].href;
-               
-               console.log('[categoryMark] Loading href=' + href);
-               
+
                if(!main_page){
                 window.history.pushState(null, null, href);
                }else{
                 $('.bttn_home_more').prop('href', href);
                }
-               
-               console.log('[categoryMark] AJAX → ' + href);
-               
+
                $.ajax({
                url: href,
                type: 'post',
@@ -260,10 +256,8 @@
 	
       });
       
-       console.log('[categoryMark] Will slideTo(' + ({{ active_index }}) + ', 0)');
 
        setTimeout(function(){
-        console.log('[categoryMark] Executing slideTo(' + ({{ active_index }}) + ', 0)');
         swiperMark.slideTo({{ active_index }}, 0);
         swiperMark.update();
         _ready = true;
